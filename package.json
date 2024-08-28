@@ -14,6 +14,7 @@
     "expo-status-bar": "~1.12.1",
     "react": "18.2.0",
     "react-native": "0.74.5",
+    "react-native-svg": "^15.6.0",
     "react-navigation": "^5.0.0"
   },
   "devDependencies": {
