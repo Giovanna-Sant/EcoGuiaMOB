@@ -1,19 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 
-import Logo from './app/assets/logo.svg'
-import Login from './app/pages/Login';
-
-
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import AppNavigator from '../EcoGuiaMOB/app/routes/AppNavigator'; // Certifique-se de que o caminho está correto
+ 
 export default function App() {
   return (
-    <View style={estilos.container}>
-      <StatusBar style="auto" />
-      <Login />
-    </View>
-  );
-}
+    <NavigationContainer>
+      <AppNavigator />
+    </NavigationContainer>
 
-const estilos = StyleSheet.create({
-  
-});
+}
+ 
