@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../pages/Home';
@@ -6,6 +5,8 @@ import Trilha from '../pages/Trilha';
 import Catalogo from '../pages/Catalogo';
 import Coleta from '../pages/Coleta';
 import Perfil from '../pages/Perfil';
+import Materiais from '../pages/DescartavelPage'
+import Residuos from '../pages/ReciclavelPage'
 
 // Cria o Tab Navigator
 const Tab = createBottomTabNavigator();
@@ -29,5 +30,3 @@ export default function AppNavigator() {
     </Tab.Navigator>
   );
 }
-
-
