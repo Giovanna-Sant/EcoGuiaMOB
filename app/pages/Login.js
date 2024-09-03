@@ -12,31 +12,31 @@ export default function Login() {
   };
 
     return (
-        <View style={estilos.container}>
+        <View style={styles.container}>
             <Logo width={240} marginTop={200}/>
 
-            <View style={estilos.contMeio}>
-                <Text style={estilos.titulo}>Cadastre-se</Text>
-                <View style={estilos.logGoogle}>
+            <View style={styles.contMeio}>
+                <Text style={styles.titulo}>Cadastre-se</Text>
+                <View style={styles.logGoogle}>
                     <Google width={25} height={25}/>
                     <Text>Crie sua conta com o Google</Text>
                 </View>
-                    <TextInput style={estilos.input} placeholder="Nome"></TextInput>
-                    <TextInput style={estilos.input} placeholder="Sobrenome"></TextInput>
-                    <TextInput style={estilos.input} placeholder="seuemail@gmail.com"></TextInput>
-                    <TextInput style={estilos.input} placeholder="Senha"></TextInput>
-                    <TextInput style={estilos.input} placeholder="Confirmar senha"></TextInput>
+                    <TextInput style={styles.input} placeholder="Nome"></TextInput>
+                    <TextInput style={styles.input} placeholder="Sobrenome"></TextInput>
+                    <TextInput style={styles.input} placeholder="seuemail@gmail.com"></TextInput>
+                    <TextInput style={styles.input} placeholder="Senha"></TextInput>
+                    <TextInput style={styles.input} placeholder="Confirmar senha"></TextInput>
 
-            <View style={estilos.contFinal}>
-                <Button style={estilos.botao} title="Concluído" color='#6BBF59' onPress={() => handlePress('Home')}/>
-                <Text style={estilos.texto}>Já possui conta?<TouchableOpacity style={estilos.irLogin}><Text style={estilos.irLogin}>Fazer Login</Text></TouchableOpacity></Text>
+            <View style={styles.contFinal}>
+                <Button style={styles.botao} title="Concluído" color='#6BBF59' onPress={() => handlePress('Home')}/>
+                <Text style={styles.texto}>Já possui conta?<TouchableOpacity style={styles.irLogin}><Text style={styles.irLogin}>Fazer Login</Text></TouchableOpacity></Text>
             </View>
             </View>
         </View>
     )
 }
 
-const estilos = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#fff',

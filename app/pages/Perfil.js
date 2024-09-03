@@ -11,7 +11,7 @@ const Perfil = () => {
       <View style={styles.content}>
         <Text style={styles.text}>Perfil Page Content</Text>
       </View>
-      <Footer />
+      <Footer/>
     </ScrollView>
   );
 };

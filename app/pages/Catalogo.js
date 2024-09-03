@@ -93,7 +93,6 @@ const styles = StyleSheet.create({
   description: {
     color: '#000',
     textAlign: 'center',
-    fontFamily: 'Poppins',
     fontSize: 14,
     fontWeight: '400',
     lineHeight: 20,
