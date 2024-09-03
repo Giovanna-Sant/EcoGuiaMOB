@@ -3,6 +3,9 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'rea
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import TitleCatalogo from '../assets/titleCatalogo.svg';
+import Recicla from '../assets/icons/Recicla.svg';
+import Lixo from '../assets/icons/Lixo.svg';
+import Imgnews from '../assets/imgnews.svg'
 
 const Catalogo = ({ navigation }) => {
   const [selectedFilter, setSelectedFilter] = useState(null);
@@ -13,83 +16,99 @@ const Catalogo = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-    <ScrollView 
-      contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
-    >
       <Header />
 
-      <View style={styles.logoContainer}>
-        <TitleCatalogo style={styles.logo} />
-        <Text style={styles.description}>
-          Encontre toda informação necessária para ter uma vida mais sustentável e um consumo consciente!
-        </Text>
-      </View>
-
-      <ScrollView 
-        horizontal={true} 
-        style={styles.filterContainer} 
-        showsHorizontalScrollIndicator={false}
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        style={styles.scrollView}
       >
-        <TouchableOpacity 
-          style={[styles.filterButton, selectedFilter === 'Notícias' ? styles.selected : styles.unselected]}
-          onPress={() => handleFilterPress('Notícias')}
+
+        <View style={styles.logoContainer}>
+          <TitleCatalogo style={styles.logo} />
+          <Text style={styles.description}>
+            Encontre toda informação necessária para ter uma vida mais sustentável e um consumo consciente!
+          </Text>
+        </View>
+
+        {/* Filtro */}
+        <ScrollView
+          horizontal={true}
+          style={styles.filterContainer}
+          showsHorizontalScrollIndicator={false}
         >
-          <Text style={[styles.filterText, selectedFilter === 'Notícias' ? styles.selectedText : styles.unselectedText]}>Notícias</Text>
+          <TouchableOpacity
+            style={[styles.filterButton, selectedFilter === 'Notícias' ? styles.selected : styles.unselected]}
+            onPress={() => handleFilterPress('Notícias')}
+          >
+            <Text style={[styles.filterText, selectedFilter === 'Notícias' ? styles.selectedText : styles.unselectedText]}>Notícias</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.filterButton, selectedFilter === 'Artigos' ? styles.selected : styles.unselected]}
+            onPress={() => handleFilterPress('Artigos')}
+          >
+            <Text style={[styles.filterText, selectedFilter === 'Artigos' ? styles.selectedText : styles.unselectedText]}>Artigos</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.filterButton, selectedFilter === 'Materiais Reciclaveis' ? styles.selected : styles.unselected]}
+            onPress={() => handleFilterPress('Materiais Reciclaveis')}
+          >
+            <Text style={[styles.filterText, selectedFilter === 'Materiais Reciclaveis' ? styles.selectedText : styles.unselectedText]}>Materiais Recicláveis</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.filterButton, selectedFilter === 'Faça você mesmo' ? styles.selected : styles.unselected]}
+            onPress={() => handleFilterPress('Faça você mesmo')}
+          >
+            <Text style={[styles.filterText, selectedFilter === 'Faça você mesmo' ? styles.selectedText : styles.unselectedText]}>Faça você mesmo</Text>
+          </TouchableOpacity>
+        </ScrollView>
+
+        {/* Notícia */}
+        <TouchableOpacity style={styles.newsContainer} onPress={() => navigation.navigate('NoticiasPage')}>
+        <Imgnews width={370} height={200}  style={styles.newsImage} />
+          <Text style={styles.newsTitle}>Projeto do Einstein de transformação de resíduos impulsiona geração de renda em Paraisópolis</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.filterButton, selectedFilter === 'Artigos' ? styles.selected : styles.unselected]}
-          onPress={() => handleFilterPress('Artigos')}
-        >
-          <Text style={[styles.filterText, selectedFilter === 'Artigos' ? styles.selectedText : styles.unselectedText]}>Artigos</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.filterButton, selectedFilter === 'Materiais Reciclaveis' ? styles.selected : styles.unselected]}
-          onPress={() => handleFilterPress('Materiais Reciclaveis')}
-        >
-          <Text style={[styles.filterText, selectedFilter === 'Materiais Reciclaveis' ? styles.selectedText : styles.unselectedText]}>Materiais Recicláveis</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.filterButton, selectedFilter === 'Faça você mesmo' ? styles.selected : styles.unselected]}
-          onPress={() => handleFilterPress('Faça você mesmo')}
-        >
-          <Text style={[styles.filterText, selectedFilter === 'Faça você mesmo' ? styles.selectedText : styles.unselectedText]}>Faça você mesmo</Text>
-        </TouchableOpacity>
+
+        {/* Lista de Materiais */}
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ReciclavelPage')}>
+            <Recicla/>
+            <Text style={styles.buttonText}>Lista de Materiais Recicláveis.</Text>
+            <Text style={styles.buttonDescription}>Confira e descubra.</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('DescartavelPage')}>
+            <Lixo  />
+            <Text style={styles.buttonText}>Não descarte estes materiais!</Text>
+            <Text style={styles.buttonDescription}>Veja e aprenda.</Text> 
+          </TouchableOpacity>
+        </View>
       </ScrollView>
 
-      <TouchableOpacity style={styles.newsContainer} onPress={() => navigation.navigate('NoticiasPage')}>
-        <Image source={{ uri: 'url-da-imagem' }} style={styles.newsImage} />
-        <Text style={styles.newsTitle}>Projeto do Einstein de transformação de resíduos impulsiona geração de renda em Paraisópolis</Text>
-      </TouchableOpacity>
-
-      <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ReciclavelPage')}>
-          <Text style={styles.buttonText}>Lista de Materiais Recicláveis</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('DescartavelPage')}>
-          <Text style={styles.buttonText}>Não descarte estes materiais!</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
-
-    <Footer />
-  </View>
+      <Footer />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
     backgroundColor: '#ffffff',
-    paddingBottom: 83,
+  },
+  scrollView: {
+    flex: 1,
+   
+  },
+  scrollContent: {
+    paddingHorizontal: 10, // Margem geral horizontal
+    paddingVertical: 20, // Margem geral vertical (equivalente ao gap)
+    paddingBottom: 60,
   },
   logoContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 20,
+    marginBottom: 20,
   },
-  logo: {},
   description: {
     color: '#000',
     textAlign: 'center',
@@ -101,12 +120,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   filterContainer: {
-    marginTop: 20,
-    paddingHorizontal: 10,
+    marginBottom: 20,
   },
   filterButton: {
-    display: 'flex',
-    width: 'auto',
     height: 30,
     paddingVertical: 1,
     paddingHorizontal: 7,
@@ -120,49 +136,73 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   selected: {
-    backgroundColor: '#4CAF50', // Cor verde para quando o botão está selecionado
+    backgroundColor: '#4CAF50',
   },
   unselected: {
-    backgroundColor: '#F1F1F1', // Cor cinza para quando o botão não está selecionado
+    backgroundColor: '#F1F1F1',
   },
   selectedText: {
-    color: '#FFF', // Texto branco quando o botão está selecionado
+    color: '#FFF',
   },
   unselectedText: {
-    color: '#3F463E', // Texto preto quando o botão não está selecionado
+    color: '#3F463E',
   },
   newsContainer: {
-    marginVertical: 20,
-    paddingHorizontal: 10,
+   
+    borderRadius: 5,
+    backgroundColor: '#E2F2DF',
+    elevation: 2,
+    marginBottom: 20,
+    padding: 10,
+
   },
   newsImage: {
-    width: '100%',
-    height: 150,
-    borderRadius: 10,
+    borderRadius: 5,
   },
   newsTitle: {
     marginTop: 10,
+
+    fontSize: 14,
     color: '#000',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins', // Certifique-se de que a fonte Poppins está carregada e registrada
+    fontStyle: 'normal', // 'normal' é o valor padrão, pode ser omitido
+    fontWeight: '500',
+
   },
   buttonsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginVertical: 20,
+    justifyContent:'space-between',
+    marginBottom: 20,
+    
   },
   button: {
     backgroundColor: '#F1F1F1',
     width: 190,
-    height: 150,
-    flexShrink: 0, 
+    height: 180,
     borderRadius: 5,
-    paddingVertical: 15,
-    paddingHorizontal: 20,
+    justifyContent: 'center',
+    gap: 5,
+    paddingHorizontal: 10,
+    elevation: 2,
+
+
   },
   buttonText: {
-    color: '#000',
     fontSize: 14,
+    color: '#000',
+    fontFamily: 'Poppins', // Certifique-se de que a fonte Poppins está carregada e registrada
+    fontStyle: 'normal', // 'normal' é o valor padrão, pode ser omitido
+    fontWeight: '600',
+    // lineHeight: 18,
+  },
+  buttonDescription: {
+    color: '#3F463E',
+    fontSize: 12,
+    color: '#000',
+    fontFamily: 'Poppins', // Certifique-se de que a fonte Poppins está carregada e registrada
+    fontStyle: 'normal', // 'normal' é o valor padrão, pode ser omitido
+    fontWeight: '500',
+    // lineHeight: 18,
   },
 });
 

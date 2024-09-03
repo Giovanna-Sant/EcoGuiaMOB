@@ -5,8 +5,8 @@ import Trilha from '../pages/Trilha';
 import Catalogo from '../pages/Catalogo';
 import Coleta from '../pages/Coleta';
 import Perfil from '../pages/Perfil';
-import Materiais from '../pages/DescartavelPage'
-import Residuos from '../pages/ReciclavelPage'
+import DescartavelPage from '../pages/DescartavelPage'
+import ReciclavelPage from '../pages/ReciclavelPage'
 import Login from '../pages/Login';
 
 // Cria o Tab Navigator
@@ -29,6 +29,8 @@ export default function AppNavigator() {
       <Tab.Screen name="Catalogo" component={Catalogo} />
       <Tab.Screen name="Coleta" component={Coleta} />
       <Tab.Screen name="Perfil" component={Perfil} />
+      <Tab.Screen name="DescartavelPage" component={DescartavelPage} />
+      <Tab.Screen name="ReciclavelPage" component={ReciclavelPage} />
     </Tab.Navigator>
   );
 }
