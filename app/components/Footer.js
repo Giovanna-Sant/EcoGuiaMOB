@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import HomeIcon from '../assets/home.svg';
-import TrilhaIcon from '../assets/trilha.svg';
-import CatalogoIcon from '../assets/catalogo.svg';
-import ColetaIcon from '../assets/coleta.svg';
-import PerfilIcon from '../assets/perfil.svg';
+import HomeIcon from '../assets/icons/home.svg';
+import TrilhaIcon from '../assets/icons/trilha.svg';
+import CatalogoIcon from '../assets/icons/catalogo.svg';
+import ColetaIcon from '../assets/icons/coleta.svg';
+import PerfilIcon from '../assets/icons/perfil.svg';
 
 const backgroundImage = require('../assets/footer-background.png'); 
 

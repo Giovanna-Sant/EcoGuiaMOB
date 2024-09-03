@@ -7,6 +7,7 @@ import Coleta from '../pages/Coleta';
 import Perfil from '../pages/Perfil';
 import Materiais from '../pages/DescartavelPage'
 import Residuos from '../pages/ReciclavelPage'
+import Login from '../pages/Login';
 
 // Cria o Tab Navigator
 const Tab = createBottomTabNavigator();
@@ -14,7 +15,7 @@ const Tab = createBottomTabNavigator();
 export default function AppNavigator() {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Login"
       screenOptions={{
         tabBarStyle: {
           display: 'none', // Esconde a tabBar padrão
@@ -22,6 +23,7 @@ export default function AppNavigator() {
         headerShown: false, // Esconde o cabeçalho padrão
       }}
     >
+      <Tab.Screen name="Login" component={Login} />
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Trilha" component={Trilha} />
       <Tab.Screen name="Catalogo" component={Catalogo} />
