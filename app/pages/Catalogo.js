@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 import TitleCatalogo from '../assets/titleCatalogo.svg';
 import Recicla from '../assets/icons/Recicla.svg';
 import Lixo from '../assets/icons/Lixo.svg';
-import Imgnews from '../assets/imgnews.svg'
+import Imgnews from '../assets/imgnews.svg';
 
 const Catalogo = ({ navigation }) => {
   const [selectedFilter, setSelectedFilter] = useState(null);
@@ -65,7 +65,7 @@ const Catalogo = ({ navigation }) => {
 
         {/* Notícia */}
         <TouchableOpacity style={styles.newsContainer} onPress={() => navigation.navigate('NoticiasPage')}>
-        <Imgnews width={370} height={200}  style={styles.newsImage} />
+          <Imgnews width={374} height={200} style={styles.newsImage} />
           <Text style={styles.newsTitle}>Projeto do Einstein de transformação de resíduos impulsiona geração de renda em Paraisópolis</Text>
         </TouchableOpacity>
 
@@ -100,8 +100,8 @@ const styles = StyleSheet.create({
    
   },
   scrollContent: {
-    paddingHorizontal: 10, // Margem geral horizontal
-    paddingVertical: 20, // Margem geral vertical (equivalente ao gap)
+    paddingHorizontal: 10, 
+    paddingVertical: 20, 
     paddingBottom: 60,
   },
   logoContainer: {
@@ -148,25 +148,28 @@ const styles = StyleSheet.create({
     color: '#3F463E',
   },
   newsContainer: {
-   
+    padding: 10,
+    
     borderRadius: 5,
     backgroundColor: '#E2F2DF',
     elevation: 2,
     marginBottom: 20,
-    padding: 10,
+
+
 
   },
   newsImage: {
     borderRadius: 5,
   },
+
   newsTitle: {
     marginTop: 10,
-
     fontSize: 14,
     color: '#000',
-    fontFamily: 'Poppins', // Certifique-se de que a fonte Poppins está carregada e registrada
-    fontStyle: 'normal', // 'normal' é o valor padrão, pode ser omitido
+    fontFamily: 'Poppins', 
+    fontStyle: 'normal', 
     fontWeight: '500',
+    paddingLeft: 6,
 
   },
   buttonsContainer: {
@@ -190,8 +193,8 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 14,
     color: '#000',
-    fontFamily: 'Poppins', // Certifique-se de que a fonte Poppins está carregada e registrada
-    fontStyle: 'normal', // 'normal' é o valor padrão, pode ser omitido
+    fontFamily: 'Poppins', 
+    fontStyle: 'normal', 
     fontWeight: '600',
     // lineHeight: 18,
   },
@@ -199,8 +202,8 @@ const styles = StyleSheet.create({
     color: '#3F463E',
     fontSize: 12,
     color: '#000',
-    fontFamily: 'Poppins', // Certifique-se de que a fonte Poppins está carregada e registrada
-    fontStyle: 'normal', // 'normal' é o valor padrão, pode ser omitido
+    fontFamily: 'Poppins',
+    fontStyle: 'normal', 
     fontWeight: '500',
     // lineHeight: 18,
   },
