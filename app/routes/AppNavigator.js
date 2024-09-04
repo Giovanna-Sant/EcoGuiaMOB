@@ -8,6 +8,7 @@ import Perfil from '../pages/Perfil';
 import DescartavelPage from '../pages/DescartavelPage'
 import ReciclavelPage from '../pages/ReciclavelPage'
 import Login from '../pages/Login';
+import NoticiasPage from '../pages/NoticiasPage';
 
 // Cria o Tab Navigator
 const Tab = createBottomTabNavigator();
@@ -23,14 +24,17 @@ export default function AppNavigator() {
         headerShown: false, // Esconde o cabeçalho padrão
       }}
     >
+      {/* oculta a seta */}
       <Tab.Screen name="Login" component={Login} />
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Trilha" component={Trilha} />
       <Tab.Screen name="Catalogo" component={Catalogo} />
       <Tab.Screen name="Coleta" component={Coleta} />
       <Tab.Screen name="Perfil" component={Perfil} />
+      {/* com seta para voltar  */}
       <Tab.Screen name="DescartavelPage" component={DescartavelPage} />
       <Tab.Screen name="ReciclavelPage" component={ReciclavelPage} />
+      <Tab.Screen name="NoticiasPage" component={NoticiasPage} />
     </Tab.Navigator>
   );
 }

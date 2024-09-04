@@ -3,13 +3,26 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Logo from '../assets/logo.svg'; // Certifique-se de que o SVG é um componente React
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-const Header = ({ onMenuPress }) => {
+const Header = ({ onMenuPress, showBackButton }) => {
+  const navigation = useNavigation();
+  const route = useRoute();
+
+  const handleBackPress = () => {
+    navigation.goBack();
+  };
+
   return (
     <View style={styles.header}>
-        <StatusBar style="auto" />
+      <StatusBar style="auto" />
+      {showBackButton && (
+        <TouchableOpacity onPress={handleBackPress} style={styles.backButton}>
+          <Ionicons name="arrow-back-outline" size={28} color="black" />
+        </TouchableOpacity>
+      )}
       <View style={styles.logoContainer}>
-        <Logo width={120} height={50} style={styles.logo} />
+        <Logo width={120} height={50} style={styles.logo} onPress={() => navigation.navigate('Home')} />
       </View>
       <TouchableOpacity onPress={onMenuPress} style={styles.menuButton}>
         <Ionicons name="menu-outline" size={28} color="black" />
@@ -47,6 +60,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
   },
+  backButton: {
+    position: 'absolute',
+    left: 20,
+    top: 35,
+    bottom: 0,
+    justifyContent: 'center',
+  },
 });
 
-export default Header; // Exportação padrão
+export default Header;
