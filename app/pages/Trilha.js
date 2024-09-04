@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
+
 const Trilha = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -29,6 +30,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
+    display: 'none'
   },
 });
 

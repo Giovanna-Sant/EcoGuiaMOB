@@ -17,10 +17,10 @@ export default function Footer() {
   };
 
   return (
-    <ImageBackground 
+    <ImageBackground
       source={backgroundImage} 
-      style={styles.footer} 
-      resizeMode="cover" // Ajusta a imagem para cobrir o container
+      style={styles.footer}
+      resizeMode="cover" // Ajusta o modo de redimensionamento da imagem
     >
       <TouchableOpacity onPress={() => handlePress('Trilha')} style={styles.iconButton}>
         <TrilhaIcon width={24} height={24} />
@@ -43,7 +43,7 @@ export default function Footer() {
       </TouchableOpacity>
     </ImageBackground>
   );
-};
+}
 
 const styles = StyleSheet.create({
   footer: {
@@ -51,19 +51,17 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    width: '100%', // Garante que a imagem ocupe toda a largura da tela
     height: 83, // Altura fixa para o footer
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    // Estilos adicionais
-    borderRadius: 10, // Se desejar bordas arredondadas
+
+  
     overflow: 'hidden', // Garante que o arredondamento das bordas se aplique
-    opacity: 0.9, // Ajusta a opacidade se necessário
+    opacity: 1, // Ajusta a opacidade se necessário
   },
   iconButton: {
-    flex: 1, // Garante que os ícones tenham espaço igual
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
