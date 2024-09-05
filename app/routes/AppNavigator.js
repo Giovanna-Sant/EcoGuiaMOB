@@ -19,9 +19,9 @@ export default function AppNavigator() {
       initialRouteName="Login"
       screenOptions={{
         tabBarStyle: {
-          display: 'none', // Esconde a tabBar padrão
+          display: 'none', 
         },
-        headerShown: false, // Esconde o cabeçalho padrão
+        headerShown: false,
       }}
     >
       {/* oculta a seta */}

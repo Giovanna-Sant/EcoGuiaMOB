@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { useFonts, Poppins_400Regular, Poppins_500Medium} from '@expo-google-fonts/poppins';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import TitleCatalogo from '../assets/titleCatalogo.svg';
@@ -8,7 +9,16 @@ import Lixo from '../assets/icons/Lixo.svg';
 import Imgnews from '../assets/imgnews.svg';
 
 const Catalogo = ({ navigation }) => {
+  const [fontsLoaded] = useFonts({
+    Poppins_400Regular, Poppins_500Medium,
+  });
+
   const [selectedFilter, setSelectedFilter] = useState(null);
+
+  // Verifique se fontsLoaded está verdadeiro antes de renderizar o componente
+  if (!fontsLoaded) {
+    return <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />;
+  }
 
   const handleFilterPress = (filter) => {
     setSelectedFilter(filter);
@@ -23,7 +33,6 @@ const Catalogo = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         style={styles.scrollView}
       >
-
         <View style={styles.logoContainer}>
           <TitleCatalogo style={styles.logo} />
           <Text style={styles.description}>
@@ -72,13 +81,13 @@ const Catalogo = ({ navigation }) => {
         {/* Lista de Materiais */}
         <View style={styles.buttonsContainer}>
           <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ReciclavelPage')}>
-            <Recicla/>
+            <Recicla />
             <Text style={styles.buttonText}>Lista de Materiais Recicláveis.</Text>
             <Text style={styles.buttonDescription}>Confira e descubra.</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('DescartavelPage')}>
-            <Lixo  />
+            <Lixo />
             <Text style={styles.buttonText}>Não descarte estes materiais!</Text>
             <Text style={styles.buttonDescription}>Veja e aprenda.</Text> 
           </TouchableOpacity>
@@ -97,7 +106,6 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-   
   },
   scrollContent: {
     paddingHorizontal: 10, 
@@ -112,9 +120,9 @@ const styles = StyleSheet.create({
   description: {
     color: '#000',
     textAlign: 'center',
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins_400Regular',
     fontSize: 14,
-    fontWeight: '400',
+
     lineHeight: 20,
     marginTop: 10,
     paddingHorizontal: 20,
@@ -133,7 +141,7 @@ const styles = StyleSheet.create({
   },
   filterText: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins_400Regular',
   },
   selected: {
     backgroundColor: '#4CAF50',
@@ -149,34 +157,26 @@ const styles = StyleSheet.create({
   },
   newsContainer: {
     padding: 10,
-    
     borderRadius: 5,
     backgroundColor: '#E2F2DF',
     elevation: 2,
     marginBottom: 20,
-
-
-
   },
   newsImage: {
     borderRadius: 5,
   },
-
   newsTitle: {
     marginTop: 10,
     fontSize: 14,
     color: '#000',
-    fontFamily: 'Poppins', 
-    fontStyle: 'normal', 
-    fontWeight: '500',
+    fontFamily: 'Poppins_500Medium',
+   
     paddingLeft: 6,
-
   },
   buttonsContainer: {
     flexDirection: 'row',
-    justifyContent:'space-between',
+    justifyContent: 'space-between',
     marginBottom: 20,
-    
   },
   button: {
     backgroundColor: '#F1F1F1',
@@ -187,25 +187,23 @@ const styles = StyleSheet.create({
     gap: 5,
     paddingHorizontal: 10,
     elevation: 2,
-
-
   },
   buttonText: {
     fontSize: 14,
     color: '#000',
-    fontFamily: 'Poppins', 
-    fontStyle: 'normal', 
+    fontFamily: 'Poppins_500Medium',
     fontWeight: '600',
-    // lineHeight: 18,
   },
   buttonDescription: {
     color: '#3F463E',
     fontSize: 12,
-    color: '#000',
-    fontFamily: 'Poppins',
-    fontStyle: 'normal', 
+    fontFamily: 'Poppins_400Regular',
     fontWeight: '500',
-    // lineHeight: 18,
+  },
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
