@@ -1,10 +1,19 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { useFonts, Poppins_400Regular, Poppins_500Medium } from '@expo-google-fonts/poppins';
 import Header from '../components/Header';
 import Imgnews from '../assets/imgnews.svg';
-import Footer from '../components/Footer'; // Supondo que o footer seja um componente já existente
+import Footer from '../components/Footer'; 
 
 const NoticiasPage = () => {
+  const [fontsLoaded] = useFonts({
+    Poppins_400Regular, Poppins_500Medium,
+  });
+
+  if (!fontsLoaded) {
+    return <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />;
+  }
+
   return (
     <View style={styles.container}>
       <Header />
@@ -38,14 +47,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   content: {
+    paddingBottom: 40, // Espaco para o Footer
     flexGrow: 1,
-    paddingBottom: 40, 
   },
   newsContainer: {
     justifyContent: 'center',
     alignItems: 'flex-start', 
     marginTop: 20,
-    marginHorizontal: 10, // Adiciona margem horizontal para alinhamento com o título
+    marginHorizontal: 10, 
     borderRadius: 5,
     marginBottom: 20,
   },
@@ -61,24 +70,21 @@ const styles = StyleSheet.create({
   newsTitle: {
     fontSize: 18,
     color: '#000',
-    fontFamily: 'Poppins', 
+    fontFamily: 'Poppins_500Medium', 
     fontStyle: 'normal', 
-    fontWeight: '500',
   },
   newsSubtitle: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#777',
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins_400Regular',
     fontStyle: 'normal',
-    fontWeight: '400',
     marginTop: 5,
   },
   newsDate: {
     fontSize: 12,
     color: '#777',
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins_400Regular',
     fontStyle: 'normal',
-    fontWeight: '400',
     marginTop: 5,
   },
   newsContentContainer: {
@@ -90,11 +96,15 @@ const styles = StyleSheet.create({
   newsContent: {
     fontSize: 14,
     color: '#000',
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins_400Regular',
     fontStyle: 'normal',
-    fontWeight: '400',
     marginBottom: 10,
     lineHeight: 22, 
+  },
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
