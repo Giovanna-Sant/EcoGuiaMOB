@@ -51,14 +51,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 83, // Altura fixa para o footer
+    height: 80,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-
-  
-    overflow: 'hidden', // Garante que o arredondamento das bordas se aplique
-    opacity: 1, // Ajusta a opacidade se necessário
+    width: '100%'
   },
   iconButton: {
     flex: 1,
