@@ -12,16 +12,10 @@ export default function Coleta() {
     Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold,
   });
 
-  const [selectedFilter, setSelectedFilter] = useState(null);
-
-  // Verifique se fontsLoaded está verdadeiro antes de renderizar o componente
   if (!fontsLoaded) {
     return <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />;
   }
 
-  const handleFilterPress = (filter) => {
-    setSelectedFilter(filter);
-  };
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Header />

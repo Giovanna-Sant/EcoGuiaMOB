@@ -1,7 +1,8 @@
 
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Pressable } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import { View, Text, StyleSheet, ScrollView, Image, Pressable, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold} from '@expo-google-fonts/poppins';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import * as Progress from 'react-native-progress'
@@ -13,6 +14,16 @@ import Trilha from '../assets/TrilhaObjetivos.png'
 import Abrir from '../assets/icons/arrow-down.svg'
 
 const Home = () => {
+  // Carregamento das fontes
+  const [fontsLoaded] = useFonts({
+    Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold,
+  });
+
+  if (!fontsLoaded) {
+    return <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />;
+  }
+
+  // Garante navegação
   const navigation = useNavigation();
 
   const handlePress = (screen) => {
@@ -30,9 +41,9 @@ const Home = () => {
         <View style={styles.iconDiv}><Image style={styles.icon} width={60} height={60} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}}></Image></View>
         
         <View>
-          <Text style={styles.textNome}>Yasmin Benjor</Text>
-          <View style={ {flexDirection: 'row', justifyContent: 'space-between', marginTop: 5}}>
-            <Text style={styles.textXp}>XP 120/340</Text>
+          <Text style={styles.subtitle}>Yasmin Benjor</Text>
+          <View style={ {flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text style={styles.text}>XP 120/340</Text>
             <Text style={styles.textLvl}>level 13</Text>
           </View>
           <Progress.Bar
@@ -60,7 +71,7 @@ const Home = () => {
         </Pressable>
 
         <View style={styles.viewDica}>
-          <Text>Dica diária</Text>
+          <Text style={styles.subtitle}>Dica diária</Text>
           <Pressable><Abrir width={32} height={32} style={styles.abrir}/></Pressable>
         </View>
 
@@ -101,6 +112,16 @@ const styles = StyleSheet.create({
     paddingBottom: 85,
   },
   
+  subtitle: {
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 16
+  },
+
+  text: {
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 14
+  },
+
   viewPerfil: {
     marginTop: 20,
     backgroundColor: '#E2F2DF',
@@ -112,10 +133,6 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  
-  text: {
-    fontSize: 18,
   },
   
   iconDiv: {
@@ -142,8 +159,9 @@ const styles = StyleSheet.create({
     textLvl: {
       backgroundColor: '#a6d89b',
       borderRadius: 5,
-      paddingHorizontal: 8,
-      paddingVertical: 2,
+      paddingHorizontal: 10,
+      fontFamily: 'Poppins_500Medium',
+      fontSize: 14
     },
     
     viewAPI: {
@@ -167,7 +185,9 @@ const styles = StyleSheet.create({
     
     atbAPI: {
       textAlign: 'center',
-      marginTop: 8
+      marginTop: 8,
+      fontFamily: 'Poppins_400Regular',
+      fontSize: 12
     },
     
     viewNews: {
