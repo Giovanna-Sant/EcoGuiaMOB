@@ -1,18 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
-import { useFonts, Poppins_400Regular, Poppins_500Medium } from '@expo-google-fonts/poppins';
+import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Header from '../components/Header';
-import Imgnews from '../assets/imgnews.svg';
+import Imgnews from '../assets/backgrounds/news_bg.svg';
 import Footer from '../components/Footer'; 
 
 const NoticiasPage = () => {
+  // Carregamento das fontes
   const [fontsLoaded] = useFonts({
-    Poppins_400Regular, Poppins_500Medium,
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
   });
 
   if (!fontsLoaded) {
-    return <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />;
-  }
+    return (
+      <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
+    );
+  };
 
   return (
     <View style={styles.container}>

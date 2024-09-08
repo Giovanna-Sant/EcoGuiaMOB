@@ -1,10 +1,23 @@
-// Importações necessárias
-import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity, View, Text, useColorScheme } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, TouchableOpacity, View, Text, useColorScheme, ActivityIndicator } from 'react-native';
+import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 // Tela principal
 export default function TabTwoScreen() {
+  // Carregamento das fontes
+  const [fontsLoaded] = useFonts({
+     Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
+  });
+  
+  if (!fontsLoaded) {
+    return (
+      <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
+    );
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>

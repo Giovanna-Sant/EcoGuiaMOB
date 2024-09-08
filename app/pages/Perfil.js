@@ -1,10 +1,23 @@
-
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 const Perfil = () => {
+  // Carregamento das fontes
+  const [fontsLoaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
+  });
+
+  if (!fontsLoaded) {
+    return (
+      <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
+    );
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Header />
@@ -19,8 +32,8 @@ const Perfil = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff', // Define o fundo branco para toda a tela
-    paddingBottom: 83, // Adiciona um espaço inferior para o Footer
+    backgroundColor: '#ffffff',  
+    paddingBottom: 85, 
   },
   content: {
     flex: 1,

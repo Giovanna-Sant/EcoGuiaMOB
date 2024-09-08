@@ -7,7 +7,7 @@ import CatalogoIcon from '../assets/icons/catalogo.svg';
 import ColetaIcon from '../assets/icons/coleta.svg';
 import PerfilIcon from '../assets/icons/perfil.svg';
 
-const backgroundImage = require('../assets/footer-background.png'); 
+const backgroundImage = require('../assets/backgrounds/footer_bg.png'); 
 
 export default function Footer() {
   const navigation = useNavigation();

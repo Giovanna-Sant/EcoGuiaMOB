@@ -2,7 +2,7 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import Logo from '../assets/logo.svg'; // Certifique-se de que o SVG é um componente React
+import Logo from '../assets/logo.svg';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 const Header = ({ onMenuPress, showBackButton }) => {
