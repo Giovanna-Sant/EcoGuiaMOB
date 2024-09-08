@@ -1,26 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, ActivityIndicator } from 'react-native';
-import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold} from '@expo-google-fonts/poppins';
+import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import Recicle from '../assets/titleColeta.png'
+import Recicle from '../assets/titles/titleColeta.svg'
 import RedTruck from '../assets/icons/redTruck.svg'
 import EcoPonto from '../assets/icons/blueLocal.svg'
 
 export default function Coleta() {
+  // Carregamento das fontes
   const [fontsLoaded] = useFonts({
-    Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold,
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
   });
 
   if (!fontsLoaded) {
-    return <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />;
-  }
+    return (
+      <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
+    );
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Header />
       <View style={styles.content}>
-        <Image source={Recicle} maxWidth={300} maxHeight={100}/>
+      <Recicle maxWidth={300} maxHeight={100}/>
         <Text style={styles.description}>Não sabe como reciclar no seu bairro? Aqui, temos informações dinâmicas para te ajudar!</Text>
       
         <View style={styles.api}>
@@ -43,30 +48,31 @@ export default function Coleta() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
-    paddingBottom: 83
+    backgroundColor: "#ffffff",
+    paddingBottom: 85,
   },
+
   content: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   description: {
-    color: '#000',
-    textAlign: 'center',
-    fontFamily: 'Poppins_400Regular',
+    color: "#000",
+    textAlign: "center",
+    fontFamily: "Poppins_400Regular",
     fontSize: 14,
     lineHeight: 20,
     paddingHorizontal: 20,
   },
 
   subtitle: {
-    fontFamily: 'Poppins_600SemiBold'
+    fontFamily: "Poppins_600SemiBold",
   },
 
   api: {
-    alignItems: 'center',
-    marginVertical: 10
-  }
+    alignItems: "center",
+    marginVertical: 10,
+  },
 });

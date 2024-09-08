@@ -1,28 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { useFonts, Poppins_400Regular, Poppins_500Medium} from '@expo-google-fonts/poppins';
+import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import TitleCatalogo from '../assets/titleCatalogo.svg';
-import Recicla from '../assets/icons/Recicla.svg';
-import Lixo from '../assets/icons/Lixo.svg';
-import Imgnews from '../assets/imgnews.svg';
+import TitleCatalogo from '../assets/titles/titleCatalogo.svg';
+import Recicla from '../assets/icons/recicla.svg';
+import Lixo from '../assets/icons/lixo.svg';
+import Imgnews from '../assets/backgrounds/news_bg.svg';
 
 const Catalogo = ({ navigation }) => {
-  const [fontsLoaded] = useFonts({
-    Poppins_400Regular, Poppins_500Medium,
-  });
-
+  // Filtros
   const [selectedFilter, setSelectedFilter] = useState(null);
-
-  // Verifique se fontsLoaded está verdadeiro antes de renderizar o componente
-  if (!fontsLoaded) {
-    return <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />;
-  }
-
+  
   const handleFilterPress = (filter) => {
     setSelectedFilter(filter);
   };
+
+  // Carregamento das fontes
+  const [fontsLoaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
+  });
+
+  if (!fontsLoaded) {
+    return (
+      <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -102,108 +107,124 @@ const Catalogo = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
   },
+
   scrollView: {
     flex: 1,
   },
+
   scrollContent: {
-    paddingHorizontal: 10, 
-    paddingVertical: 20, 
+    paddingHorizontal: 10,
+    paddingVertical: 20,
     paddingBottom: 60,
   },
+
   logoContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 20,
   },
-  description: {
-    color: '#000',
-    textAlign: 'center',
-    fontFamily: 'Poppins_400Regular',
-    fontSize: 14,
 
+  description: {
+    color: "#000",
+    textAlign: "center",
+    fontFamily: "Poppins_400Regular",
+    fontSize: 14,
     lineHeight: 20,
     marginTop: 10,
     paddingHorizontal: 20,
   },
+
   filterContainer: {
     marginBottom: 20,
   },
+
   filterButton: {
     height: 30,
     paddingVertical: 1,
     paddingHorizontal: 7,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 12,
     marginRight: 10,
   },
+
   filterText: {
     fontSize: 14,
-    fontFamily: 'Poppins_400Regular',
+    fontFamily: "Poppins_400Regular",
   },
+
   selected: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: "#4CAF50",
   },
+
   unselected: {
-    backgroundColor: '#F1F1F1',
+    backgroundColor: "#F1F1F1",
   },
+
   selectedText: {
-    color: '#FFF',
+    color: "#FFF",
   },
   unselectedText: {
-    color: '#3F463E',
+    color: "#3F463E",
   },
+
   newsContainer: {
     padding: 10,
     borderRadius: 5,
-    backgroundColor: '#E2F2DF',
+    backgroundColor: "#E2F2DF",
     elevation: 2,
     marginBottom: 20,
   },
+
   newsImage: {
     borderRadius: 5,
   },
+
   newsTitle: {
     marginTop: 10,
     fontSize: 14,
-    color: '#000',
-    fontFamily: 'Poppins_500Medium',
-   
+    color: "#000",
+    fontFamily: "Poppins_500Medium",
     paddingLeft: 6,
   },
+
   buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 20,
   },
+  
   button: {
-    backgroundColor: '#F1F1F1',
+    backgroundColor: "#F1F1F1",
     width: 190,
     height: 180,
     borderRadius: 5,
-    justifyContent: 'center',
+    justifyContent: "center",
     gap: 5,
     paddingHorizontal: 10,
     elevation: 2,
   },
+
   buttonText: {
     fontSize: 14,
-    color: '#000',
-    fontFamily: 'Poppins_500Medium',
-    fontWeight: '600',
+    color: "#000",
+    fontFamily: "Poppins_500Medium",
+    fontWeight: "600",
   },
+
   buttonDescription: {
-    color: '#3F463E',
+    color: "#3F463E",
     fontSize: 12,
-    fontFamily: 'Poppins_400Regular',
-    fontWeight: '500',
+    fontFamily: "Poppins_400Regular",
+    fontWeight: "500",
   },
+
   loader: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

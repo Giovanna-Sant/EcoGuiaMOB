@@ -1,17 +1,16 @@
-
-import React, {useEffect, useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, Pressable, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold} from '@expo-google-fonts/poppins';
+import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import * as Progress from 'react-native-progress'
-import Coleta from '../assets/icons/caminhao.svg'
+import Coleta from '../assets/icons/truck.svg'
 import EcoPonto from '../assets/icons/local.svg'
-import Seta from '../assets/icons/setaDireita.svg'
-import News from '../assets/catalogoBackground.png'
-import Trilha from '../assets/TrilhaObjetivos.png'
-import Abrir from '../assets/icons/arrow-down.svg'
+import Seta from '../assets/icons/arrowRight.svg'
+import News from '../assets/backgrounds/catalogo_bg.png'
+import Trilha from '../assets/backgrounds/trilha_bg.png'
+import Abrir from '../assets/icons/arrowDown.svg'
 
 const Home = () => {
   // Carregamento das fontes
@@ -21,7 +20,7 @@ const Home = () => {
 
   if (!fontsLoaded) {
     return <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />;
-  }
+  };
 
   // Garante navegação
   const navigation = useNavigation();
@@ -67,7 +66,7 @@ const Home = () => {
         </Pressable>
 
         <Pressable onPress={() => handlePress('Trilha')} maxHeight={210} style={styles.viewTrilha}>
-          <Image source={Trilha} maxHeight={210} maxWidth={360} borderRadius={10}/>
+          <Image source={Trilha} maxHeight={210} maxWidth='100%' borderRadius={10}/>
         </Pressable>
 
         <View style={styles.viewDica}>
@@ -90,7 +89,7 @@ const Home = () => {
         </Pressable>
 
         <Pressable onPress={() => handlePress('Catalogo')} style={styles.viewNews}>
-          <Image style={styles.imgNews} source={News} maxWidth={360} maxHeight={205}/>
+          <Image style={styles.imgNews} source={News} maxWidth='100%' maxHeight={205}/>
         </Pressable>
     </ScrollView>
       <Footer />
