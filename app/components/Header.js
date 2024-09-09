@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     elevation: 4,
-    position: 'relative', // Necessário para o alinhamento absoluto do logo
+    position: 'relative',
   },
   logoContainer: {
     position: 'absolute',
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
   menuButton: {
     position: 'absolute',
-    right: 20, // Ajuste o valor conforme necessário
+    right: 20,
     top: 35,
     bottom: 0,
     justifyContent: 'center',

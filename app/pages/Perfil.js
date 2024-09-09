@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator, Image } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
+import { useNavigation } from '@react-navigation/native';
+import * as Progress from 'react-native-progress'
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import Seta from '../assets/icons/arrowRight.svg'
 
 const Perfil = () => {
+  const navigation = useNavigation();
+
+  const handlePress = (screen) => {
+    navigation.navigate(screen);
+  };
+
   // Carregamento das fontes
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
@@ -22,7 +31,56 @@ const Perfil = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <Header />
       <View style={styles.content}>
-        <Text style={styles.text}>Perfil Page Content</Text>
+        <View style={styles.viewPerfil}>
+          <View style={styles.iconDiv}>
+            <Image
+              style={styles.icon}
+              width={60}
+              height={60}
+              source={{
+                uri: "https://cdn-icons-png.flaticon.com/256/903/903482.png",
+              }}
+            ></Image>
+          </View>
+
+          <View>
+            <Text style={styles.subtitle}>Yasmin Benjor</Text>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <Text style={styles.text}>XP 120/340</Text>
+              <Text style={styles.textLvl}>level 13</Text>
+            </View>
+            <Progress.Bar
+              width={170}
+              color="#6BBF59"
+              unfilledColor="#EBEBEB"
+              borderWidth={1}
+              borderColor="#6BBF59"
+              height={10}
+              borderRadius={5}
+              style={styles.progressBar}
+              progress={0.6}
+            />
+            {/* Adicionar lógica para converter valor atual e xp necessário para o próximo, convertendo para um número de 0 a 1 que será o responsável para o atriburo de progress*/}
+          </View>
+        </View>
+
+        <Pressable style={styles.viewBadge} onPress={() => handlePress('Trilha')}>
+          <View style={styles.badge}>
+            <Image
+              width={70}
+              height={80}
+              source={{
+                uri: "https://th.bing.com/th/id/OIP.KgtLpFEUvAR0-jhXUGG-pgHaHa?w=512&h=512&rs=1&pid=ImgDetMain",}}></Image>
+            {/* Substituir url por variável que traga current img link da badge*/}
+          </View>
+          <View>
+            <Text style={styles.subtitle}>Árvore Iniciante</Text>
+            <Text style={styles.text}>Você está indo bem, continue assim para evoluir!</Text>
+            <Pressable style={styles.botao}><Text style={styles.textBotao}>Ver Trilha de Objetivos</Text><Seta maxWidth={12} maxHeight={12}/></Pressable>
+          </View>
+        </Pressable>
       </View>
       <Footer />
     </ScrollView>
@@ -32,17 +90,88 @@ const Perfil = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',  
-    paddingBottom: 85, 
+    backgroundColor: "#ffffff",
+    paddingBottom: 85,
   },
+
   content: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
+
+  subtitle: {
+    fontFamily: "Poppins_500Medium",
+    fontSize: 16,
+  },
+
   text: {
-    fontSize: 18,
+    fontFamily: "Poppins_400Regular",
+    fontSize: 14,
   },
+
+  viewPerfil: {
+    marginTop: 20,
+    backgroundColor: "#E2F2DF",
+    borderWidth: 0.5,
+    borderColor: "#6BBF59",
+    borderRadius: 10,
+    marginVertical: 5,
+    flexDirection: "row",
+    padding: 10,
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  iconDiv: {
+    borderColor: "#A6D89B",
+    backgroundColor: "#F1F1F1",
+    borderWidth: 3,
+    borderRadius: 50,
+    padding: 8,
+  },
+
+  badge: {
+    borderRadius: 10,
+    borderColor: "#6BBF59",
+    borderWidth: 2,
+    backgroundColor: "#F1F1F1",
+    padding: 5,
+  },
+
+  progressBar: {
+    height: 10,
+    marginTop: 8,
+  },
+
+  textLvl: {
+    backgroundColor: "#a6d89b",
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    fontFamily: "Poppins_500Medium",
+    fontSize: 14,
+  },
+
+  botao: {
+    backgroundColor: '#E2F2DF',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  textBotao: {
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 14,
+    color: "#3F463E",
+    paddingRight: 8
+  },
+
+  viewBadge: {
+    flexDirection: 'row',
+    gap: 10
+  }
 });
 
 export default Perfil;

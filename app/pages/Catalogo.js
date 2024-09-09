@@ -79,7 +79,7 @@ const Catalogo = ({ navigation }) => {
 
         {/* Notícia */}
         <TouchableOpacity style={styles.newsContainer} onPress={() => navigation.navigate('NoticiasPage')}>
-          <Imgnews width={374} height={200} style={styles.newsImage} />
+          <Imgnews width={'100%'} height={200} style={styles.newsImage} />
           <Text style={styles.newsTitle}>Projeto do Einstein de transformação de resíduos impulsiona geração de renda em Paraisópolis</Text>
         </TouchableOpacity>
 

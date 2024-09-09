@@ -34,11 +34,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',  
     paddingBottom: 85, 
   },
+
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  
   text: {
     fontSize: 18,
   },
