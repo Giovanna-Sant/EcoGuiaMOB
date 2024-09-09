@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator, Image, TouchableOpacity } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { useNavigation } from '@react-navigation/native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Progress from 'react-native-progress'
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Seta from '../assets/icons/arrowRight.svg'
+import Edit from '../assets/icons/edit.svg'
 
 const Perfil = () => {
   const navigation = useNavigation();
@@ -29,9 +31,19 @@ const Perfil = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Header />
       <View style={styles.content}>
+        <View>
         <View style={styles.viewPerfil}>
+          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+            <TouchableOpacity>
+              <Edit maxHeight={24} maxWidth={24}/>
+            </TouchableOpacity>
+            <Text style={styles.subtitle}>yasmin#3244</Text>
+            <TouchableOpacity>
+              <Ionicons name="menu-outline" size={28} color="black" />
+            </TouchableOpacity>
+          </View>
+          <View style={{flexDirection: 'row'}}>
           <View style={styles.iconDiv}>
             <Image
               style={styles.icon}
@@ -42,7 +54,6 @@ const Perfil = () => {
               }}
             ></Image>
           </View>
-
           <View>
             <Text style={styles.subtitle}>Yasmin Benjor</Text>
             <View
@@ -65,7 +76,8 @@ const Perfil = () => {
             {/* Adicionar lógica para converter valor atual e xp necessário para o próximo, convertendo para um número de 0 a 1 que será o responsável para o atriburo de progress*/}
           </View>
         </View>
-
+        </View>
+        </View>
         <Pressable style={styles.viewBadge} onPress={() => handlePress('Trilha')}>
           <View style={styles.badge}>
             <Image
@@ -96,8 +108,6 @@ const styles = StyleSheet.create({
 
   content: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
 
   subtitle: {
@@ -111,16 +121,16 @@ const styles = StyleSheet.create({
   },
 
   viewPerfil: {
-    marginTop: 20,
-    backgroundColor: "#E2F2DF",
+    paddingTop: 20,
+    backgroundColor: "#F1F1F1",
     borderWidth: 0.5,
-    borderColor: "#6BBF59",
+    borderColor: "#919890",
     borderRadius: 10,
-    marginVertical: 5,
-    flexDirection: "row",
+    flexDirection: "column",
     padding: 10,
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: 'center',
+    maxWidth: "100%"
   },
 
   iconDiv: {
