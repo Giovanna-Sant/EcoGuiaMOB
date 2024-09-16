@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, Pressable, ActivityIndicator } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet, ScrollView, Image, Pressable, ActivityIndicator, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
+import Collapsible from 'react-native-collapsible'; 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import * as Progress from 'react-native-progress'
-import Coleta from '../assets/icons/truck.svg'
-import EcoPonto from '../assets/icons/local.svg'
-import Seta from '../assets/icons/arrowRight.svg'
-import News from '../assets/backgrounds/catalogo_bg.png'
-import Trilha from '../assets/backgrounds/trilha_bg.png'
-import Abrir from '../assets/icons/arrowDown.svg'
+import * as Progress from 'react-native-progress';
+import Coleta from '../assets/icons/truck.svg';
+import EcoPonto from '../assets/icons/local.svg';
+import Seta from '../assets/icons/arrowRight.svg';
+import News from '../assets/backgrounds/catalogo_bg.png';
+import Trilha from '../assets/backgrounds/trilha_bg.png';
+import Abrir from '../assets/icons/arrowDown.svg'; // Ícone da seta para baixo
 
 const Home = () => {
-  // Carregamento das fontes
+  const [isCollapsed, setIsCollapsed] = useState(true); // Controla se a dica está colapsada ou não
+  const rotateAnim = useRef(new Animated.Value(0)).current; // Valor animado para rotação
+
   const [fontsLoaded] = useFonts({
     Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold,
   });
@@ -22,57 +25,90 @@ const Home = () => {
     return <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />;
   };
 
-  // Garante navegação
   const navigation = useNavigation();
 
   const handlePress = (screen) => {
     navigation.navigate(screen);
   };
+
+  const toggleCollapse = () => {
+    // Alterna entre expandido e colapsado
+    setIsCollapsed(!isCollapsed);
+
+    // Anima a rotação do ícone
+    Animated.timing(rotateAnim, {
+      toValue: isCollapsed ? 1 : 0, // Se está colapsado, rotaciona para 180°, caso contrário, volta para 0°
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  // Interpolação para rotacionar o ícone de seta
+  const rotateIcon = rotateAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '180deg'], // Gira de 0° a 180°
+  });
+
   return (
     <View style={styles.container}>
       <Header />
-    <ScrollView 
+      <ScrollView 
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         style={styles.scrollView}>
-
-      <Pressable style={styles.viewPerfil} onPress={() => handlePress('Perfil')}>
-        <View style={styles.iconDiv}><Image style={styles.icon} width={60} height={60} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}}></Image></View>
         
-        <View>
-          <Text style={styles.subtitle}>Yasmin Benjor</Text>
-          <View style={ {flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Text style={styles.text}>XP 120/340</Text>
-            <Text style={styles.textLvl}>level 13</Text>
-          </View>
-          <Progress.Bar
-            width={170}
-            color="#6BBF59"
-            unfilledColor="#EBEBEB"
-            borderWidth={1}
-            borderColor='#6BBF59'
-            height={10}
-            borderRadius={5}
-            style={styles.progressBar}
-            progress={0.6}
-          />
-          {/* Adicionar lógica para converter valor atual e xp necessário para o próximo, convertendo para um número de 0 a 1 que será o responsável para o atriburo de progress*/}
-        </View>
+        <Pressable style={styles.viewPerfil} onPress={() => handlePress('Perfil')}>
+          <View style={styles.iconDiv}><Image style={styles.icon} width={60} height={60} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}}></Image></View>
+          
+          <View>
+            <Text style={styles.subtitle}>Yasmin Benjor</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Text style={styles.text}>XP 120/340</Text>
+              <Text style={styles.textLvl}>level 13</Text>
+            </View>
 
-        <View style={styles.badge}>
-          <Image width={50} height={60} source={{uri: 'https://th.bing.com/th/id/OIP.KgtLpFEUvAR0-jhXUGG-pgHaHa?w=512&h=512&rs=1&pid=ImgDetMain'}}></Image>
-        {/* Substituir url por variável que traga current img link */}
-        </View>
+            <Progress.Bar
+              width={170}
+              color="#6BBF59"
+              unfilledColor="#EBEBEB"
+              borderWidth={1}
+              borderColor='#6BBF59'
+              height={10}
+              borderRadius={5}
+              style={styles.progressBar}
+              progress={0.6}
+            />
+          </View>
+
+          <View style={styles.badge}>
+            <Image width={50} height={60} source={{uri: 'https://th.bing.com/th/id/OIP.KgtLpFEUvAR0-jhXUGG-pgHaHa?w=512&h=512&rs=1&pid=ImgDetMain'}}></Image>
+          </View>
         </Pressable>
+
+        
 
         <Pressable onPress={() => handlePress('Trilha')} maxHeight={210} style={styles.viewTrilha}>
           <Image source={Trilha} maxHeight={210} maxWidth='100%' borderRadius={10}/>
         </Pressable>
 
-        <View style={styles.viewDica}>
+        {/* Pressable em toda a dica diária */}
+        <Pressable onPress={toggleCollapse} style={styles.viewDica}>
           <Text style={styles.subtitle}>Dica diária</Text>
-          <Pressable><Abrir width={32} height={32} style={styles.abrir}/></Pressable>
-        </View>
+          
+          {/* Animação de rotação da seta */}
+          <Animated.View style={{ transform: [{ rotate: rotateIcon }] }}>
+            <Abrir width={32} height={32} style={styles.abrir}/>
+          </Animated.View>
+        </Pressable>
+
+        {/* Componente Collapsible que expande ou colapsa o conteúdo */}
+        <Collapsible collapsed={isCollapsed}>
+          <View style={styles.dicaContent}>
+            <Text style={styles.dicaText}>
+              Aqui está a sua dica do dia! Coloque o lixo para fora antes das 8h.
+            </Text>
+          </View>
+        </Collapsible>
 
         <Pressable onPress={() => handlePress('Coleta')} style={styles.iconButton}>
           <View style={styles.viewAPI}>
@@ -91,7 +127,9 @@ const Home = () => {
         <Pressable onPress={() => handlePress('Catalogo')} style={styles.viewNews}>
           <Image style={styles.imgNews} source={News} maxWidth='100%' maxHeight={205}/>
         </Pressable>
-    </ScrollView>
+
+      </ScrollView>
+
       <Footer />
     </View>
   );
@@ -159,9 +197,13 @@ const styles = StyleSheet.create({
     textLvl: {
       backgroundColor: '#a6d89b',
       borderRadius: 5,
-      paddingHorizontal: 10,
+      paddingHorizontal: 6, // Diminui o padding para ajustar o tamanho
+      paddingVertical: 1, // Adiciona um padding vertical para melhorar a legibilidade
       fontFamily: 'Poppins_500Medium',
-      fontSize: 14
+      fontSize: 12, 
+      textAlign: 'center', 
+      alignSelf: 'flex-start', 
+      
     },
     
     viewAPI: {
@@ -221,7 +263,21 @@ const styles = StyleSheet.create({
 
     viewTrilha: {
       marginVertical: 5,
+    },
 
+    dicaContent: {
+      backgroundColor: '#5EB26C',
+      padding: 10,
+      borderRadius: 10,
+      borderColor: '#E2F2DF',
+      borderWidth: 0.5,
+      marginVertical: 5,
+    },
+
+    dicaText: {
+      fontFamily: 'Poppins_400Regular',
+      fontSize: 14,
+      color: 'white',
     },
 });
 
