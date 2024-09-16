@@ -32,67 +32,80 @@ const Perfil = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.content}>
-        <View>
+          
         <View style={styles.viewPerfil}>
-          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+          
+          {/* Informações do Perfil */}
+          <View style={styles.viewPerfilInfos}>
             <TouchableOpacity>
+              {/* ao apertar tem que sair uma modal */}
               <Edit maxHeight={24} maxWidth={24}/>
             </TouchableOpacity>
-            <Text style={styles.subtitle}>yasmin#3244</Text>
+
+            <Text style={styles.username}>yasmin#3452</Text>
+            
             <TouchableOpacity>
               <Ionicons name="menu-outline" size={28} color="black" />
             </TouchableOpacity>
           </View>
-          <View style={{flexDirection: 'row'}}>
-          <View style={styles.iconDiv}>
-            <Image
-              style={styles.icon}
-              width={60}
-              height={60}
-              source={{
-                uri: "https://cdn-icons-png.flaticon.com/256/903/903482.png",
-              }}
-            ></Image>
-          </View>
-          <View>
+
+          {/* Detalhes do Perfil */}
+          <View style={styles.profileDetails}>
+            <View style={styles.iconDiv}>
+              <Image
+                style={styles.icon}
+                width={60}
+                height={60}
+                source={{
+                  uri: "https://cdn-icons-png.flaticon.com/256/903/903482.png",
+                }}
+              />
+            </View>
+
+            <View style={styles.profileInfo}>
             <Text style={styles.subtitle}>Yasmin Benjor</Text>
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
-            >
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <Text style={styles.text}>XP 120/340</Text>
               <Text style={styles.textLvl}>level 13</Text>
             </View>
-            <Progress.Bar
-              width={170}
-              color="#6BBF59"
-              unfilledColor="#EBEBEB"
-              borderWidth={1}
-              borderColor="#6BBF59"
-              height={10}
-              borderRadius={5}
-              style={styles.progressBar}
-              progress={0.6}
-            />
-            {/* Adicionar lógica para converter valor atual e xp necessário para o próximo, convertendo para um número de 0 a 1 que será o responsável para o atriburo de progress*/}
+              <Progress.Bar
+                width={170}
+                color="#6BBF59"
+                unfilledColor="#EBEBEB"
+                borderWidth={1}
+                borderColor='#6BBF59'
+                height={10}
+                borderRadius={5}
+                style={styles.progressBar}
+                progress={0.6}
+              />
+            </View>
+
           </View>
+
         </View>
-        </View>
-        </View>
+
+        {/* Botão da Trilha */}
         <Pressable style={styles.viewBadge} onPress={() => handlePress('Trilha')}>
           <View style={styles.badge}>
             <Image
               width={70}
               height={80}
               source={{
-                uri: "https://th.bing.com/th/id/OIP.KgtLpFEUvAR0-jhXUGG-pgHaHa?w=512&h=512&rs=1&pid=ImgDetMain",}}></Image>
-            {/* Substituir url por variável que traga current img link da badge*/}
+                uri: "https://th.bing.com/th/id/OIP.KgtLpFEUvAR0-jhXUGG-pgHaHa?w=512&h=512&rs=1&pid=ImgDetMain",
+              }}
+            />
           </View>
           <View>
             <Text style={styles.subtitle}>Árvore Iniciante</Text>
             <Text style={styles.text}>Você está indo bem, continue assim para evoluir!</Text>
-            <Pressable style={styles.botao}><Text style={styles.textBotao}>Ver Trilha de Objetivos</Text><Seta maxWidth={12} maxHeight={12}/></Pressable>
+            <Pressable style={styles.botao}>
+              <Text style={styles.textBotao}>Ver Trilha de Objetivos</Text>
+              <Seta maxWidth={12} maxHeight={12} />
+            </Pressable>
           </View>
         </Pressable>
+
       </View>
       <Footer />
     </ScrollView>
@@ -104,9 +117,59 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#ffffff",
     paddingBottom: 85,
+    
   },
 
   content: {
+    flex: 1,
+  },
+
+  viewPerfil: {
+    paddingTop: 35,
+    backgroundColor: "#F1F1F1",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 5,
+    alignItems: 'center',
+    maxWidth: "100%",
+    
+  },
+
+  viewPerfilInfos: {
+    width: '100%',
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'space-between',
+  },
+
+  profileDetails: {
+    flexDirection: 'row',
+    alignItems: 'center', // Centraliza os itens verticalmente
+    justifyContent: 'center', // Centraliza os itens horizontalmente
+    width: '100%',
+    marginTop: 10,
+  },
+
+  profileInfo: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-start', // Alinhamento do conteúdo textual à esquerda
+    paddingHorizontal: 10,
+  },
+
+  iconDiv: {
+    borderColor: "#A6D89B",
+    backgroundColor: "#F1F1F1",
+    borderWidth: 3,
+    borderRadius: 50,
+    padding: 8,
+    marginRight: 10, // Espaço à direita do ícone
+  },
+
+  username: {
+    fontFamily: "Poppins_500Medium",
+    fontSize: 12,
+    textAlign: "center",
     flex: 1,
   },
 
@@ -120,25 +183,33 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 
-  viewPerfil: {
-    paddingTop: 20,
-    backgroundColor: "#F1F1F1",
-    borderWidth: 0.5,
-    borderColor: "#919890",
-    borderRadius: 10,
-    flexDirection: "column",
-    padding: 10,
-    justifyContent: "space-between",
-    alignItems: 'center',
-    maxWidth: "100%"
+  textLvl: {
+    backgroundColor: '#a6d89b',
+    borderRadius: 5,
+    paddingHorizontal: 6, // Diminui o padding para ajustar o tamanho
+    paddingVertical: 1, // Adiciona um padding vertical para melhorar a legibilidade
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 12, 
+    textAlign: 'center', 
+    alignSelf: 'flex-start', 
   },
 
-  iconDiv: {
-    borderColor: "#A6D89B",
-    backgroundColor: "#F1F1F1",
-    borderWidth: 3,
-    borderRadius: 50,
-    padding: 8,
+  progressDetails: {
+    flexDirection: "row",
+    justifyContent: "space-between", // Alinhamento dos detalhes do progresso
+    width: "100%",
+  },
+
+  icon: {
+    width: 60,
+    height: 60,
+  },
+
+  viewBadge: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 20,
+    paddingHorizontal: 10,
   },
 
   badge: {
@@ -149,39 +220,21 @@ const styles = StyleSheet.create({
     padding: 5,
   },
 
-  progressBar: {
-    height: 10,
-    marginTop: 8,
-  },
-
-  textLvl: {
-    backgroundColor: "#a6d89b",
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    fontFamily: "Poppins_500Medium",
-    fontSize: 14,
-  },
-
   botao: {
     backgroundColor: '#E2F2DF',
     borderRadius: 5,
     paddingHorizontal: 10,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 
   textBotao: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 14,
     color: "#3F463E",
-    paddingRight: 8
+    paddingRight: 8,
   },
-
-  viewBadge: {
-    flexDirection: 'row',
-    gap: 10
-  }
 });
 
 export default Perfil;
