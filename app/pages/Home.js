@@ -11,11 +11,11 @@ import EcoPonto from '../assets/icons/local.svg';
 import Seta from '../assets/icons/arrowRight.svg';
 import News from '../assets/backgrounds/catalogo_bg.png';
 import Trilha from '../assets/backgrounds/trilha_bg.png';
-import Abrir from '../assets/icons/arrowDown.svg'; // Ícone da seta para baixo
+import Abrir from '../assets/icons/arrowDown.svg'; 
 
 const Home = () => {
-  const [isCollapsed, setIsCollapsed] = useState(true); // Controla se a dica está colapsada ou não
-  const rotateAnim = useRef(new Animated.Value(0)).current; // Valor animado para rotação
+  const [isCollapsed, setIsCollapsed] = useState(true); 
+  const rotateAnim = useRef(new Animated.Value(0)).current; 
 
   const [fontsLoaded] = useFonts({
     Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold,
@@ -32,18 +32,18 @@ const Home = () => {
   };
 
   const toggleCollapse = () => {
-    // Alterna entre expandido e colapsado
+
     setIsCollapsed(!isCollapsed);
 
-    // Anima a rotação do ícone
+
     Animated.timing(rotateAnim, {
-      toValue: isCollapsed ? 1 : 0, // Se está colapsado, rotaciona para 180°, caso contrário, volta para 0°
+      toValue: isCollapsed ? 1 : 0,
       duration: 300,
       useNativeDriver: true,
     }).start();
   };
 
-  // Interpolação para rotacionar o ícone de seta
+
   const rotateIcon = rotateAnim.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '180deg'], // Gira de 0° a 180°
@@ -197,8 +197,8 @@ const styles = StyleSheet.create({
     textLvl: {
       backgroundColor: '#a6d89b',
       borderRadius: 5,
-      paddingHorizontal: 6, // Diminui o padding para ajustar o tamanho
-      paddingVertical: 1, // Adiciona um padding vertical para melhorar a legibilidade
+      paddingHorizontal: 6, 
+      paddingVertical: 1, 
       fontFamily: 'Poppins_500Medium',
       fontSize: 12, 
       textAlign: 'center', 

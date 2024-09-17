@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, ImageBackground, Dimensions } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
+import Banner from '../assets/backgrounds/bannerReciclavel.png'; 
 
+const { width } = Dimensions.get('window');
 
 const ReciclavelPage = () => {
-  // Carregamento das fontes
+  const [expanded, setExpanded] = useState({});
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
@@ -13,38 +16,161 @@ const ReciclavelPage = () => {
   });
 
   if (!fontsLoaded) {
-    return (
-      <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
-    );
+    return <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />;
   }
+
+  const handleExpand = (category) => {
+    setExpanded((prevExpanded) => ({
+      ...prevExpanded,
+      [category]: !prevExpanded[category],
+    }));
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Header />
+      <ImageBackground 
+        source={Banner} 
+        style={[styles.bannerContainer, { height: width * 0.659 }]} 
+        resizeMode="cover"
+      />
       <View style={styles.content}>
-        <Text style={styles.text}>Reciclavel Page Content</Text>
+        <Text style={styles.description}>
+          São materiais que podem ser descartados corretamente no lixo reciclável e destinados à reciclagem.
+        </Text>
+        <CategoryContainer
+          category="Metais"
+          items={['Latas de alumínio', 'Fios de cobre', 'Panelas velhas']}
+          expanded={expanded['Metais']}
+          onToggleExpand={() => handleExpand('Metais')}
+          color="#FFC107"
+        />
+        <CategoryContainer
+          category="Papéis"
+          items={['Jornais', 'Revistas', 'Papéis de escritório']}
+          expanded={expanded['Papéis']}
+          onToggleExpand={() => handleExpand('Papéis')}
+          color="#42A5F5"
+        />
+        <CategoryContainer
+          category="Vidros"
+          items={['Garrafas de vidro', 'Frascos de remédios', 'Potes de vidro']}
+          expanded={expanded['Vidros']}
+          onToggleExpand={() => handleExpand('Vidros')}
+          color="#66BB6A"
+        />
+        <CategoryContainer
+          category="Plásticos"
+          items={['Garrafas PET', 'Sacolas plásticas', 'Embalagens']}
+          expanded={expanded['Plásticos']}
+          onToggleExpand={() => handleExpand('Plásticos')}
+          color="#EF5350"
+        />
       </View>
+      <Footer />
     </ScrollView>
   );
 };
 
+const CategoryContainer = ({ category, items, expanded, onToggleExpand, color }) => (
+  <View style={styles.categoryContainer}>
+    <TouchableOpacity onPress={onToggleExpand} style={styles.categoryHeader}>
+      <View style={[styles.bullet, { backgroundColor: color }]} />
+      <Text style={styles.categoryText}>{category}</Text>
+    </TouchableOpacity>
+    {expanded ? (
+      <View>
+        <SubList items={items} color={color} />
+        <View style={styles.categorySeparator} />
+      </View>
+    ) : (
+      <View style={styles.categorySeparator} />
+    )}
+  </View>
+);
+
+const SubList = ({ items, color }) => (
+  <View style={styles.subList}>
+    {items.map((item, index) => (
+      <RecyclableItem key={index} item={item} color={color} />
+    ))}
+  </View>
+);
+
+const RecyclableItem = ({ item, color }) => (
+  <View style={styles.subItemContainer}>
+    <View style={[styles.subItemBullet, { backgroundColor: color }]} />
+    <Text style={styles.subItemText}>{item}</Text>
+  </View>
+);
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#ffffff',  
-    paddingBottom: 85, 
+    flexGrow: 1,
+    backgroundColor: '#ffffff',
+    paddingBottom: 85,
   },
-
   content: {
-    flex: 1,
+    paddingHorizontal: 10,
+  },
+  bannerContainer: {
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  
-  text: {
-    fontSize: 18,
+  description: {
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 14,
+    textAlign: 'center',
+    color: '#3F463E',
+    marginBottom: 15,
+  },
+  categoryContainer: {
+    marginBottom: 15,
+  },
+  categoryHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
+    borderRadius: 8,
+  },
+  categoryText: {
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 20,
+    flex: 1,
+  },
+  bullet: {
+    width: 15,
+    height: 15,
+    borderRadius: 10,
+    marginRight: 10,
+  },
+  subList: {
+    paddingLeft: 35,
+  },
+  subItemContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5,
+  },
+  subItemBullet: {
+    width: 15,
+    height: 15,
+    borderRadius: 10,
+    marginRight: 10,
+  },
+  subItemText: {
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 16,
+    color: '#333',
+  },
+  categorySeparator: {
+    height: 1,
+    backgroundColor: '#E0E0E0',
+    marginVertical: 10,
+    marginLeft: 15,
   },
 });
 
 export default ReciclavelPage;
-
