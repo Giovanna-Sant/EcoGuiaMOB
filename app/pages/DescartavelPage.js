@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   itemText: {
-    fontFamily: 'Poppins_400Regular',
+    fontFamily: 'Poppins_500Medium',
     fontSize: 20,
     color: '#333',
     flex: 1,
