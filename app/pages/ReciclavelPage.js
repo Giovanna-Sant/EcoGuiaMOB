@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, ImageBackground, Dimensions } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, ImageBackground, Dimensions, Animated } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
+import { Ionicons } from '@expo/vector-icons'; 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Banner from '../assets/backgrounds/bannerReciclavel.png'; 
@@ -9,6 +10,7 @@ const { width } = Dimensions.get('window');
 
 const ReciclavelPage = () => {
   const [expanded, setExpanded] = useState({});
+  
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
@@ -27,67 +29,93 @@ const ReciclavelPage = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       <Header />
-      <ImageBackground 
-        source={Banner} 
-        style={[styles.bannerContainer, { height: width * 0.659 }]} 
-        resizeMode="cover"
-      />
-      <View style={styles.content}>
-        <Text style={styles.description}>
-          São materiais que podem ser descartados corretamente no lixo reciclável e destinados à reciclagem.
-        </Text>
-        <CategoryContainer
-          category="Metais"
-          items={['Latas de alumínio', 'Fios de cobre', 'Panelas velhas']}
-          expanded={expanded['Metais']}
-          onToggleExpand={() => handleExpand('Metais')}
-          color="#FFC107"
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <ImageBackground 
+          source={Banner} 
+          style={[styles.bannerContainer, { height: width * 0.659 }]} 
+          resizeMode="cover"
         />
-        <CategoryContainer
-          category="Papéis"
-          items={['Jornais', 'Revistas', 'Papéis de escritório']}
-          expanded={expanded['Papéis']}
-          onToggleExpand={() => handleExpand('Papéis')}
-          color="#42A5F5"
-        />
-        <CategoryContainer
-          category="Vidros"
-          items={['Garrafas de vidro', 'Frascos de remédios', 'Potes de vidro']}
-          expanded={expanded['Vidros']}
-          onToggleExpand={() => handleExpand('Vidros')}
-          color="#66BB6A"
-        />
-        <CategoryContainer
-          category="Plásticos"
-          items={['Garrafas PET', 'Sacolas plásticas', 'Embalagens']}
-          expanded={expanded['Plásticos']}
-          onToggleExpand={() => handleExpand('Plásticos')}
-          color="#EF5350"
-        />
-      </View>
+        <View style={styles.content}>
+          <Text style={styles.description}>
+            São materiais que podem ser descartados corretamente no lixo reciclável e destinados à reciclagem.
+          </Text>
+          <CategoryContainer
+            category="Metais"
+            items={['Fios de cobre', 'Latas de bebidas e alimentos', 'Panelas sem cabo']}
+            expanded={expanded['Metais']}
+            onToggleExpand={() => handleExpand('Metais')}
+            color="#FFC107"
+          />
+          <CategoryContainer
+            category="Papéis"
+            items={['Jornais', 'Revistas', 'Papéis de escritório']}
+            expanded={expanded['Papéis']}
+            onToggleExpand={() => handleExpand('Papéis')}
+            color="#42A5F5"
+          />
+          <CategoryContainer
+            category="Vidros"
+            items={['Garrafas de vidro', 'Frascos de remédios', 'Potes de vidro']}
+            expanded={expanded['Vidros']}
+            onToggleExpand={() => handleExpand('Vidros')}
+            color="#66BB6A"
+          />
+          <CategoryContainer
+            category="Plásticos"
+            items={['Garrafas PET', 'Sacolas plásticas', 'Embalagens']}
+            expanded={expanded['Plásticos']}
+            onToggleExpand={() => handleExpand('Plásticos')}
+            color="#EF5350"
+          />
+        </View>
+      </ScrollView>
       <Footer />
-    </ScrollView>
+    </View>
   );
 };
 
-const CategoryContainer = ({ category, items, expanded, onToggleExpand, color }) => (
-  <View style={styles.categoryContainer}>
-    <TouchableOpacity onPress={onToggleExpand} style={styles.categoryHeader}>
-      <View style={[styles.bullet, { backgroundColor: color }]} />
-      <Text style={styles.categoryText}>{category}</Text>
-    </TouchableOpacity>
-    {expanded ? (
-      <View>
-        <SubList items={items} color={color} />
+const CategoryContainer = ({ category, items, expanded, onToggleExpand, color }) => {
+  const animation = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(animation, {
+      toValue: expanded ? 1 : 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  }, [expanded]);
+
+  const rotateInterpolate = animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '180deg'], // A seta gira 180 graus
+  });
+
+  const arrowStyle = {
+    transform: [{ rotate: rotateInterpolate }],
+  };
+
+  return (
+    <View style={styles.categoryContainer}>
+      <TouchableOpacity onPress={onToggleExpand} style={styles.categoryHeader}>
+        <View style={[styles.bullet, { backgroundColor: color }]} />
+        <Text style={styles.categoryText}>{category}</Text>
+        <Animated.View style={arrowStyle}>
+          <Ionicons name="chevron-down" size={24} color="black" />
+        </Animated.View>
+      </TouchableOpacity>
+      {expanded ? (
+        <View>
+          <SubList items={items} color={color} />
+          <View style={styles.categorySeparator} />
+        </View>
+      ) : (
         <View style={styles.categorySeparator} />
-      </View>
-    ) : (
-      <View style={styles.categorySeparator} />
-    )}
-  </View>
-);
+      )}
+    </View>
+  );
+};
 
 const SubList = ({ items, color }) => (
   <View style={styles.subList}>
@@ -106,8 +134,11 @@ const RecyclableItem = ({ item, color }) => (
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
     backgroundColor: '#ffffff',
+  },
+  scrollContainer: {
+    flexGrow: 1,
     paddingBottom: 85,
   },
   content: {
