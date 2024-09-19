@@ -18,7 +18,8 @@ Trabalho de Conclusão de Curso desenvolvido pelo grupo EcoBio12 da turma 3DM do
 | Link  | Função |
 | ------------- | ------------- |
 | [Figma](https://www.figma.com/design/g6fvHnC4mVXiQc28NnTuPr/ECOGUIA?node-id=27-2&t=cLyLLDDcSvJB7ID1-1)  | Prototipação  de Telas|
-| [Repositório](https://github.com/Jhamim-py/API_Ecopontos)  | API de EcoPontos  |
+| [Repositório](https://github.com/kamimarinn/EcoGuiaWEB)  | Aplicação do Website |
+| [Repositório](https://github.com/Jhamim-py/Ecoguia-API)  | API Rest|
 
 ## 💬 Como visualizar localmente?
 
