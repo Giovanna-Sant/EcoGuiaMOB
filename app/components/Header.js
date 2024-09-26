@@ -13,6 +13,10 @@ const Header = ({ onMenuPress, showBackButton }) => {
     navigation.goBack();
   };
 
+  const handlePress = (screen) => {
+    navigation.navigate(screen);
+  };
+  
   return (
     <View style={styles.header}>
       <StatusBar style="auto" />
@@ -24,7 +28,7 @@ const Header = ({ onMenuPress, showBackButton }) => {
       <View style={styles.logoContainer}>
         <Logo width={120} height={50} style={styles.logo} onPress={() => navigation.navigate('Home')} />
       </View>
-      <TouchableOpacity onPress={onMenuPress} style={styles.menuButton}>
+      <TouchableOpacity onPress={() => handlePress('Config')} style={styles.menuButton}>
         <Ionicons name="menu-outline" size={28} color="black" />
       </TouchableOpacity>
     </View>

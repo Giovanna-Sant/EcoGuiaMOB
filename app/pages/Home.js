@@ -35,7 +35,6 @@ const Home = () => {
 
     setIsCollapsed(!isCollapsed);
 
-
     Animated.timing(rotateAnim, {
       toValue: isCollapsed ? 1 : 0,
       duration: 300,

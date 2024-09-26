@@ -9,6 +9,7 @@ import DescartavelPage from '../pages/DescartavelPage'
 import ReciclavelPage from '../pages/ReciclavelPage'
 import Login from '../pages/Login';
 import NoticiasPage from '../pages/NoticiasPage';
+import Config from '../pages/sidebar/Config';
 
 // Cria o Tab Navigator
 const Tab = createBottomTabNavigator();
@@ -35,6 +36,7 @@ export default function AppNavigator() {
       <Tab.Screen name="DescartavelPage" component={DescartavelPage} />
       <Tab.Screen name="ReciclavelPage" component={ReciclavelPage} />
       <Tab.Screen name="NoticiasPage" component={NoticiasPage} />
+      <Tab.Screen name="Config" component={Config}/>
     </Tab.Navigator>
   );
 }
