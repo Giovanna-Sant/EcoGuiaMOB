@@ -9,6 +9,10 @@ import DescartavelPage from '../pages/DescartavelPage'
 import ReciclavelPage from '../pages/ReciclavelPage'
 import Login from '../pages/Login';
 import NoticiasPage from '../pages/NoticiasPage';
+import RedefinirSenha from '../pages/RedefinirSenha';
+import Token from '../pages/Token';
+import NovaSenha from '../pages/NovaSenha';
+
 
 // Cria o Tab Navigator
 const Tab = createBottomTabNavigator();
@@ -31,6 +35,9 @@ export default function AppNavigator() {
       <Tab.Screen name="Catalogo" component={Catalogo} />
       <Tab.Screen name="Coleta" component={Coleta} />
       <Tab.Screen name="Perfil" component={Perfil} />
+      <Tab.Screen name="RedefinirSenha" component={RedefinirSenha} />
+      <Tab.Screen name="Token" component={Token} />
+      <Tab.Screen name="NovaSenha" component={NovaSenha} />
       {/* com seta para voltar  */}
       <Tab.Screen name="DescartavelPage" component={DescartavelPage} />
       <Tab.Screen name="ReciclavelPage" component={ReciclavelPage} />
