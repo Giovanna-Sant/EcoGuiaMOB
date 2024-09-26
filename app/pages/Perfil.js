@@ -13,6 +13,7 @@ const Perfil = () => {
   const navigation = useNavigation();
 
   const [isModalVisible, setModalVisible] = useState(false);
+  
   const [nome, setNome] = useState('Yasmin');
   const [sobrenome, setSobrenome] = useState('Benjor');
   const [selectedIcon, setSelectedIcon] = useState(null);
