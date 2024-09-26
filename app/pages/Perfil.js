@@ -99,7 +99,7 @@ const Perfil = () => {
         </View>
 
         {/* Botão da Trilha */}
-        <Pressable style={styles.viewBadge} onPress={() => handlePress('Trilha')}>
+        <View style={styles.viewBadge}>
           <View style={styles.badge}>
             <Image
               width={70}
@@ -112,12 +112,12 @@ const Perfil = () => {
           <View>
             <Text style={styles.subtitle}>Árvore Iniciante</Text>
             <Text style={styles.text}>Você está indo bem, continue assim para evoluir!</Text>
-            <Pressable style={styles.botao}>
+            <Pressable style={styles.botao} onPress={() => handlePress('Trilha')}>
               <Text style={styles.textBotao}>Ver Trilha de Objetivos</Text>
               <Seta maxWidth={12} maxHeight={12} />
             </Pressable>
           </View>
-        </Pressable>
+        </View>
       </View>
       <Footer />
 
@@ -156,10 +156,10 @@ const Perfil = () => {
 
             <View style={styles.buttonContainer}>
               <Pressable style={styles.confirmButton} onPress={handleSave}>
-                <Text style={styles.buttonTextConfir}>Confirmar</Text>
+                <Text style={styles.buttonTextConfir}>Cancelar</Text>
               </Pressable>
               <Pressable style={styles.cancelButton} onPress={toggleModal}>
-                <Text style={styles.buttonText}>Cancelar</Text>
+                <Text style={styles.buttonText}>Confirmar</Text>
               </Pressable>
             </View>
           </View>
@@ -175,9 +175,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     paddingBottom: 85,
   },
+
   content: {
     flex: 1,
   },
+
   viewPerfil: {
     paddingTop: 35,
     paddingBottom: 15,
@@ -189,12 +191,14 @@ const styles = StyleSheet.create({
     maxWidth: "100%",
     paddingHorizontal: 20,
   },
+
   viewPerfilInfos: {
     width: '100%',
     flexDirection: 'row', 
     alignItems: 'center', 
     justifyContent: 'space-between',
   },
+
   profileDetails: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -202,12 +206,14 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 10, 
   },
+
   profileInfo: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
     paddingHorizontal: 10,
   },
+
   iconDiv: {
     borderColor: "#A6D89B",
     backgroundColor: "#F1F1F1",
@@ -216,20 +222,24 @@ const styles = StyleSheet.create({
     padding: 8,
     marginRight: 10,
   },
+
   username: {
     fontFamily: "Poppins_500Medium",
     fontSize: 12,
     textAlign: "center",
     flex: 1,
   },
+
   subtitle: {
     fontFamily: "Poppins_500Medium",
     fontSize: 16,
   },
+
   text: {
     fontFamily: "Poppins_400Regular",
     fontSize: 14,
   },
+
   textLvl: {
     backgroundColor: '#a6d89b',
     borderRadius: 5,
@@ -240,20 +250,26 @@ const styles = StyleSheet.create({
     textAlign: 'center', 
     alignSelf: 'flex-start', 
   },
+
   progressBar: {
     height: 10,
     marginTop: 8,
   },
+  
   icon: {
     width: 60,
     height: 60,
   },
+  
   viewBadge: {
     flexDirection: 'row',
     gap: 10,
     marginTop: 20,
     paddingHorizontal: 10,
+    marginHorizontal: 10,
+    maxWidth: '70%'
   },
+  
   badge: {
     borderRadius: 10,
     borderColor: "#6BBF59",
@@ -261,6 +277,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F1F1F1",
     padding: 5,
   },
+  
   botao: {
     backgroundColor: '#E2F2DF',
     borderRadius: 5,
@@ -269,6 +286,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   textBotao: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 14,
@@ -283,18 +301,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   modalContainer: {
     width: 300,
     padding: 20,
     backgroundColor: '#fff',
     borderRadius: 10,
     elevation: 10,
+  
   },
   label: {
     fontSize: 10, 
     color: '#333',
     fontFamily: 'Poppins_500Medium',
   },
+
   input: {
     borderColor: '#6BBF59',
     borderWidth: 1,
@@ -303,12 +324,14 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     height: 40,
   },
+  
   iconGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     marginVertical: 15,
   },
+  
   iconCircle: {
     width: 60,
     height: 60,
@@ -319,16 +342,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
+
   selectedIcon: {
     backgroundColor: '#6BBF59',
   },
+  
   iconText: {
     fontSize: 18,
     color: '#333',
   },
+
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'center', // Altera para center
+    justifyContent: 'center',
     marginTop: 20,
   },
   
@@ -340,7 +366,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#6BBF59',
     flex: 1,
-    marginHorizontal: 5, // Adiciona margem horizontal
+    marginHorizontal: 5,
   },
   
   cancelButton: {
@@ -350,12 +376,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-    marginHorizontal: 5, // Adiciona margem horizontal
+    marginHorizontal: 5,
   },
+
   buttonText: {
     color: '#fff',
     fontFamily: 'Poppins_500Medium',
   },
+
   buttonTextConfir: {
     color: '#6BBF59',
     fontFamily: 'Poppins_500Medium',

@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: 10,
     paddingVertical: 20,
-    paddingBottom: 60,
+    paddingBottom: 75,
   },
 
   logoContainer: {
@@ -194,11 +194,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 20,
+    
   },
   
   button: {
     backgroundColor: "#F1F1F1",
-    width: 190,
+    width: 175,
     height: 180,
     borderRadius: 5,
     justifyContent: "center",
