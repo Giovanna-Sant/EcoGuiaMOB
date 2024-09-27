@@ -166,6 +166,7 @@ const Perfil = () => {
           </View>
         </View>
       </Modal>
+      
     </ScrollView>
   );
 };
