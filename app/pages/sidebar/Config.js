@@ -14,6 +14,7 @@ const Config = () => {
   });
 
   const [emailModalVisible, setEmailModalVisible] = useState(false);
+  const [tokenModalVisible, setTokenModalVisible] = useState(false);
   const [senhaModalVisible, setSenhaModalVisible] = useState(false);
   const [deletarModalVisible, setDeletarModalVisible] = useState(false);
   const [confirmarSenhaModalVisible, setConfirmarSenhaModalVisible] = useState(false);
@@ -23,13 +24,19 @@ const Config = () => {
   const [confirmarEmail, setConfirmarEmail] = useState('');
 
   const [senhaAtual, setSenhaAtual] = useState('');
+  const [tokenAtual, setTokenAtual] = useState('');
   const [novaSenha, setNovaSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
   
   const [senhaParaDeletar, setSenhaParaDeletar] = useState('');
+  const [tokenParaAlterar, setTokenParaAlterar] = useState('');
 
   const toggleEmailModal = () => {
     setEmailModalVisible(!emailModalVisible);
+  };
+
+  const toggleTokenModal = () => {
+    setTokenModalVisible(!tokenModalVisible);
   };
 
   const toggleSenhaModal = () => {
@@ -67,6 +74,15 @@ const Config = () => {
     toggleConfirmarSenhaModal();
   };
 
+  const handleConfirmarToken = () => {
+    if (tokenParaAlterar === tokenAtual) {
+      alert('Email atualizado com sucesso!')
+
+    } else {
+      alert('Código de acesso incorreta!');
+    }
+  };
+
   if (!fontsLoaded) {
     return (
       <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
@@ -93,7 +109,7 @@ const Config = () => {
 
         <View style={styles.div}>
           <Pressable style={styles.operacao} onPress={toggleEmailModal}>
-            <Text style={styles.txtOperacao}>Alterar E-mail</Text>
+            <Text style={styles.txtOperacao}>Alterar Email</Text>
             <Seta />
           </Pressable>
           <Pressable style={styles.operacao} onPress={toggleSenhaModal}>
@@ -107,24 +123,18 @@ const Config = () => {
         </View>
         <Image source={Detail} style={styles.detalhe} />
 
-        {/* Modal para Alterar E-mail */}
-        <Modal visible={emailModalVisible} transparent animationType="slide">
+        {/* Modal para Alterar Email */}
+        <Modal visible={emailModalVisible} transparent animationType="fade">
           <View style={styles.modalOverlay}>
             <View style={styles.modalContainer}>
-              <Text style={styles.title}>Alteração Email</Text>
-              <Text style={styles.label}>E-mail Atual:</Text>
-              <TextInput
-                style={styles.input}
-                value={emailAtual}
-                onChangeText={setEmailAtual}
-              />
-              <Text style={styles.label}>Novo E-mail:</Text>
+              <Text style={styles.title}>Atualizar seu email</Text>
+              <Text style={styles.label}>Novo email:</Text>
               <TextInput
                 style={styles.input}
                 value={novoEmail}
                 onChangeText={setNovoEmail}
               />
-              <Text style={styles.label}> Confirmar Novo E-mail:</Text>
+              <Text style={styles.label}> Confirmar novo email:</Text>
               <TextInput
                 style={styles.input}
                 value={confirmarEmail}
@@ -134,7 +144,7 @@ const Config = () => {
                 <Pressable style={styles.confirmButton} onPress={toggleEmailModal}>
                   <Text style={styles.buttonTextConfir}>Cancelar</Text>
                 </Pressable>
-                <Pressable style={styles.cancelButton} onPress={handleEmailSave}>
+                <Pressable style={styles.cancelButton} onPress={toggleTokenModal}>
                   <Text style={styles.buttonText}>Confirmar</Text>
                 </Pressable>
               </View>
@@ -143,7 +153,7 @@ const Config = () => {
         </Modal>
 
         {/* Modal para Alterar Senha */}
-        <Modal visible={senhaModalVisible} transparent animationType="slide">
+        <Modal visible={senhaModalVisible} transparent animationType="fade">
           <View style={styles.modalOverlay}>
             <View style={styles.modalContainer}>
               <Text style={styles.title}>Alteração Senha</Text>
@@ -181,7 +191,7 @@ const Config = () => {
         </Modal>
 
         {/* Modal para Deletar Conta */}
-        <Modal visible={deletarModalVisible} transparent animationType="slide">
+        <Modal visible={deletarModalVisible} transparent animationType="fade">
           <View style={styles.modalOverlay}>
             <View style={styles.modalContainer}>
               <Text style={styles.delete}>Você deseja DELETAR sua conta?</Text>
@@ -197,7 +207,8 @@ const Config = () => {
           </View>
         </Modal>
 
-        <Modal visible={confirmarSenhaModalVisible} transparent animationType="slide">
+        {/* Modal de confirmação para deletar conta */}
+        <Modal visible={confirmarSenhaModalVisible} transparent animationType="fade">
           <View style={styles.modalOverlay}>
             <View style={styles.modalContainer}>
               <Text style={styles.title}>yasmin#3452 confirme a senha da sua conta para haver a exclusão.</Text>
@@ -212,6 +223,29 @@ const Config = () => {
                   <Text style={styles.buttonTextConfir}>Cancelar</Text>
                 </Pressable>
                 <Pressable style={styles.cancelButton} onPress={handleConfirmarSenha}>
+                  <Text style={styles.buttonText}>Confirmar</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
+
+        {/* Token para Confirmar alteração de email. */}
+        <Modal visible={tokenModalVisible} transparent animationType="fade">
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContainer}>
+              <Text style={styles.title}>Um código de acesso foi enviado ao novo email. Insira-o abaixo para confirmar a alteração.</Text>
+              <TextInput
+                style={styles.input}
+                value={senhaParaDeletar}
+                onChangeText={setTokenParaAlterar}
+                secureTextEntry
+              />
+              <View style={styles.buttonContainer}>
+                <Pressable style={styles.confirmButton} onPress={toggleTokenModal}>
+                  <Text style={styles.buttonTextConfir}>Cancelar</Text>
+                </Pressable>
+                <Pressable style={styles.cancelButton} onPress={handleConfirmarToken}>
                   <Text style={styles.buttonText}>Confirmar</Text>
                 </Pressable>
               </View>
@@ -274,11 +308,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10
   },
+
   iconDiv: {
     backgroundColor: '#f1f1f1',
     padding: 8,
     borderRadius: 50
   },
+  
   operacao: {
     flexDirection: 'row',
     alignContent: 'center',
@@ -286,6 +322,7 @@ const styles = StyleSheet.create({
     margin: 3,
     alignItems: 'center'
   },
+  
   detalhe: {
     maxWidth: 320,
     maxHeight: 85,
@@ -298,6 +335,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  
   modalContainer: {
     width: 350,
     padding: 20,
@@ -305,6 +343,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 10,
   },
+  
   title: {
     fontSize: 18,
     color: '#333',
@@ -312,11 +351,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10,
   },
+  
   label: {
     fontSize: 10,
     color: '#333',
     fontFamily: 'Poppins_500Medium',
   },
+  
   delete: {
     fontSize: 16,
     color: '#333',
@@ -325,6 +366,7 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     marginRight: 50,
   },
+  
   input: {
     borderColor: '#6BBF59',
     borderWidth: 1,
@@ -333,11 +375,13 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     height: 40,
   },
+  
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 20,
   },
+  
   confirmButton: {
     backgroundColor: '#fff',
     padding: 10,
@@ -348,6 +392,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 5,
   },
+  
   cancelButton: {
     backgroundColor: '#6BBF59',
     padding: 10,
@@ -357,11 +402,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     justifyContent: 'center'
   },
+  
   buttonText: {
     color: '#fff',
     fontFamily: 'Poppins_500Medium',
-  
   },
+  
   buttonTextConfir: {
     color: '#6BBF59',
     fontFamily: 'Poppins_500Medium',

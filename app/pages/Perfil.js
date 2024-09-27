@@ -60,7 +60,7 @@ const Perfil = () => {
 
             <Text style={styles.username}>yasmin#3452</Text>
             
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => handlePress('Config')}>
               <Ionicons name="menu-outline" size={28} color="black" />
             </TouchableOpacity>
           </View>

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import TitleCatalogo from '../assets/titles/titleCatalogo.svg';
-import Recicla from '../assets/icons/recicla.svg';
-import Lixo from '../assets/icons/lixo.svg';
-import Imgnews from '../assets/backgrounds/news_bg.svg';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import TitleCatalogo from '../../assets/titles/titleCatalogo.svg';
+import Recicla from '../../assets/icons/recicla.svg';
+import Lixo from '../../assets/icons/lixo.svg';
+import Imgnews from '../../assets/backgrounds/news_bg.svg';
 
 const Catalogo = ({ navigation }) => {
   // Filtros

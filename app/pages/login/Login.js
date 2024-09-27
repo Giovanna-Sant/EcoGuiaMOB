@@ -1,17 +1,26 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
-import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_300Light } from '@expo-google-fonts/poppins';
-import Logo from '../assets/logo.svg';
+import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
+import Logo from '../../assets/logo.svg';
+import Google from '../../assets/icons/google.svg';
 
+export default function Login() {
+  const [isVisible, setIsVisible] = useState(true);
 
-export default function RedefinirSenha() {
+  const toggleVisibility = () => {
+    setIsVisible(!isVisible);
+  };
+
   const navigation = useNavigation();
-  
+  const handlePress = (screen) => {
+    navigation.navigate(screen);
+  };
+
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
+    Poppins_500Medium,
     Poppins_600SemiBold,
-    Poppins_300Light,
   });
 
   if (!fontsLoaded) {
@@ -24,32 +33,59 @@ export default function RedefinirSenha() {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.fixedContent}>
         <Logo width={300} style={styles.logo} />
-        <Text style={styles.title}>Atualização de Senha</Text>
-        <Text style={styles.sub}>Informe a nova senha</Text>
+        <Text style={styles.title}>
+          {isVisible ? 'Cadastre-se' : 'Fazer Login'}
+        </Text>
+        <View style={styles.googleContainer}>
+          <Google width={25} height={25} />
+          <Text style={styles.googleText}>
+            {isVisible ? 'Criar conta com o Google' : 'Entrar com o Google'}
+          </Text>
+        </View>
       </View>
 
       <View style={styles.inputContainer}>
-        <CustomInput placeholder="Senha" />
-        <CustomInput placeholder="Confirmar Senha" />
-
-
+        {isVisible ? (
+          <>
+            <CustomInput placeholder="Nome" />
+            <CustomInput placeholder="Sobrenome" />
+            <CustomInput placeholder="seuemail@gmail.com" />
+            <CustomInput placeholder="Senha" secureTextEntry />
+            <CustomInput placeholder="Confirmar senha" secureTextEntry />
+            
+          </>
+        ) : (
+          <>
+            <CustomInput placeholder="seuemail@gmail.com" />
+            <CustomInput placeholder="Senha" secureTextEntry />
+            <TouchableOpacity
+              style={styles.recover}
+              onPress={() => handlePress("RedefinirSenha")}
+            >
+              <Text style={styles.recoverTexto}>Esqueci a Senha</Text>
+            </TouchableOpacity>
+              </>
+        )}
       </View>
 
       <View style={styles.footer}>
         <TouchableOpacity
           style={styles.botao}
-          onPress={() => navigation.navigate("Login")}
+          onPress={() => handlePress("Home")}
         >
-          <Text style={styles.botaoTexto}>Redefinir Senha</Text>
+          <Text style={styles.botaoTexto}>Concluído</Text>
         </TouchableOpacity>
 
         <View style={styles.textContainer}>
-
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-            <Text style={styles.text}>Voltar ao Login</Text>
+          <Text style={styles.text}>
+            {isVisible ? 'Já possui conta? ' : 'Não possui conta? '}
+          </Text>
+          <TouchableOpacity onPress={toggleVisibility}>
+            <Text style={styles.loginText}>
+              {isVisible ? 'Fazer Login' : 'Fazer Cadastro'}
+            </Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.passoTexto}>Passo 3</Text>
       </View>
     </ScrollView>
   );
@@ -70,6 +106,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#fff",
   },
+
   fixedContent: {
     paddingTop: 80,
     alignItems: "center",
@@ -77,22 +114,16 @@ const styles = StyleSheet.create({
     marginTop: 50,
     marginBottom: 20,
   },
+
   logo: {},
+
   title: {
     fontFamily: "Poppins_600SemiBold",
     fontSize: 24,
     color: "#3F463E",
     marginTop: 20,
   },
-  sub: {
-    fontFamily: "Poppins_400Regular",
-    fontSize: 12,
-    color: "#3F463E",
-    textAlign: 'center',
-    marginLeft: 40,
-    marginRight: 40,
 
-  },
   googleContainer: {
     borderWidth: 2,
     borderRadius: 25,
@@ -103,17 +134,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 10,
   },
+
   googleText: {
     fontFamily: "Poppins_400Regular",
     fontSize: 16,
     color: "#000",
     marginLeft: 8,
   },
+
   inputContainer: {
     width: '100%',
     paddingHorizontal: 30,
     marginTop: 20,
   },
+
   input: {
     backgroundColor: "#F1F1F1",
     paddingVertical: 5,
@@ -126,33 +160,38 @@ const styles = StyleSheet.create({
     height: 40,
     fontFamily: "Poppins_400Regular",
   },
+
   loginText: {
     fontFamily: "Poppins_400Regular",
     fontSize: 16,
     color: "#6BBF59",
   },
+
   footer: {
     marginTop: 20,
     alignItems: "center",
     marginBottom: 40,
   },
+
   text: {
     fontFamily: "Poppins_400Regular",
     fontSize: 16,
     color: "#000",
-    marginBottom: 166,
   },
+
   textContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     marginTop: 10,
   },
+
   loader: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
+
   botao: {
     backgroundColor: "#6BBF59",
     justifyContent: "center",
@@ -161,15 +200,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 5,
   },
+
   botaoTexto: {
     fontFamily: "Poppins_600SemiBold",
     color: "#fff",
     fontSize: 16,
   },
-  passoTexto: {
+
+  recoverTexto: {
     fontFamily: "Poppins_400Regular",
     color: "#6BBF59",
     fontSize: 14,
     textDecorationLine: 'underline',
+    textAlign: 'center'
   },
 });

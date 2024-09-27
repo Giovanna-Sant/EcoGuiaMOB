@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_300Light } from '@expo-google-fonts/poppins';
-import Logo from '../assets/logo.svg';
+import Logo from '../../assets/logo.svg';
 
 
 export default function RedefinirSenha() {
@@ -24,8 +24,8 @@ export default function RedefinirSenha() {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.fixedContent}>
         <Logo width={300} style={styles.logo} />
-        <Text style={styles.title}>Redefinir Senha</Text>
-        <Text style={styles.sub}>Informe o e-mail para o qual deseja redefinir a sua senha.</Text>
+        <Text style={styles.title}>Confirme seu email</Text>
+        <Text style={styles.sub}>Informe o email de sua conta para redefinir a senha</Text>
       </View>
 
       <View style={styles.inputContainer}>
@@ -38,7 +38,7 @@ export default function RedefinirSenha() {
           style={styles.botao}
           onPress={() => navigation.navigate("Token")}
         >
-          <Text style={styles.botaoTexto}>Redefinir Senha</Text>
+          <Text style={styles.botaoTexto}>Enviar Código</Text>
         </TouchableOpacity>
 
         <View style={styles.textContainer}>
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   },
   sub: {
     fontFamily: "Poppins_400Regular",
-    fontSize: 12,
+    fontSize: 14,
     color: "#3F463E",
     textAlign: 'center',
     marginLeft: 40,
@@ -169,6 +169,5 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_400Regular",
     color: "#6BBF59",
     fontSize: 14,
-    textDecorationLine: 'underline',
   },
 });
