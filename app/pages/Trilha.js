@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Modal, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Modal, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 const Trilha = () => {
-  const [modalVisible, setModalVisible] = useState(false);  // Estado para controlar a visibilidade do modal
-  const windowHeight = Dimensions.get('window').height;     // Obter a altura da tela
+  const [modalVisible, setModalVisible] = useState(false);
+  const windowHeight = Dimensions.get('window').height;
 
   // Carregamento das fontes
   const [fontsLoaded] = useFonts({
@@ -24,7 +24,7 @@ const Trilha = () => {
   return (
     <View style={styles.container}>
       <Header />
-      
+
       {/* Conteúdo Principal */}
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.text}>Trilha Page Content</Text>
@@ -45,22 +45,48 @@ const Trilha = () => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.modalBackground} />
+        </TouchableWithoutFeedback>
+
         <View style={[styles.modalView, { height: windowHeight * 0.8 }]}>
           <Text style={styles.modalText}>Selecione os materiais</Text>
           <Text style={styles.modalDescri}>Selecione os materiais que fazem parte desta coleta</Text>
           
-          {/* Adicione aqui os componentes de seleção de materiais */}
+          {/* Componentes de seleção de materiais */}
           <View style={styles.materialsContainer}>
-           
-          </View>
+            {/* Linha 1 */}
+            <View style={styles.row}>
+              <View style={[styles.materialCircle, { backgroundColor: '#A6C8FF' }]}>
+                <Text style={styles.materialXP}>10XP</Text>
+                <Text style={styles.materialName}>Papel</Text>
+              </View>
+              <View style={[styles.materialCircle, { backgroundColor: '#FF9E9E' }]}>
+                <Text style={styles.materialXP}>20XP</Text>
+                <Text style={styles.materialName}>Plástico</Text>
+              </View>
+            </View>
 
-          {/* Botão de fechar o modal */}
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={() => setModalVisible(false)}
-          >
-            <Text style={styles.closeButtonText}>Fechar</Text>
-          </TouchableOpacity>
+            {/* Linha 2 */}
+            <View style={styles.row}>
+              <View style={[styles.materialCircle, { backgroundColor: '#A8E6A3' }]}>
+                <Text style={styles.materialXP}>30XP</Text>
+                <Text style={styles.materialName}>Vidro</Text>
+              </View>
+              <View style={[styles.materialCircle, { backgroundColor: '#EBD687' }]}>
+                <Text style={styles.materialXP}>40XP</Text>
+                <Text style={styles.materialName}>Metal</Text>
+              </View>
+            </View>
+
+            {/* Linha 3 */}
+            <View style={styles.row}>
+              <View style={[styles.materialCircle, { backgroundColor: '#F0C4A4' }]}>
+                <Text style={styles.materialXP}>50XP</Text>
+                <Text style={styles.materialName}>Eletrônicos</Text>
+              </View>
+            </View>
+          </View>
         </View>
       </Modal>
 
@@ -86,7 +112,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 
-
   floatingButton: {
     position: 'absolute',
     width: 60,
@@ -109,6 +134,9 @@ const styles = StyleSheet.create({
     color: '#000',
   },
 
+  modalBackground: {
+    flex: 1,  // Preenche toda a área disponível
+  },
 
   modalView: {
     position: 'absolute',
@@ -129,11 +157,10 @@ const styles = StyleSheet.create({
   modalText: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 20,
-    // marginBottom: 20,
     textAlign: 'center',
   },
 
-  modalDescri:{
+  modalDescri: {
     fontFamily: 'Poppins_400Regular',
     fontSize: 12,
     marginBottom: 20,
@@ -143,22 +170,46 @@ const styles = StyleSheet.create({
   },
 
   materialsContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+
+  },
+
+  materialCircle: {
+    width: 114,
+    height: 114,
+    borderRadius: 64,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 12,
+  },
+
+  materialXP: {
+    fontFamily: 'Poppins_600SemiBold',
+    fontSize: 14,
+    color: '#FFF',
+    position: 'absolute',
+    top: 10,
+    textAlign: 'center',
+    backgroundColor: '#000',
+    borderRadius: 20,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
     alignItems: 'center',
     justifyContent: 'center',
   },
 
-  // Estilos para o botão de fechar o modal
-  closeButton: {
+  materialName: {
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 14,
+    textAlign: 'center',
     marginTop: 20,
-    padding: 10,
-    backgroundColor: '#FF6347',  // Vermelho tomate
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-
-  closeButtonText: {
-    color: '#FFF',
-    fontWeight: '600',
+    color: '#000',
   },
 });
 
