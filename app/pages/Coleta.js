@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, ActivityIndicator } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import Header from '../components/Header';
+
 import Footer from '../components/Footer';
 import Recicle from '../assets/titles/titleColeta.svg'
 import RedTruck from '../assets/icons/redTruck.svg'
@@ -23,7 +23,7 @@ export default function Coleta() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Header />
+
       <View style={styles.content}>
       <Recicle maxWidth={300} maxHeight={100}/>
         <Text style={styles.description}>Não sabe como reciclar no seu bairro? Aqui, temos informações dinâmicas para te ajudar!</Text>

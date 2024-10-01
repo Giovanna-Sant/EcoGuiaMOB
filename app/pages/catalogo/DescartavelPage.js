@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator, ImageBackground, Dimensions } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+
 import Banner from '../../assets/backgrounds/bannerEspecial.png'; 
 
 const { width } = Dimensions.get('window');
@@ -19,7 +18,7 @@ const DescartavelPage = () => {
 
   return (
     <View style={styles.container}>
-      <Header />
+
       
       <ScrollView contentContainerStyle={styles.content}>
         {/* Banner como fundo */}
@@ -75,7 +74,7 @@ const DescartavelPage = () => {
         </View>
       </ScrollView>
 
-      <Footer />
+
     </View>
   );
 };

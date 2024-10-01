@@ -1,48 +1,103 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import Home from '../pages/Home';
 import Trilha from '../pages/Trilha';
 import Catalogo from '../pages/catalogo/Catalogo';
 import Coleta from '../pages/Coleta';
 import Perfil from '../pages/Perfil';
-import DescartavelPage from '../pages/catalogo/DescartavelPage'
-import ReciclavelPage from '../pages/catalogo/ReciclavelPage'
+import DescartavelPage from '../pages/catalogo/DescartavelPage';
+import ReciclavelPage from '../pages/catalogo/ReciclavelPage';
 import Login from '../pages/login/Login';
 import NoticiasPage from '../pages/catalogo/NoticiasPage';
 import Config from '../pages/sidebar/Config';
 import RedefinirSenha from '../pages/login/RedefinirSenha';
 import Token from '../pages/login/Token';
 import NovaSenha from '../pages/login/NovaSenha';
+import Header from '../components/Header'; // Importando seu componente Header
 
-// Cria o Tab Navigator
-const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 export default function AppNavigator() {
   return (
-    <Tab.Navigator
+    <Stack.Navigator
       initialRouteName="Login"
       screenOptions={{
-        tabBarStyle: {
-          display: 'none', 
+        headerShown: true, // Mostrando o cabeçalho
+        gestureEnabled: true, // Permite gestos de voltar
+        cardStyleInterpolator: ({ current, layouts }) => {
+          return {
+            cardStyle: {
+              opacity: current.progress, // Transição de dissolver
+            },
+          };
         },
-        headerShown: false,
       }}
     >
-      {/* oculta a seta */}
-      <Tab.Screen name="Login" component={Login} />
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Trilha" component={Trilha} />
-      <Tab.Screen name="Catalogo" component={Catalogo} />
-      <Tab.Screen name="Coleta" component={Coleta} />
-      <Tab.Screen name="Perfil" component={Perfil} />
-      <Tab.Screen name="RedefinirSenha" component={RedefinirSenha} />
-      <Tab.Screen name="Token" component={Token} />
-      <Tab.Screen name="NovaSenha" component={NovaSenha} />
-      {/* com seta para voltar  */}
-      <Tab.Screen name="DescartavelPage" component={DescartavelPage} />
-      <Tab.Screen name="ReciclavelPage" component={ReciclavelPage} />
-      <Tab.Screen name="NoticiasPage" component={NoticiasPage} />
-      <Tab.Screen name="Config" component={Config}/>
-    </Tab.Navigator>
+      <Stack.Screen 
+        name="Login" 
+        component={Login} 
+        options={{ headerShown: false }} // Sem cabeçalho para a tela de Login
+      />
+      <Stack.Screen 
+        name="Home" 
+        component={Home} 
+        options={{ header: () => <Header showBackButton={false} /> }} // Sem seta de voltar
+      />
+      <Stack.Screen 
+        name="Trilha" 
+        component={Trilha} 
+        options={{ header: () => <Header showBackButton={false} /> }} // Sem cabeçalho
+      />
+      <Stack.Screen 
+        name="Catalogo" 
+        component={Catalogo} 
+        options={{ header: () => <Header showBackButton={false} /> }} // Sem cabeçalho
+      />
+      <Stack.Screen 
+        name="Coleta" 
+        component={Coleta} 
+        options={{ header: () => <Header showBackButton={false} /> }} // Sem cabeçalho
+      />
+      <Stack.Screen 
+        name="Perfil" 
+        component={Perfil} 
+        options={{ headerShown: false }}/>
+        
+      <Stack.Screen 
+        name="RedefinirSenha" 
+        component={RedefinirSenha} 
+        options={{ headerShown: false }}/>
+
+      <Stack.Screen 
+        name="Token" 
+        component={Token} 
+        options={{ headerShown: false }}/>
+
+      <Stack.Screen 
+        name="NovaSenha" 
+        component={NovaSenha} 
+        options={{ headerShown: false }}/>
+
+      <Stack.Screen 
+        name="DescartavelPage" 
+        component={DescartavelPage} 
+        options={{ header: () => <Header showBackButton={true} /> }} // Com seta de voltar
+      />
+      <Stack.Screen 
+        name="ReciclavelPage" 
+        component={ReciclavelPage} 
+        options={{ header: () => <Header showBackButton={true} /> }} // Com seta de voltar
+      />
+      <Stack.Screen 
+        name="NoticiasPage" 
+        component={NoticiasPage} 
+        options={{ header: () => <Header showBackButton={true} /> }} // Com seta de voltar
+      />
+      <Stack.Screen 
+        name="Config" 
+        component={Config} 
+        options={{ header: () => <Header showBackButton={true} /> }} // Com seta de voltar
+      />
+    </Stack.Navigator>
   );
 }

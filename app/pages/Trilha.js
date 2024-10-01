@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Modal, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import Header from '../components/Header';
+
 import Footer from '../components/Footer';
 
 const Trilha = () => {
@@ -23,7 +23,7 @@ const Trilha = () => {
 
   return (
     <View style={styles.container}>
-      <Header />
+
 
       {/* Conteúdo Principal */}
       <ScrollView contentContainerStyle={styles.content}>
