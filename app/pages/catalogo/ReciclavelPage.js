@@ -2,8 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, ImageBackground, Dimensions, Animated } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { Ionicons } from '@expo/vector-icons'; 
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
 import Banner from '../../assets/backgrounds/bannerReciclavel.png'; 
 
 const { width } = Dimensions.get('window');
@@ -30,7 +28,7 @@ const ReciclavelPage = () => {
 
   return (
     <View style={styles.container}>
-      <Header />
+     
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <ImageBackground 
           source={Banner} 
@@ -71,7 +69,7 @@ const ReciclavelPage = () => {
           />
         </View>
       </ScrollView>
-      <Footer />
+
     </View>
   );
 };

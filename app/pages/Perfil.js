@@ -123,7 +123,7 @@
         <Footer />
 
         {/* Modal de Edição do Perfil */}
-        <Modal visible={isModalVisible} transparent animationType="slide">
+        <Modal visible={isModalVisible} transparent animationType="fade">
           <View style={styles.modalOverlay}>
             <View style={styles.modalContainer}>
               <Text style={styles.labelModal}>Nome:</Text>

@@ -49,7 +49,7 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
-      <Header />
+
       <ScrollView 
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}

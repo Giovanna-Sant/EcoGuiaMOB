@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import Header from '../../components/Header';
+
 import Imgnews from '../../assets/backgrounds/news_bg.svg';
-import Footer from '../../components/Footer'; 
+
 
 const NoticiasPage = () => {
   // Carregamento das fontes
@@ -21,7 +21,7 @@ const NoticiasPage = () => {
 
   return (
     <View style={styles.container}>
-      <Header />
+      
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.newsContainer}>
           <Imgnews width={'100%'} height={200} style={styles.newsImage} />
@@ -41,7 +41,7 @@ const NoticiasPage = () => {
           </Text>
         </View>
       </ScrollView>
-      <Footer />
+
     </View>
   );
 };

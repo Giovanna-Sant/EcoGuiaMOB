@@ -4,7 +4,7 @@ import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Image, Pressable
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Seta from '../../assets/icons/arrowRight.svg';
 import Detail from '../../assets/backgrounds/detail.png';
-import Header from "../../components/Header";
+
 
 const Config = () => {
   const [fontsLoaded] = useFonts({
@@ -90,7 +90,7 @@ const Config = () => {
   }
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Header />
+     
       <View style={styles.content}>
         <Text style={styles.titulo}>Configurações da Conta</Text>
         <View style={styles.divPerfil}>

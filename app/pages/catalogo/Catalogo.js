@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import Header from '../../components/Header';
+
 import Footer from '../../components/Footer';
 import TitleCatalogo from '../../assets/titles/titleCatalogo.svg';
 import Recicla from '../../assets/icons/recicla.svg';
@@ -31,8 +31,7 @@ const Catalogo = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Header />
-
+      
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -199,7 +198,7 @@ const styles = StyleSheet.create({
   
   button: {
     backgroundColor: "#F1F1F1",
-    width: 175,
+    width: 190,
     height: 180,
     borderRadius: 5,
     justifyContent: "center",
