@@ -164,9 +164,11 @@ const styles = StyleSheet.create({
 
   selectedText: {
     color: "#FFF",
+    paddingHorizontal: 5
   },
   unselectedText: {
     color: "#3F463E",
+    paddingHorizontal: 5
   },
 
   newsContainer: {
@@ -193,12 +195,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 20,
+    gap: 8
     
   },
   
   button: {
     backgroundColor: "#F1F1F1",
-    width: 190,
+    width: 180,
     height: 180,
     borderRadius: 5,
     justifyContent: "center",

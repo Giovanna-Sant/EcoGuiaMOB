@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: '#6BBF59',
     padding: 10,
-    margin: 5,
+    margin: 8,
     width: '95%',
   },
   divPerfil: {
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: '#6BBF59',
     padding: 10,
-    margin: 5,
+    margin: 8,
     width: '95%',
     flexDirection: 'row',
     alignItems: 'center',
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignContent: 'center',
     justifyContent: 'space-between',
-    margin: 3,
+    margin: 5,
     alignItems: 'center'
   },
   

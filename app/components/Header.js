@@ -4,6 +4,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Logo from '../assets/logo.svg';
 import { useNavigation } from '@react-navigation/native';
+import Sidebar from './SideBar';
 
 const Header = ({ onMenuPress, showBackButton }) => {
   const navigation = useNavigation();
