@@ -23,7 +23,7 @@ export default function AppNavigator() {
       initialRouteName="Login"
       screenOptions={{
         headerShown: true, // Mostrando o cabeçalho
-        gestureEnabled: true, // Permite gestos de voltar
+        gestureEnabled: false, // Permite gestos de voltar
         cardStyleInterpolator: ({ current, layouts }) => {
           return {
             cardStyle: {
