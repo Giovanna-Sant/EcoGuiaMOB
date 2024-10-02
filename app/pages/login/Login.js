@@ -6,6 +6,8 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } 
 import Logo from '../../assets/logo.svg';
 import Google from '../../assets/icons/google.svg';
 
+import API from '../../config/server';
+
 export default function Login() {
   const [isVisible, setIsVisible] = useState(true);
 
@@ -18,6 +20,14 @@ export default function Login() {
     navigation.navigate(screen);
   };
 
+    // Estados para os inputs
+    const [nome, setNome] = useState('');
+    const [sobrenome, setSobrenome] = useState('');
+    const [email, setEmail] = useState('');
+    const [pwd, setPwd] = useState('');
+    const [confirmPwd, setConfirmPwd] = useState('');
+  
+
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
@@ -28,7 +38,33 @@ export default function Login() {
     return (
       <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
     );
-  }
+  };
+
+
+  //função assíncrona que envia e recebe os dados da API
+  async function getAPI_Login() {
+    const apiURL = await API.post('login', {email, pwd});
+    const cache  = require('../../config/cache');
+    
+    try{
+      const [results] = await apiURL;
+  
+      if(results != 0){
+      //caso o resultado do envio da query seja diferente de 0 linhas,
+      //armazena o valor do token no cache da aplicação
+        cache.set("tokenID", results.data.token);
+      }else{
+        console.log("Algo deu errado ao reconhecer o resultado da query e armazenar o token no cache.");
+      }
+  
+      console.log(results);
+      console.log(await cache.get("tokenID"));
+      
+      handlePress("Home");
+    }catch(error){
+      console.error("Algo deu errado ao logar usuário, tente novamente." + error);
+    };
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -50,17 +86,17 @@ export default function Login() {
       <View style={styles.inputContainer}>
         {isVisible ? (
           <>
-            <CustomInput placeholder="Nome" />
-            <CustomInput placeholder="Sobrenome" />
-            <CustomInput placeholder="seuemail@gmail.com" />
-            <CustomInput placeholder="Senha" secureTextEntry />
-            <CustomInput placeholder="Confirmar senha" secureTextEntry />
+            <CustomInput placeholder="Nome" value={nome} onChangeText={setNome} />
+            <CustomInput placeholder="Sobrenome" value={sobrenome} onChangeText={setSobrenome} />
+            <CustomInput placeholder="seuemail@gmail.com" value={email} onChangeText={setEmail} />
+            <CustomInput placeholder="Senha" secureTextEntry value={pwd} onChangeText={setPwd} />
+            <CustomInput placeholder="Confirmar senha" secureTextEntry value={confirmPwd} onChangeText={setConfirmPwd} />
             
           </>
         ) : (
           <>
-            <CustomInput placeholder="seuemail@gmail.com" />
-            <CustomInput placeholder="Senha" secureTextEntry />
+            <CustomInput placeholder="seuemail@gmail.com" value={email} onChangeText={setEmail}/>
+            <CustomInput placeholder="Senha" secureTextEntry value={pwd} onChangeText={setPwd} />
             <TouchableOpacity
               style={styles.recover}
               onPress={() => handlePress("RedefinirSenha")}
@@ -74,7 +110,7 @@ export default function Login() {
       <View style={styles.footer}>
         <TouchableOpacity
           style={styles.botao}
-          onPress={() => handlePress("Home")}
+          onPress={getAPI_Login}
         >
           <Text style={styles.botaoTexto}>Concluído</Text>
         </TouchableOpacity>
@@ -94,11 +130,12 @@ export default function Login() {
   );
 }
 
-const CustomInput = ({ placeholder, secureTextEntry }) => (
+const CustomInput = ({ placeholder, secureTextEntry, onChangeText }) => (
   <TextInput
     style={styles.input}
     placeholder={placeholder}
     secureTextEntry={secureTextEntry}
+    onChangeText={onChangeText}
   />
 );
 
