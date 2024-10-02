@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
@@ -31,7 +32,9 @@ export default function Login() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+
       <View style={styles.fixedContent}>
+        
         <Logo width={300} style={styles.logo} />
         <Text style={styles.title}>
           {isVisible ? 'Cadastre-se' : 'Fazer Login'}
@@ -212,6 +215,6 @@ const styles = StyleSheet.create({
     color: "#6BBF59",
     fontSize: 14,
     textDecorationLine: 'underline',
-    textAlign: 'center'
+
   },
 });
