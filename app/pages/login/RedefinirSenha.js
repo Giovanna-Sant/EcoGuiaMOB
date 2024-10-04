@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_300Light } from '@expo-google-fonts/poppins';
-import Logo from '../../assets/logo.svg';
-
+import { LogoEcoGuia } from '../../assets';
 
 export default function RedefinirSenha() {
   const navigation = useNavigation();
@@ -23,7 +22,7 @@ export default function RedefinirSenha() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.fixedContent}>
-        <Logo width={300} style={styles.logo} />
+        <LogoEcoGuia width={300} style={styles.logo} />
         <Text style={styles.title}>Confirme seu email</Text>
         <Text style={styles.sub}>Informe o email de sua conta para redefinir a senha</Text>
       </View>

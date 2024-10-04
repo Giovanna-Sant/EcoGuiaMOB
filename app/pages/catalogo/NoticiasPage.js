@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-
-import Imgnews from '../../assets/backgrounds/news_bg.svg';
-
+import { NewsBG } from '../../assets';
 
 const NoticiasPage = () => {
   // Carregamento das fontes
@@ -24,7 +22,7 @@ const NoticiasPage = () => {
       
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.newsContainer}>
-          <Imgnews width={'100%'} height={200} style={styles.newsImage} />
+          <NewsBG width={'100%'} height={200} style={styles.newsImage} />
           <View style={styles.newsTextContainer}>
             <Text style={styles.newsTitle}>Projeto do Einstein de transformação de resíduos impulsiona geração de renda em Paraisópolis</Text>
             <Text style={styles.newsSubtitle}>Por Gabriella Soares, EcoGuia - São Paulo</Text>

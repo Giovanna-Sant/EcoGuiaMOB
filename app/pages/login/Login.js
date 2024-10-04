@@ -3,8 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import Logo from '../../assets/logo.svg';
-import Google from '../../assets/icons/google.svg';
+import { LogoEcoGuia, Google } from '../../assets';
 
 export default function Login() {
   const [isVisible, setIsVisible] = useState(true);
@@ -35,7 +34,7 @@ export default function Login() {
 
       <View style={styles.fixedContent}>
         
-        <Logo width={300} style={styles.logo} />
+        <LogoEcoGuia width={300} style={styles.logo} />
         <Text style={styles.title}>
           {isVisible ? 'Cadastre-se' : 'Fazer Login'}
         </Text>

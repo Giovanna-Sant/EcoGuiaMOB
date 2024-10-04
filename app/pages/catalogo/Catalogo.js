@@ -3,10 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 
 import Footer from '../../components/Footer';
-import TitleCatalogo from '../../assets/titles/titleCatalogo.svg';
-import Recicla from '../../assets/icons/recicla.svg';
-import Lixo from '../../assets/icons/lixo.svg';
-import Imgnews from '../../assets/backgrounds/news_bg.svg';
+import { Lixo, Recicla, TitleCatalogo, NewsBG } from '../../assets';
 
 const Catalogo = ({ navigation }) => {
   // Filtros
@@ -78,7 +75,7 @@ const Catalogo = ({ navigation }) => {
 
         {/* Notícia */}
         <TouchableOpacity style={styles.newsContainer} onPress={() => navigation.navigate('NoticiasPage')}>
-          <Imgnews width={'100%'} height={200} style={styles.newsImage} />
+          <NewsBG width={'100%'} height={200} style={styles.newsImage} />
           <Text style={styles.newsTitle}>Projeto do Einstein de transformação de resíduos impulsiona geração de renda em Paraisópolis</Text>
         </TouchableOpacity>
 

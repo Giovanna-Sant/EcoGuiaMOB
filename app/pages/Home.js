@@ -3,15 +3,9 @@ import { View, Text, StyleSheet, ScrollView, Image, Pressable, ActivityIndicator
 import { useNavigation } from '@react-navigation/native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Collapsible from 'react-native-collapsible'; 
-import Header from '../components/Header';
 import Footer from '../components/Footer';
 import * as Progress from 'react-native-progress';
-import Coleta from '../assets/icons/truck.svg';
-import EcoPonto from '../assets/icons/local.svg';
-import Seta from '../assets/icons/arrowRight.svg';
-import News from '../assets/backgrounds/catalogo_bg.png';
-import Trilha from '../assets/backgrounds/trilha_bg.png';
-import Abrir from '../assets/icons/arrowDown.svg'; 
+import { ArrowDown, ArrowRight, CatalogoBG, TrilhaBG, Truck, Local } from '../assets'
 
 const Home = () => {
   const [isCollapsed, setIsCollapsed] = useState(true); 
@@ -85,13 +79,13 @@ const Home = () => {
         </Pressable>
 
         <Pressable onPress={() => handlePress('Trilha')} maxHeight={210} style={styles.viewTrilha}>
-          <Image source={Trilha} maxHeight={210} maxWidth='100%' borderRadius={10} />
+          <Image source={TrilhaBG} maxHeight={210} maxWidth='100%' borderRadius={10} />
         </Pressable>
 
         <Pressable onPress={toggleCollapse} style={styles.viewDica}>
           <Text style={styles.subtitle}>Dica diária</Text>
           <Animated.View style={{ transform: [{ rotate: rotateIcon }] }}>
-            <Abrir width={32} height={32} style={styles.abrir} />
+            <ArrowDown width={32} height={32} style={styles.abrir} />
           </Animated.View>
         </Pressable>
 
@@ -106,19 +100,19 @@ const Home = () => {
         <Pressable onPress={() => handlePress('Coleta')} style={styles.iconButton}>
           <View style={styles.viewAPI}>
             <View style={styles.contAPI}>
-              <Coleta />
+              <Truck />
               <Text style={styles.atbAPI}>Saiba o horário de colocar seu lixo pra fora!</Text>
             </View>
             <View style={styles.contAPI}>
-              <EcoPonto />
+              <Local />
               <Text style={styles.atbAPI}>Conheça os pontos de coleta perto de você!</Text>
             </View>
-            <Seta />
+            <ArrowRight />
           </View>
         </Pressable>
 
         <Pressable onPress={() => handlePress('Catalogo')} style={styles.viewNews}>
-          <Image style={styles.imgNews} source={News} maxWidth='100%' maxHeight={205} />
+          <Image style={styles.imgNews} source={CatalogoBG} maxWidth='100%' maxHeight={205} />
         </Pressable>
 
       </ScrollView>

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator, ImageBackground, Dimensions } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-
-import Banner from '../../assets/backgrounds/bannerEspecial.png'; 
+import { BannerEspecial } from '../../assets'; 
 
 const { width } = Dimensions.get('window');
 
@@ -23,7 +22,7 @@ const DescartavelPage = () => {
       <ScrollView contentContainerStyle={styles.content}>
         {/* Banner como fundo */}
         <ImageBackground 
-          source={Banner} 
+          source={BannerEspecial} 
           style={[styles.bannerContainer, { height: width * 0.659 }]} // Mantém a proporção da imagem
           resizeMode="cover"
         >
