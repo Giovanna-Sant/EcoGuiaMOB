@@ -3,10 +3,30 @@ import { useNavigation } from '@react-navigation/native';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_600SemiBold, } from '@expo-google-fonts/poppins';
 import { LogoEcoGuia } from '../../assets';
+import cache from '../../utils/cache'
 
 export default function RedefinirSenha() {
   const navigation = useNavigation();
   
+    
+  const [userToken , setUserToken] = useState('')
+
+  const checkToken = async () =>{
+  
+  const getToken = await cache.get("token")
+    console.log("token",getToken)
+    console.log("digitado")
+    console.log(userToken)
+    if(getToken != userToken){
+      alert("token inválido ou expirado")
+    }
+   else{
+    navigation.navigate("NovaSenha")
+
+   }
+
+  }
+
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_600SemiBold,
@@ -28,14 +48,14 @@ export default function RedefinirSenha() {
       </View>
 
       <View style={styles.inputContainer}>
-        <CustomInput placeholder="*****" />
+        <CustomInput placeholder="*****" onChangeText={setUserToken}/>
 
       </View>
 
       <View style={styles.footer}>
         <TouchableOpacity
           style={styles.botao}
-          onPress={() => navigation.navigate("NovaSenha")}
+          onPress={checkToken}
         >
           <Text style={styles.botaoTexto}>Confirmar Código</Text>
         </TouchableOpacity>
@@ -54,11 +74,12 @@ export default function RedefinirSenha() {
   );
 }
 
-const CustomInput = ({ placeholder, secureTextEntry }) => (
+const CustomInput = ({ placeholder, secureTextEntry, onChangeText }) => (
   <TextInput
     style={styles.input}
     placeholder={placeholder}
     secureTextEntry={secureTextEntry}
+    onChangeText={onChangeText}
   />
 );
 

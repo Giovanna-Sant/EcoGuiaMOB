@@ -3,10 +3,34 @@ import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import { LogoEcoGuia, Google } from '../../assets';
+import Logo from '../../assets/logo.svg';
+import Google from '../../assets/icons/google.svg';
+import api from '../../services/api';
 
 export default function Login() {
   const [isVisible, setIsVisible] = useState(true);
+
+  const [email, setEmail] = useState('');
+
+  const [pwd, setSenha] = useState('');
+
+  const login  = async (event) => {
+  event.preventDefault();
+     try{
+        console.log(email);
+        console.log(pwd);
+        const response = await api.post('/user/login', {email,pwd});
+        console.log(response.data);
+        console.log(response.data.token)
+        handlePress("Home")
+
+        }catch(erro){
+        console.log(email);
+        console.log(pwd);
+        console.log(erro);
+        console.log(erro.response.data)
+        }
+    }
 
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
@@ -31,10 +55,8 @@ export default function Login() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-
       <View style={styles.fixedContent}>
-        
-        <LogoEcoGuia width={300} style={styles.logo} />
+        <Logo width={300} style={styles.logo} />
         <Text style={styles.title}>
           {isVisible ? 'Cadastre-se' : 'Fazer Login'}
         </Text>
@@ -54,29 +76,40 @@ export default function Login() {
             <CustomInput placeholder="seuemail@gmail.com" />
             <CustomInput placeholder="Senha" secureTextEntry />
             <CustomInput placeholder="Confirmar senha" secureTextEntry />
+            <View style={styles.footer}>
+            <TouchableOpacity
+            style={styles.botao}
+            onPress={() => handlePress("Home")}
+            >
+            <Text style={styles.botaoTexto}>Concluído</Text>
+            </TouchableOpacity> 
+            </View>
             
           </>
         ) : (
           <>
-            <CustomInput placeholder="seuemail@gmail.com" />
-            <CustomInput placeholder="Senha" secureTextEntry />
+            <CustomInput placeholder="seuemail@gmail.com" onChangeText={setEmail} />
+            <CustomInput placeholder="Senha" secureTextEntry onChangeText={setSenha}/>
             <TouchableOpacity
-              style={styles.recover}
-              onPress={() => handlePress("RedefinirSenha")}
+            style={styles.recover}
+            onPress={() => handlePress("RedefinirSenha")}
             >
-              <Text style={styles.recoverTexto}>Esqueci a Senha</Text>
+            <Text style={styles.recoverTexto}>Esqueci a Senha</Text>
             </TouchableOpacity>
-              </>
+             <View style={styles.footer}>
+            <TouchableOpacity
+            style={styles.botao}
+            onPress={login}
+            >
+            <Text style={styles.botaoTexto}>Concluído</Text>
+            </TouchableOpacity> 
+            </View>
+          </>
         )}
       </View>
 
-      <View style={styles.footer}>
-        <TouchableOpacity
-          style={styles.botao}
-          onPress={() => handlePress("Home")}
-        >
-          <Text style={styles.botaoTexto}>Concluído</Text>
-        </TouchableOpacity>
+      <View >
+        
 
         <View style={styles.textContainer}>
           <Text style={styles.text}>
@@ -93,11 +126,12 @@ export default function Login() {
   );
 }
 
-const CustomInput = ({ placeholder, secureTextEntry }) => (
+const CustomInput = ({ placeholder, secureTextEntry,onChangeText }) => (
   <TextInput
     style={styles.input}
     placeholder={placeholder}
     secureTextEntry={secureTextEntry}
+    onChangeText={onChangeText}
   />
 );
 
@@ -172,7 +206,7 @@ const styles = StyleSheet.create({
   footer: {
     marginTop: 20,
     alignItems: "center",
-    marginBottom: 40,
+    marginBottom: 20,
   },
 
   text: {
@@ -214,6 +248,6 @@ const styles = StyleSheet.create({
     color: "#6BBF59",
     fontSize: 14,
     textDecorationLine: 'underline',
-
+    textAlign: 'center'
   },
 });

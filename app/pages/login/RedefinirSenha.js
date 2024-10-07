@@ -2,10 +2,29 @@ import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_300Light } from '@expo-google-fonts/poppins';
-import { LogoEcoGuia } from '../../assets';
+import Logo from '../../assets/logo.svg';
+import api from '../../services/api'
+import cache from '../../utils/cache'
 
 export default function RedefinirSenha() {
   const navigation = useNavigation();
+  const [email,setEmail] =  useState('')
+
+  const sendEmail = async (event) => {
+    event.preventDefault();
+       try{
+          const response = await api.post('/user/token', {email});
+          console.log(response.data);
+          console.log(response.data.token);   
+          await cache.set("token",response.data.token);
+          console.log( await cache.get("token"))
+          await cache.set("email",email)
+          navigation.navigate("Token")
+          }catch(erro){
+          console.log(email);
+          console.log(erro.response.data)
+          }
+      }
   
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
@@ -22,20 +41,20 @@ export default function RedefinirSenha() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.fixedContent}>
-        <LogoEcoGuia width={300} style={styles.logo} />
+        <Logo width={300} style={styles.logo} />
         <Text style={styles.title}>Confirme seu email</Text>
         <Text style={styles.sub}>Informe o email de sua conta para redefinir a senha</Text>
       </View>
 
       <View style={styles.inputContainer}>
-        <CustomInput placeholder="seuemail@gmail.com" />
+        <CustomInput placeholder="seuemail@gmail.com" onChangeText={setEmail} />
 
       </View>
 
       <View style={styles.footer}>
         <TouchableOpacity
           style={styles.botao}
-          onPress={() => navigation.navigate("Token")}
+          onPress={sendEmail}
         >
           <Text style={styles.botaoTexto}>Enviar Código</Text>
         </TouchableOpacity>
@@ -53,11 +72,12 @@ export default function RedefinirSenha() {
   );
 }
 
-const CustomInput = ({ placeholder, secureTextEntry }) => (
+const CustomInput = ({ placeholder, secureTextEntry,onChangeText}) => (
   <TextInput
     style={styles.input}
     placeholder={placeholder}
     secureTextEntry={secureTextEntry}
+    onChangeText={onChangeText}
   />
 );
 
