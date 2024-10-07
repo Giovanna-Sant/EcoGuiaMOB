@@ -7,7 +7,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 export default function TabTwoScreen() {
   // Carregamento das fontes
   const [fontsLoaded] = useFonts({
-     Poppins_400Regular,
+    Poppins_400Regular,
     Poppins_500Medium,
     Poppins_600SemiBold,
   });

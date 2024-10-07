@@ -4,10 +4,8 @@
   import { useNavigation } from '@react-navigation/native';
   import Ionicons from '@expo/vector-icons/Ionicons';
   import * as Progress from 'react-native-progress';
-  import Header from '../components/Header';
   import Footer from '../components/Footer';
-  import Seta from '../assets/icons/arrowRight.svg';
-  import Edit from '../assets/icons/edit.svg';
+  import { ArrowRight, Edit } from '../assets';
 
   const Perfil = () => {
     const navigation = useNavigation();
@@ -114,7 +112,7 @@
               <Text style={styles.text}>Você está indo bem, continue assim para evoluir!</Text>
               <Pressable style={styles.botao} onPress={() => handlePress('Trilha')}>
                 <Text style={styles.textBotao}>Ver Trilha de Objetivos</Text>
-                <Seta maxWidth={12} maxHeight={12} />
+                <ArrowRight maxWidth={12} maxHeight={12} />
               </Pressable>
             </View>
           </View>

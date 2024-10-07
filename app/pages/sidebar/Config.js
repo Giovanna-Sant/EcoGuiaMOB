@@ -2,9 +2,7 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Image, Pressable, Modal, TextInput } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import Seta from '../../assets/icons/arrowRight.svg';
-import Detail from '../../assets/backgrounds/detail.png';
-
+import { Detail, ArrowRight } from "../../assets";
 
 const Config = () => {
   const [fontsLoaded] = useFonts({
@@ -110,15 +108,15 @@ const Config = () => {
         <View style={styles.div}>
           <Pressable style={styles.operacao} onPress={toggleEmailModal}>
             <Text style={styles.txtOperacao}>Alterar Email</Text>
-            <Seta />
+            <ArrowRight />
           </Pressable>
           <Pressable style={styles.operacao} onPress={toggleSenhaModal}>
             <Text style={styles.txtOperacao}>Alterar Senha</Text>
-            <Seta />
+            <ArrowRight />
           </Pressable>
           <Pressable style={styles.operacao} onPress={toggleDeletarModal}>
             <Text style={styles.txtOperacao}>Deletar Conta</Text>
-            <Seta />
+            <ArrowRight />
           </Pressable>
         </View>
         <Image source={Detail} style={styles.detalhe} />

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, ImageBackground, Dimensions, Animated } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { Ionicons } from '@expo/vector-icons'; 
-import Banner from '../../assets/backgrounds/bannerReciclavel.png'; 
+import { BannerReciclavel } from '../../assets';
 
 const { width } = Dimensions.get('window');
 
@@ -31,7 +31,7 @@ const ReciclavelPage = () => {
      
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <ImageBackground 
-          source={Banner} 
+          source={BannerReciclavel} 
           style={[styles.bannerContainer, { height: width * 0.659 }]} 
           resizeMode="cover"
         />

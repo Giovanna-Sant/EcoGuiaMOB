@@ -3,9 +3,7 @@ import { View, Text, StyleSheet, ScrollView, Image, ActivityIndicator } from 're
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 
 import Footer from '../components/Footer';
-import Recicle from '../assets/titles/titleColeta.svg'
-import RedTruck from '../assets/icons/redTruck.svg'
-import EcoPonto from '../assets/icons/blueLocal.svg'
+import { TitleColeta, RedTruck, BlueLocal } from '../assets';
 
 export default function Coleta() {
   // Carregamento das fontes
@@ -25,7 +23,7 @@ export default function Coleta() {
     <ScrollView contentContainerStyle={styles.container}>
 
       <View style={styles.content}>
-      <Recicle maxWidth={300} maxHeight={100}/>
+      <TitleColeta maxWidth={300} maxHeight={100}/>
         <Text style={styles.description}>Não sabe como reciclar no seu bairro? Aqui, temos informações dinâmicas para te ajudar!</Text>
       
         <View style={styles.api}>
@@ -35,7 +33,7 @@ export default function Coleta() {
         </View>
         
         <View style={styles.api}>
-          <EcoPonto maxWidth={40} maxHeight={40} marginBottom={10}/>
+          <BlueLocal maxWidth={40} maxHeight={40} marginBottom={10}/>
           <Text style={styles.subtitle}>Localização de EcoPontos</Text>
           <Text style={styles.description}>Acesse os pontos de coleta mais próximos de você! Use para descartar entulho de forma correta e consciente!</Text>
         </View>
