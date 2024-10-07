@@ -30,10 +30,10 @@ const ReciclavelPage = () => {
     <View style={styles.container}>
      
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <ImageBackground 
-          source={BannerReciclavel} 
-          style={[styles.bannerContainer, { height: width * 0.659 }]} 
+        <BannerReciclavel
+          style={[styles.bannerContainer]}
           resizeMode="cover"
+          maxWidth="100%"
         />
         <View style={styles.content}>
           <Text style={styles.description}>
@@ -143,9 +143,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   bannerContainer: {
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginVertical: -180
   },
   description: {
     fontFamily: 'Poppins_500Medium',

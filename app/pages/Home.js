@@ -209,6 +209,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     marginVertical: -90,
+    zIndex: -1
   },
   imgNews: {
     borderRadius: 10,

@@ -13,13 +13,19 @@
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ionna.EcoGuiaMOB"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "ecc5a02a-248f-4820-b817-db4fe42ac051"
+      }
+    }
   }
 }

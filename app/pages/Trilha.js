@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Modal, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-
+import { TitleTrilha, Point } from '../assets';
 import Footer from '../components/Footer';
 
 const Trilha = () => {
@@ -27,7 +27,9 @@ const Trilha = () => {
 
       {/* Conteúdo Principal */}
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.text}>Trilha Page Content</Text>
+        <TitleTrilha maxWidth={210}/>
+        <Text style={styles.text}></Text>
+        <Point style={styles.pointCompleted}/>
       </ScrollView>
 
       {/* Botão flutuante (a bolinha verde) */}
@@ -98,7 +100,7 @@ const Trilha = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#E2F2DF",
     paddingBottom: 95,
   },
   
