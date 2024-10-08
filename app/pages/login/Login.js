@@ -6,6 +6,7 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } 
 import Logo from '../../assets/logo.svg';
 import Google from '../../assets/icons/google.svg';
 import api from '../../services/api';
+import cache from '../../utils/cache'
 
 export default function Login() {
   const [isVisible, setIsVisible] = useState(true);
@@ -22,6 +23,7 @@ export default function Login() {
         const response = await api.post('/user/login', {email,pwd});
         console.log(response.data);
         console.log(response.data.token)
+        cache.set("tokenID",response.data.token)
         handlePress("Home")
 
         }catch(erro){

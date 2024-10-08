@@ -6,9 +6,14 @@
   import * as Progress from 'react-native-progress';
   import Footer from '../components/Footer';
   import { ArrowRight, Edit } from '../assets';
+  import cache from '../utils/cache'
+  import api from '../services/api';
+
 
   const Perfil = () => {
-    const navigation = useNavigation();
+  
+  const navigation = useNavigation();
+
 
     const [isModalVisible, setModalVisible] = useState(false);
     const [nome, setNome] = useState('Yasmin');
@@ -55,7 +60,7 @@
                 <Edit maxHeight={24} maxWidth={24} />
               </TouchableOpacity>
 
-              <Text style={styles.username}>yasmin#3452</Text>
+              <Text style={styles.username}></Text>
               
               <TouchableOpacity onPress={() => handlePress('Config')}>
                 <Ionicons name="menu-outline" size={28} color="black" />
@@ -76,10 +81,11 @@
               </View>
 
               <View style={styles.profileInfo}>
-                <Text style={styles.subtitle}>Yasmin Benjor</Text>
+                <Text style={styles.subtitle}>{user.name_user}  {user.lastname_user}</Text>
+
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: 200 }}>
-                  <Text style={styles.textxp}>XP 120/340</Text>
-                  <Text style={styles.textLvl}>level 13</Text>
+                  <Text style={styles.textxp}>XP {user.XP_user}/{user.XP_level}</Text>
+                  <Text style={styles.textLvl}>level {user.fk_level_user}</Text>
                 </View>
                 <Progress.Bar
                   width={200}

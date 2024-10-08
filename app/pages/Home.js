@@ -13,6 +13,8 @@ import News from '../assets/backgrounds/catalogo_bg.png';
 import Trilha from '../assets/backgrounds/trilha_bg.png';
 import Abrir from '../assets/icons/arrowDown.svg'; 
 import api from '../services/api'
+import cache from '../utils/cache'
+
 const Home = () => {
   const [isCollapsed, setIsCollapsed] = useState(true); 
   const rotateAnim = useRef(new Animated.Value(0)).current; 
@@ -27,6 +29,34 @@ const Home = () => {
     getTip(); 
   },
 []);
+
+const [user, setUser] = useState({});
+useEffect(() => {
+    async function lerUser(){
+      const token = await cache.get("tokenID")
+      console.log("olha o token", token)
+      const resposta = await api.get('/user/profile',{ 
+          headers: {
+            authorization:`Bearer ${token}`
+        }
+      }
+    );
+    setUser(resposta.data.results[0][0])
+   //{user.name_user}  {user.lastname_user}
+    await cache.set("nick",user.nickname_user);
+    await caches.set("XP_user",user.XP_user);
+    await caches.set("XP_level",user.XP_level);
+    await caches.set("fk_level_user",user.fk_level_user);
+    await caches.set("fk_level_user",user.fk_level_user);
+    await caches.set("name_user",user.name_user);
+    await caches.set("lastname_user",user.lastname_user)
+    };
+    lerUser();
+  },
+[]);
+
+
+
   const [fontsLoaded] = useFonts({
     Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold,
   });
@@ -69,10 +99,10 @@ const Home = () => {
             <Image style={styles.icon} width={60} height={60} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}} />
           </View>
           <View>
-            <Text style={styles.subtitle}>Yasmin Benjor</Text>
+            <Text style={styles.subtitle}>{user.name_user} {user.lastname_user}</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={styles.text}>XP 120/340</Text>
-              <Text style={styles.textLvl}>level 13</Text>
+              <Text style={styles.text}>XP {user.XP_user}/{user.XP_level}</Text>
+              <Text style={styles.textLvl}>level {user.fk_level_user}</Text>
             </View>
 
             <Progress.Bar
