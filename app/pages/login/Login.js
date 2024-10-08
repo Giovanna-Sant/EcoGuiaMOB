@@ -23,7 +23,8 @@ export default function Login() {
         const response = await api.post('/user/login', {email,pwd});
         console.log(response.data);
         console.log(response.data.token)
-        cache.set("tokenID",response.data.token)
+        await cache.set("tokenID",response.data.token)
+        await cache.set("email",email)
         handlePress("Home")
 
         }catch(erro){

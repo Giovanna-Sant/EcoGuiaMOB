@@ -1,15 +1,45 @@
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Image, Pressable, Modal, TextInput } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { Detail, ArrowRight } from "../../assets";
-
+import cache from '../../utils/cache'
+import api from '../../services/api';
 const Config = () => {
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
     Poppins_600SemiBold,
   });
+
+  const [user, setUser] = useState({});
+  const [email,setEmail] = useState('')
+  useEffect(() => {
+    async function lerUser(){
+    setUser(await cache.get("dados"))
+    setEmail(await cache.get("email")) 
+    };
+    lerUser();
+  },
+[]);
+
+const [pwdHash,setPwdHash] = useState('')
+const deleteUser  = async () => {
+     try{
+
+        const token = await cache.get("tokenID")
+        const response = await api.delete('/user',{ 
+          headers: {
+            authorization:`Bearer ${token}`
+        },pwdHash
+      }
+    );
+        }catch(erro){
+        console.log(erro);
+        }
+    }
+
+
 
   const [emailModalVisible, setEmailModalVisible] = useState(false);
   const [tokenModalVisible, setTokenModalVisible] = useState(false);
@@ -95,14 +125,14 @@ const Config = () => {
           <View style={styles.iconDiv}><Image width={40} height={40} source={{ uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png' }} /></View>
           <View>
             <Text style={styles.subtitulo}>Perfil</Text>
-            <Text style={styles.info}>yasmin#1837</Text>
+            <Text style={styles.info}>{user.nickname_user}</Text>
           </View>
         </View>
 
         <View style={styles.div}>
           <Text style={styles.subtitulo}>Informações Pessoais</Text>
-          <Text style={styles.info}>Yasmin Benjor</Text>
-          <Text style={styles.info}>yasminbenjor@gmail.com</Text>
+          <Text style={styles.info}>{user.name_user} {user.lastname_user}</Text>
+          <Text style={styles.info}>{email}</Text>
         </View>
 
         <View style={styles.div}>
@@ -209,18 +239,17 @@ const Config = () => {
         <Modal visible={confirmarSenhaModalVisible} transparent animationType="fade">
           <View style={styles.modalOverlay}>
             <View style={styles.modalContainer}>
-              <Text style={styles.title}>yasmin#3452 confirme a senha da sua conta para haver a exclusão.</Text>
+              <Text style={styles.title}>{user.name_user} confirme a senha da sua conta para haver a exclusão.</Text>
               <TextInput
                 style={styles.input}
-                value={senhaParaDeletar}
-                onChangeText={setSenhaParaDeletar}
+                onChangeText={setPwdHash}
                 secureTextEntry
               />
               <View style={styles.buttonContainer}>
                 <Pressable style={styles.confirmButton} onPress={toggleConfirmarSenhaModal}>
                   <Text style={styles.buttonTextConfir}>Cancelar</Text>
                 </Pressable>
-                <Pressable style={styles.cancelButton} onPress={handleConfirmarSenha}>
+                <Pressable style={styles.cancelButton} onPress={deleteUser}>
                   <Text style={styles.buttonText}>Confirmar</Text>
                 </Pressable>
               </View>

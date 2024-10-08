@@ -30,26 +30,25 @@ const Home = () => {
   },
 []);
 
+
 const [user, setUser] = useState({});
 useEffect(() => {
     async function lerUser(){
       const token = await cache.get("tokenID")
-      console.log("olha o token", token)
       const resposta = await api.get('/user/profile',{ 
           headers: {
             authorization:`Bearer ${token}`
         }
-      }
+      },
     );
-    setUser(resposta.data.results[0][0])
-   //{user.name_user}  {user.lastname_user}
+    setUser(resposta.data.results[0][0]);
     await cache.set("dados",resposta.data.results[0][0]);
-
     };
     lerUser();
   },
 []);
 
+console.log(user)
 
 
   const [fontsLoaded] = useFonts({
