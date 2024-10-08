@@ -13,11 +13,20 @@
   const Perfil = () => {
   
   const navigation = useNavigation();
+  
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    async function lerUser(){
+    setUser(await cache.get("dados")) 
+    };
+    lerUser();
+  },
+[]);
 
 
     const [isModalVisible, setModalVisible] = useState(false);
-    const [nome, setNome] = useState('Yasmin');
-    const [sobrenome, setSobrenome] = useState('Benjor');
+    const [nome, setNome] = useState('');
+    const [sobrenome, setSobrenome] = useState('');
     const [selectedIcon, setSelectedIcon] = useState(null);
 
     const handlePress = (screen) => {
@@ -60,7 +69,7 @@
                 <Edit maxHeight={24} maxWidth={24} />
               </TouchableOpacity>
 
-              <Text style={styles.username}></Text>
+              <Text style={styles.username}>{user.nickname_user}</Text>
               
               <TouchableOpacity onPress={() => handlePress('Config')}>
                 <Ionicons name="menu-outline" size={28} color="black" />
@@ -81,7 +90,7 @@
               </View>
 
               <View style={styles.profileInfo}>
-                <Text style={styles.subtitle}>{user.name_user}  {user.lastname_user}</Text>
+                <Text style={styles.subtitle}>{user.name_user} {user.lastname_user}</Text>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: 200 }}>
                   <Text style={styles.textxp}>XP {user.XP_user}/{user.XP_level}</Text>

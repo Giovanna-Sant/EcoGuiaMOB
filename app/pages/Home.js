@@ -43,13 +43,8 @@ useEffect(() => {
     );
     setUser(resposta.data.results[0][0])
    //{user.name_user}  {user.lastname_user}
-    await cache.set("nick",user.nickname_user);
-    await caches.set("XP_user",user.XP_user);
-    await caches.set("XP_level",user.XP_level);
-    await caches.set("fk_level_user",user.fk_level_user);
-    await caches.set("fk_level_user",user.fk_level_user);
-    await caches.set("name_user",user.name_user);
-    await caches.set("lastname_user",user.lastname_user)
+    await cache.set("dados",resposta.data.results[0][0]);
+
     };
     lerUser();
   },
