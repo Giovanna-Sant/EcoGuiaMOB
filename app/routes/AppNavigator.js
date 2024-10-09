@@ -13,7 +13,7 @@ import Config from '../pages/sidebar/Config';
 import RedefinirSenha from '../pages/login/RedefinirSenha';
 import Token from '../pages/login/Token';
 import NovaSenha from '../pages/login/NovaSenha';
-import Header from '../components/Header'; // Importando seu componente Header
+import Header from '../components/Header';
 
 const Stack = createStackNavigator();
 

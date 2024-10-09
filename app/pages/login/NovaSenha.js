@@ -30,8 +30,8 @@ export default function RedefinirSenha() {
       </View>
 
       <View style={styles.inputContainer}>
-        <CustomInput placeholder="Senha" />
-        <CustomInput placeholder="Confirmar Senha" />
+        <CustomInput placeholder="Senha" secureTextEntry/>
+        <CustomInput placeholder="Confirmar Senha" secureTextEntry/>
 
 
       </View>
@@ -67,7 +67,7 @@ const CustomInput = ({ placeholder, secureTextEntry }) => (
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
   },
@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 30,
     marginTop: 20,
+    alignItems: 'center'
   },
   input: {
     backgroundColor: "#F1F1F1",

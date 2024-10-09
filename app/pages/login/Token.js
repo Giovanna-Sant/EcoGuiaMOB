@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_600SemiBold, } from '@expo-google-fonts/poppins';
@@ -21,6 +22,7 @@ export default function RedefinirSenha() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <StatusBar style="auto" />
       <View style={styles.fixedContent}>
         <LogoEcoGuia width={300} style={styles.logo} />
         <Text style={styles.title}>Chave de Acesso</Text>
@@ -65,7 +67,7 @@ const CustomInput = ({ placeholder, secureTextEntry }) => (
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
   },
@@ -111,7 +113,8 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
     paddingHorizontal: 30,
-    marginTop: 20,
+    marginTop: 20,    
+    alignItems: 'center'
   },
   input: {
     backgroundColor: "#F1F1F1",

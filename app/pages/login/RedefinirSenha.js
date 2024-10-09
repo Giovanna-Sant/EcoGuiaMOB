@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_300Light } from '@expo-google-fonts/poppins';
@@ -21,10 +22,11 @@ export default function RedefinirSenha() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <StatusBar style="auto" />
       <View style={styles.fixedContent}>
         <LogoEcoGuia width={300} style={styles.logo} />
         <Text style={styles.title}>Confirme seu email</Text>
-        <Text style={styles.sub}>Informe o email de sua conta para redefinir a senha</Text>
+        <Text style={styles.sub}>Informe o email de sua conta para receber um código para redefinição de senha</Text>
       </View>
 
       <View style={styles.inputContainer}>
@@ -64,7 +66,7 @@ const CustomInput = ({ placeholder, secureTextEntry }) => (
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
   },
@@ -111,6 +113,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 30,
     marginTop: 20,
+    alignItems: 'center'
   },
   input: {
     backgroundColor: "#F1F1F1",
