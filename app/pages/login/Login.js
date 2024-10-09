@@ -31,33 +31,18 @@ export default function Login() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <StatusBar style="auto" />
+      {isVisible ? (
+        // Login Content
+        <View style={styles.fixedContent}>
+          <LogoEcoGuia width={300} style={styles.logo} />
+          <Text style={styles.title}>Login</Text>
+          <View style={styles.googleContainer}>
+            <Google width={25} height={25} />
+            <Text style={styles.googleText}>Entrar com o Google</Text>
+          </View>
 
-      <View style={styles.fixedContent}>
-        
-        <LogoEcoGuia width={300} style={styles.logo} />
-        <Text style={styles.title}>
-          {isVisible ? 'Cadastre-se' : 'Fazer Login'}
-        </Text>
-        <View style={styles.googleContainer}>
-          <Google width={25} height={25} />
-          <Text style={styles.googleText}>
-            {isVisible ? 'Criar conta com o Google' : 'Entrar com o Google'}
-          </Text>
-        </View>
-      </View>
-
-      <View style={styles.inputContainer}>
-        {isVisible ? (
-          <>
-            <CustomInput placeholder="Nome" />
-            <CustomInput placeholder="Sobrenome" />
-            <CustomInput placeholder="seuemail@gmail.com" />
-            <CustomInput placeholder="Senha" secureTextEntry />
-            <CustomInput placeholder="Confirmar senha" secureTextEntry />
-            
-          </>
-        ) : (
-          <>
+          <View style={styles.inputContainer}>
             <CustomInput placeholder="seuemail@gmail.com" />
             <CustomInput placeholder="Senha" secureTextEntry />
             <TouchableOpacity
@@ -66,11 +51,9 @@ export default function Login() {
             >
               <Text style={styles.recoverTexto}>Esqueci a Senha</Text>
             </TouchableOpacity>
-              </>
-        )}
-      </View>
+          </View>
 
-      <View style={styles.footer}>
+          <View style={styles.footer}>
         <TouchableOpacity
           style={styles.botao}
           onPress={() => handlePress("Home")}
@@ -79,16 +62,48 @@ export default function Login() {
         </TouchableOpacity>
 
         <View style={styles.textContainer}>
-          <Text style={styles.text}>
-            {isVisible ? 'Já possui conta? ' : 'Não possui conta? '}
-          </Text>
+          <Text style={styles.text}>Não possui conta?</Text>
           <TouchableOpacity onPress={toggleVisibility}>
-            <Text style={styles.loginText}>
-              {isVisible ? 'Fazer Login' : 'Fazer Cadastro'}
-            </Text>
+            <Text style={styles.loginText}>Fazer Cadastro</Text>
           </TouchableOpacity>
         </View>
       </View>
+        </View>
+      ) : (
+        // Cadastro Content
+        <View style={styles.fixedContent}>
+          <LogoEcoGuia width={300} style={styles.logo} />
+          <Text style={styles.title}>Cadastro</Text>
+          <View style={styles.googleContainer}>
+            <Google width={25} height={25} />
+            <Text style={styles.googleText}>Criar conta com o Google</Text>
+          </View>
+
+          <View style={styles.inputContainer}>
+            <CustomInput placeholder="Nome" />
+            <CustomInput placeholder="Sobrenome" />
+            <CustomInput placeholder="seuemail@gmail.com" />
+            <CustomInput placeholder="Senha" secureTextEntry />
+            <CustomInput placeholder="Confirmar senha" secureTextEntry />
+          </View>
+
+          <View style={styles.footer}>
+            <TouchableOpacity
+              style={styles.botao}
+              onPress={() => handlePress("Home")}
+            >
+              <Text style={styles.botaoTexto}>Concluído</Text>
+            </TouchableOpacity>
+
+            <View style={styles.textContainer}>
+              <Text style={styles.text}>Já possui conta?</Text>
+              <TouchableOpacity onPress={toggleVisibility}>
+                <Text style={styles.loginText}>Fazer Login</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      )}
     </ScrollView>
   );
 }
@@ -104,7 +119,7 @@ const CustomInput = ({ placeholder, secureTextEntry }) => (
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
   },
@@ -148,6 +163,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 30,
     marginTop: 20,
+    alignItems: 'center'
   },
 
   input: {
