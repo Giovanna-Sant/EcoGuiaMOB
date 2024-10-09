@@ -119,7 +119,7 @@ const CustomInput = ({ placeholder, secureTextEntry }) => (
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    justifyContent: "center",
+    justifyContent: "space-around",
     alignItems: "center",
     backgroundColor: "#fff",
   },
@@ -132,7 +132,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 
-  logo: {},
+  logo: {
+    marginBottom: 20
+  },
 
   title: {
     fontFamily: "Poppins_600SemiBold",
@@ -183,6 +185,7 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_400Regular",
     fontSize: 16,
     color: "#6BBF59",
+    paddingLeft: 5
   },
 
   footer: {
@@ -217,6 +220,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 5,
+    marginTop: 20
   },
 
   botaoTexto: {
