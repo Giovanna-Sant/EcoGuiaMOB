@@ -16,6 +16,7 @@ const [checkPwd,setCheckPwd] = useState('');
       alert("As senhas estão diferentes");
       return;
     }
+    try{
     const email = await cache.get('email')
     console.log(email)
     const response = await api.post('/user/pwd', {pwd,email});
@@ -24,7 +25,9 @@ const [checkPwd,setCheckPwd] = useState('');
       alert("Senha alterada com sucesso");
       navigation.navigate("Login")
     }
-  
+   }catch(erro){
+    console.log(erro)
+  }
 
   }
   const navigation = useNavigation();

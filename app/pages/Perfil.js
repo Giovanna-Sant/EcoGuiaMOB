@@ -6,9 +6,10 @@
   import * as Progress from 'react-native-progress';
   import Footer from '../components/Footer';
   import { ArrowRight, Edit } from '../assets';
-  import cache from '../utils/cache'
+  import cache from '../utils/cache';
+  import getPerfil from '../utils/gerProfile';
+  import { RefreshControl } from 'react-native-gesture-handler';
   import api from '../services/api';
-
 
   const Perfil = () => {
   
@@ -16,18 +17,48 @@
   
   const [user, setUser] = useState({});
   useEffect(() => {
-    async function lerUser(){
-    setUser(await cache.get("dados")) 
-    };
-    lerUser();
+        try{
+        async function lerUser(){
+        setUser(await cache.get("dados")) 
+          };
+      lerUser();
+      }catch(erro){
+     console.log(erro)
+    }
   },
 []);
-
 
     const [isModalVisible, setModalVisible] = useState(false);
     const [nome, setNome] = useState('');
     const [sobrenome, setSobrenome] = useState('');
     const [selectedIcon, setSelectedIcon] = useState(null);
+
+    const [refresh,setRefresh]  = useState(false)
+
+    const onRefresh = async  () =>{
+      setRefresh(true) 
+      setUser(await cache.get("dados")) 
+      setTimeout(() =>{
+        setRefresh(false)
+      },2000)
+    }
+    const editPerfil = async () => {
+      try {
+        const token = await cache.get("tokenID");
+        const response = await api.put('/user/profile', {
+                name: nome,
+                lastname: sobrenome,
+                avatar: selectedIcon
+        }, {
+          headers: {
+            authorization: `Bearer ${token}`
+          }
+        });
+        getPerfil()
+      } catch (erro) {
+        console.log(erro);
+      }
+    };
 
     const handlePress = (screen) => {
       navigation.navigate(screen);
@@ -38,7 +69,8 @@
     };
 
     const handleSave = () => {
-      // Aqui você pode adicionar lógica para salvar as informações do perfil
+      onRefresh();
+      editPerfil();
       toggleModal();
     };
 
@@ -60,7 +92,9 @@
     }
 
     return (
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView contentContainerStyle={styles.container} refreshControl={
+        <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+      }>
         <View style={styles.content}>
           <View style={styles.viewPerfil}>
             {/* Informações do Perfil */}
@@ -169,12 +203,13 @@
               </View>
 
               <View style={styles.buttonContainer}>
-                <Pressable style={styles.confirmButton} onPress={handleSave}>
+                <Pressable style={styles.confirmButton} onPress={toggleModal}>
                   <Text style={styles.buttonText}>Cancelar</Text>
                 </Pressable>
-                <Pressable style={styles.cancelButton} onPress={toggleModal}>
+                <Pressable style={styles.cancelButton} onPress={handleSave}>
                   <Text style={styles.buttonTextConfir}>Confirmar</Text>
                 </Pressable>
+               
               </View>
             </View>
           </View>

@@ -25,13 +25,19 @@ const Config = () => {
 
 const [pwdHash,setPwdHash] = useState('')
 const deleteUser  = async () => {
+  console.log(pwdHash)
      try{
 
         const token = await cache.get("tokenID")
-        const response = await api.delete('/user',{ 
+        const response = await api.delete('/user',
+          {
           headers: {
             authorization:`Bearer ${token}`
-        },pwdHash
+        },
+        data:{
+          pwdHash:pwdHash
+        },
+        
       }
     );
         }catch(erro){

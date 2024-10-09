@@ -1,5 +1,5 @@
 import React, { useState, useRef,useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, Pressable, ActivityIndicator, Animated } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, Pressable, ActivityIndicator, Animated, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Collapsible from 'react-native-collapsible'; 
@@ -14,6 +14,7 @@ import Trilha from '../assets/backgrounds/trilha_bg.png';
 import Abrir from '../assets/icons/arrowDown.svg'; 
 import api from '../services/api'
 import cache from '../utils/cache'
+import getPerfil from '../utils/gerProfile';
 
 const Home = () => {
   const [isCollapsed, setIsCollapsed] = useState(true); 
@@ -22,33 +23,36 @@ const Home = () => {
 
   const [tip,setTip] = useState([])
   useEffect(() => {
-    async function getTip(){
+
+  try{
+      async function getTip(){
       const resposta = await api.get('/tips');
       setTip(resposta.data);
     };
-    getTip(); 
+     getTip(); 
+    }catch(erro){
+    console.log(erro)
+  }
   },
 []);
 
+const [refresh,setRefresh]  = useState(false)
 
 const [user, setUser] = useState({});
 useEffect(() => {
-    async function lerUser(){
-      const token = await cache.get("tokenID")
-      const resposta = await api.get('/user/profile',{ 
-          headers: {
-            authorization:`Bearer ${token}`
-        }
-      },
-    );
-    setUser(resposta.data.results[0][0]);
-    await cache.set("dados",resposta.data.results[0][0]);
-    };
-    lerUser();
-  },
+  try{
+  getPerfil()
+  async function lerUser(){
+  setUser(await cache.get("dados")) 
+  };
+  lerUser();
+}catch(erro){
+  console.log(erro)
+}
+},
 []);
 
-console.log(user)
+
 
 
   const [fontsLoaded] = useFonts({
