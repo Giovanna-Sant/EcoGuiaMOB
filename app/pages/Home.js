@@ -21,12 +21,12 @@ const Home = () => {
   const rotateAnim = useRef(new Animated.Value(0)).current; 
   const navigation = useNavigation();
 
-  const [tip,setTip] = useState([])
+const [tip,setTip] = useState([])
   useEffect(() => {
 
   try{
       async function getTip(){
-      const resposta = await api.get('/tips');
+      const resposta = await api.get('/tip');
       setTip(resposta.data);
     };
      getTip(); 
@@ -36,7 +36,6 @@ const Home = () => {
   },
 []);
 
-const [refresh,setRefresh]  = useState(false)
 
 const [user, setUser] = useState({});
 useEffect(() => {
@@ -50,7 +49,7 @@ useEffect(() => {
   console.log(erro)
 }
 },
-[]);
+[user]);
 
 
 
@@ -85,7 +84,7 @@ useEffect(() => {
   });
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} >
 
       <ScrollView 
         contentContainerStyle={styles.scrollContent}

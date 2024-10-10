@@ -14,6 +14,7 @@ const Config = () => {
 
   const [user, setUser] = useState({});
   const [email,setEmail] = useState('')
+  
   useEffect(() => {
     async function lerUser(){
     setUser(await cache.get("dados"))
@@ -21,13 +22,69 @@ const Config = () => {
     };
     lerUser();
   },
-[]);
+[user,email]);
+
+const modifyPwd = async () => {
+  try{
+    const token = await cache.get("tokenID")
+    console.log(token)
+    if(novaSenha != confirmarSenha ){
+      alert('As senhas não conferem')
+      return;
+    }
+    const response = await api.put('/user/pwd',{
+        pwdUser:senhaAtual,
+        newPwd:novaSenha
+    },{
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    }
+  )
+  alert("Senha alterada com sucesso!")
+  }
+  catch(erro){
+    console.log(erro)
+  }
+}
+
+
+const registerModifyEmail = async () =>{
+  try{
+    if(novoEmail != confirmarEmail){
+      alert('Os e-mails não conferem');
+      return;
+    }
+    const response = await api.put('/user/registerEmail',{
+     email:novoEmail
+    })
+    setTokenAtual(response.data.token);
+    setTokenModalVisible(!tokenModalVisible);
+  }catch(erro){
+    console.log(erro)
+  }
+}
+
+const modifyEmail = async () =>{
+  try{
+    const token = await cache.get("tokenID")
+    const response = await api.put("/user/email",{
+     email:novoEmail
+    },{
+      headers:{
+        authorization: `Bearer ${token}`
+      }
+    })
+    await cache.set("email",novoEmail)
+  }catch(erro){
+    console.log(erro)
+  } 
+}
 
 const [pwdHash,setPwdHash] = useState('')
 const deleteUser  = async () => {
   console.log(pwdHash)
      try{
-
         const token = await cache.get("tokenID")
         const response = await api.delete('/user',
           {
@@ -70,7 +127,7 @@ const deleteUser  = async () => {
   };
 
   const toggleTokenModal = () => {
-    setTokenModalVisible(!tokenModalVisible);
+   registerModifyEmail();
   };
 
   const toggleSenhaModal = () => {
@@ -90,6 +147,7 @@ const deleteUser  = async () => {
   };
 
   const handleSenhaSave = () => {
+    modifyPwd();
     toggleSenhaModal();
   };
 
@@ -110,10 +168,11 @@ const deleteUser  = async () => {
 
   const handleConfirmarToken = () => {
     if (tokenParaAlterar === tokenAtual) {
+      modifyEmail()
       alert('Email atualizado com sucesso!')
 
     } else {
-      alert('Código de acesso incorreta!');
+      alert('Código de acesso incorreto!');
     }
   };
 
@@ -270,7 +329,7 @@ const deleteUser  = async () => {
               <Text style={styles.title}>Um código de acesso foi enviado ao novo email. Insira-o abaixo para confirmar a alteração.</Text>
               <TextInput
                 style={styles.input}
-                value={senhaParaDeletar}
+                value={tokenParaAlterar}
                 onChangeText={setTokenParaAlterar}
                 secureTextEntry
               />

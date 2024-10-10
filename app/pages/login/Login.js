@@ -24,7 +24,7 @@ export default function Login() {
         console.log(response.data);
         console.log(response.data.token)
         await cache.set("tokenID",response.data.token)
-        await cache.set("email",email)
+        await cache.set("email",email),
         handlePress("Home")
 
         }catch(erro){

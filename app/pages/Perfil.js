@@ -26,7 +26,7 @@
      console.log(erro)
     }
   },
-[]);
+[user]);
 
     const [isModalVisible, setModalVisible] = useState(false);
     const [nome, setNome] = useState('');
@@ -49,7 +49,7 @@
                 name: nome,
                 lastname: sobrenome,
                 avatar: selectedIcon
-        }, {
+        },{
           headers: {
             authorization: `Bearer ${token}`
           }
