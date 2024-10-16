@@ -261,11 +261,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     marginTop: 10,
-    marginLeft: 20,
   },
 
   profileInfo: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "flex-start",
     paddingHorizontal: 10,
@@ -334,7 +332,8 @@ const styles = StyleSheet.create({
     gap: 10,
     marginTop: 20,
     marginHorizontal: 15,
-    maxWidth: "70%",
+    justifyContent: 'center',
+    paddingHorizontal: 35
   },
 
   badge: {
