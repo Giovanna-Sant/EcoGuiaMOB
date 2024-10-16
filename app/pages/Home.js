@@ -1,4 +1,4 @@
-import React, { useState, useRef,useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, Pressable, ActivityIndicator, Animated, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
@@ -15,35 +15,33 @@ const Home = () => {
   const rotateAnim = useRef(new Animated.Value(0)).current; 
   const navigation = useNavigation();
 
-  const [tip,setTip] = useState([])
+  const [tip, setTip] = useState([])
   useEffect(() => {
 
-  try{
-      async function getTip(){
-      const resposta = await api.get('/tip');
+  try {
+    async function getTip() {
+      const resposta = await api.get("/tip");
       setTip(resposta.data);
-    };
-     getTip(); 
-    }catch(erro){
-    console.log(erro)
+    }
+    getTip();
+  } catch (erro) {
+    console.log(erro);
   }
   },
 []);
 
-
-const [user, setUser] = useState({});
-useEffect(() => {
-  try{
-  getPerfil()
-  async function lerUser(){
-  setUser(await cache.get("dados")) 
-  };
-  lerUser();
-}catch(erro){
-  console.log(erro)
-}
-},
-[user]);
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    try {
+      getPerfil();
+      async function lerUser() {
+        setUser(await cache.get("dados"));
+      }
+      lerUser();
+    } catch (erro) {
+      console.log(erro);
+    }
+  }, [user]);
 
   const [fontsLoaded] = useFonts({
     Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold,
@@ -192,6 +190,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     padding: 8,
   },
+  
   badge: {
     borderRadius: 10,
     borderColor: '#A6D89B',
@@ -199,10 +198,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#E2F2DF',
     padding: 5,
   },
+  
   progressBar: {
     height: 10,
     marginTop: 8,
   },
+  
   textLvl: {
     backgroundColor: '#a6d89b',
     borderRadius: 5,
