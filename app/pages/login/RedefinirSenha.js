@@ -1,31 +1,33 @@
 import React, { useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_300Light } from '@expo-google-fonts/poppins';
-import Logo from '../../assets/logo.svg';
+import { LogoEcoGuia } from '../../assets';
 import api from '../../services/api'
 import cache from '../../utils/cache'
 
 export default function RedefinirSenha() {
   const navigation = useNavigation();
-  const [email,setEmail] =  useState('')
+
+  const [email, setEmail] =  useState('')
 
   const sendEmail = async (event) => {
     event.preventDefault();
-       try{
-          const response = await api.post('/user/token', {email});
-          console.log(response.data);
-          console.log(response.data.token);   
-          await cache.set("token",response.data.token);
-          console.log( await cache.get("token"))
-          await cache.set("email",email)
-          navigation.navigate("Token")
-          }catch(erro){
-          console.log(email);
-          console.log(erro.response.data)
-          }
-      }
-  
+    try {
+      const response = await api.post("/user/token", { email });
+      console.log(response.data);
+      console.log(response.data.token);
+      await cache.set("token", response.data.token);
+      console.log(await cache.get("token"));
+      await cache.set("email", email);
+      navigation.navigate("Token");
+    } catch (erro) {
+      console.log(email);
+      console.log(erro.response.data);
+    }
+  }
+
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_600SemiBold,
@@ -40,15 +42,15 @@ export default function RedefinirSenha() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <StatusBar style="auto" />
       <View style={styles.fixedContent}>
-        <Logo width={300} style={styles.logo} />
+        <LogoEcoGuia width={300} style={styles.logo} />
         <Text style={styles.title}>Confirme seu email</Text>
-        <Text style={styles.sub}>Informe o email de sua conta para redefinir a senha</Text>
+        <Text style={styles.sub}>Informe o email de sua conta para receber um código para redefinição de senha</Text>
       </View>
 
       <View style={styles.inputContainer}>
         <CustomInput placeholder="seuemail@gmail.com" onChangeText={setEmail} />
-
       </View>
 
       <View style={styles.footer}>
@@ -84,7 +86,7 @@ const CustomInput = ({ placeholder, secureTextEntry,onChangeText}) => (
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
   },
@@ -131,6 +133,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 30,
     marginTop: 20,
+    alignItems: 'center'
   },
   input: {
     backgroundColor: "#F1F1F1",
