@@ -8,28 +8,27 @@ import api from '../../services/api'
 import cache from '../../utils/cache'
 
 export default function RedefinirSenha() {
-
-const [pwd,setPwd] = useState('');
-const [checkPwd,setCheckPwd] = useState('');
-  const newPassword = async ()=>{
-    if(pwd != checkPwd){
+  const [pwd, setPwd] = useState("");
+  const [checkPwd, setCheckPwd] = useState("");
+  const newPassword = async () => {
+    if (pwd != checkPwd) {
       alert("As senhas estão diferentes");
       return;
     }
-    try{
-    const email = await cache.get('email')
-    console.log(email)
-    const response = await api.post('/user/pwd', {pwd,email});
-    console.log(response)
-    if(response.status == 200){
-      alert("Senha alterada com sucesso");
-      navigation.navigate("Login")
+    try {
+      const email = await cache.get("email");
+      console.log(email);
+      const response = await api.post("/user/pwd", { pwd, email });
+      console.log(response);
+      if (response.status == 200) {
+        alert("Senha alterada com sucesso");
+        navigation.navigate("Login");
+      }
+    } catch (erro) {
+      console.log(erro);
     }
-   }catch(erro){
-    console.log(erro)
-  }
+  };
 
-  }
   const navigation = useNavigation();
   
   const [fontsLoaded] = useFonts({
@@ -56,8 +55,6 @@ const [checkPwd,setCheckPwd] = useState('');
       <View style={styles.inputContainer}>
         <CustomInput placeholder="Senha" onChangeText={setPwd}/>
         <CustomInput placeholder="Confirmar Senha" onChangeText={setCheckPwd}/>
-
-
       </View>
 
       <View style={styles.footer}>
@@ -92,7 +89,7 @@ const CustomInput = ({ placeholder, secureTextEntry, onChangeText }) => (
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
   },
@@ -139,6 +136,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 30,
     marginTop: 20,
+    alignItems: 'center'
   },
   input: {
     backgroundColor: "#F1F1F1",
