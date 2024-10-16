@@ -76,40 +76,21 @@ useEffect(() => {
 
   return (
     <View style={styles.container}>
-      <ScrollView
+
+      <ScrollView 
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
-        style={styles.scrollView}
-      >
-        <Pressable
-          style={styles.viewPerfil}
-          onPress={() => handlePress("Perfil")}
-        >
+        style={styles.scrollView}>
+        
+        <Pressable style={styles.viewPerfil} onPress={() => handlePress('Perfil')}>
           <View style={styles.iconDiv}>
-            <Image
-              style={styles.icon}
-              width={60}
-              height={60}
-              source={{
-                uri: "https://cdn-icons-png.flaticon.com/256/903/903482.png",
-              }}
-            />
+            <Image style={styles.icon} width={60} height={60} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}} />
           </View>
           <View>
-            <Text style={styles.subtitle}>
-              {user.name_user} {user.lastname_user}
-            </Text>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Text style={styles.text}>
-                XP {user.XP_user}/{user.XP_level}
-              </Text>
-              <Text style={styles.textLvl}>level {user.fk_level_user}</Text>
+          <Text style={styles.subtitle}>{user.name_user} {user.lastname_user}</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Text style={styles.text}>XP {user.XP_user}/{user.XP_level}</Text>
+            <Text style={styles.textLvl}>level {user.fk_level_user}</Text>
             </View>
 
             <Progress.Bar
@@ -117,7 +98,7 @@ useEffect(() => {
               color="#6BBF59"
               unfilledColor="#EBEBEB"
               borderWidth={1}
-              borderColor="#6BBF59"
+              borderColor='#6BBF59'
               height={10}
               borderRadius={5}
               style={styles.progressBar}
@@ -126,27 +107,12 @@ useEffect(() => {
           </View>
 
           <View style={styles.badge}>
-            <Image
-              width={50}
-              height={60}
-              source={{
-                uri: "https://th.bing.com/th/id/OIP.KgtLpFEUvAR0-jhXUGG-pgHaHa?w=512&h=512&rs=1&pid=ImgDetMain",
-              }}
-            />
+            <Image width={50} height={60} source={{uri: 'https://th.bing.com/th/id/OIP.KgtLpFEUvAR0-jhXUGG-pgHaHa?w=512&h=512&rs=1&pid=ImgDetMain'}} />
           </View>
         </Pressable>
 
-        <Pressable
-          onPress={() => handlePress("Trilha")}
-          maxHeight={210}
-          style={styles.viewTrilha}
-        >
-          <Image
-            source={TrilhaBG}
-            maxHeight={210}
-            maxWidth="100%"
-            borderRadius={10}
-          />
+        <Pressable onPress={() => handlePress('Trilha')} maxHeight={210} style={styles.viewTrilha}>
+          <Image source={TrilhaBG} maxHeight={210} maxWidth='100%' borderRadius={10} />
         </Pressable>
 
         <Pressable onPress={toggleCollapse} style={styles.viewDica}>
@@ -162,38 +128,24 @@ useEffect(() => {
           </View>
         </Collapsible>
 
-        <Pressable
-          onPress={() => handlePress("Coleta")}
-          style={styles.iconButton}
-        >
+        <Pressable onPress={() => handlePress('Coleta')} style={styles.iconButton}>
           <View style={styles.viewAPI}>
             <View style={styles.contAPI}>
-              <Truck />
-              <Text style={styles.atbAPI}>
-                Saiba o horário de colocar seu lixo pra fora!
-              </Text>
+              <Truck/>
+              <Text style={styles.atbAPI}>Saiba o horário de colocar seu lixo pra fora!</Text>
             </View>
             <View style={styles.contAPI}>
-              <Local />
-              <Text style={styles.atbAPI}>
-                Conheça os pontos de coleta perto de você!
-              </Text>
+              <Local/>
+              <Text style={styles.atbAPI}>Conheça os pontos de coleta perto de você!</Text>
             </View>
-            <ArrowRight />
+            <ArrowRight/>
           </View>
         </Pressable>
 
-        <Pressable
-          onPress={() => handlePress("Catalogo")}
-          style={styles.viewNews}
-        >
-          <Image
-            style={styles.imgNews}
-            source={CatalogoBG}
-            maxWidth="100%"
-            maxHeight={205}
-          />
+        <Pressable onPress={() => handlePress('Catalogo')} style={styles.viewNews}>
+          <Image style={styles.imgNews} source={CatalogoBG} maxWidth='100%' maxHeight={205} />
         </Pressable>
+
       </ScrollView>
 
       <Footer />
