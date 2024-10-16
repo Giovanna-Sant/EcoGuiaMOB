@@ -3,8 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import Logo from '../../assets/logo.svg';
-import Google from '../../assets/icons/google.svg';
+import { LogoEcoGuia, Google } from '../../assets';
 import api from '../../services/api';
 import cache from '../../utils/cache'
 
@@ -12,7 +11,6 @@ export default function Login() {
   const [isVisible, setIsVisible] = useState(true);
 
   const [email, setEmail] = useState('');
-
   const [pwd, setSenha] = useState('');
 
   const login  = async (event) => {
@@ -58,78 +56,91 @@ export default function Login() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.fixedContent}>
-        <Logo width={300} style={styles.logo} />
-        <Text style={styles.title}>
-          {isVisible ? 'Cadastre-se' : 'Fazer Login'}
-        </Text>
-        <View style={styles.googleContainer}>
-          <Google width={25} height={25} />
-          <Text style={styles.googleText}>
-            {isVisible ? 'Criar conta com o Google' : 'Entrar com o Google'}
-          </Text>
-        </View>
-      </View>
+      <StatusBar style="auto" />
+      {isVisible ? (
+        // Login Content
+        <View style={styles.fixedContent}>
+          <LogoEcoGuia width={300} style={styles.logo} />
+          <Text style={styles.title}>Login</Text>
+          <View style={styles.googleContainer}>
+            <Google width={25} height={25} />
+            <Text style={styles.googleText}>Entrar com o Google</Text>
+          </View>
 
-      <View style={styles.inputContainer}>
-        {isVisible ? (
-          <>
+          <View style={styles.inputContainer}>
+            <CustomInput
+              placeholder="seuemail@gmail.com"
+              onChangeText={setEmail}
+            />
+            <CustomInput
+              placeholder="Senha"
+              secureTextEntry
+              onChangeText={setSenha}
+            />
+            <TouchableOpacity
+              style={styles.recover}
+              onPress={() => handlePress("RedefinirSenha")}
+            >
+              <Text style={styles.recoverTexto}>Esqueci a Senha</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.footer}>
+            <TouchableOpacity
+              style={styles.botao}
+              onPress={() => handlePress("Home")}
+            >
+              <Text style={styles.botaoTexto}>Concluído</Text>
+            </TouchableOpacity>
+
+            <View style={styles.textContainer}>
+              <Text style={styles.text}>Não possui conta?</Text>
+              <TouchableOpacity onPress={toggleVisibility}>
+                <Text style={styles.loginText}>Fazer Cadastro</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      ) : (
+        // Cadastro Content
+        <View style={styles.fixedContent}>
+          <LogoEcoGuia width={300} style={styles.logo} />
+          <Text style={styles.title}>Cadastro</Text>
+          <View style={styles.googleContainer}>
+            <Google width={25} height={25} />
+            <Text style={styles.googleText}>Criar conta com o Google</Text>
+          </View>
+
+          <View style={styles.inputContainer}>
             <CustomInput placeholder="Nome" />
             <CustomInput placeholder="Sobrenome" />
             <CustomInput placeholder="seuemail@gmail.com" />
             <CustomInput placeholder="Senha" secureTextEntry />
             <CustomInput placeholder="Confirmar senha" secureTextEntry />
-            <View style={styles.footer}>
+          </View>
+
+          <View style={styles.footer}>
             <TouchableOpacity
-            style={styles.botao}
-            onPress={() => handlePress("Home")}
+              style={styles.botao}
+              onPress={() => handlePress("Home")}
             >
-            <Text style={styles.botaoTexto}>Concluído</Text>
-            </TouchableOpacity> 
-            </View>
-            
-          </>
-        ) : (
-          <>
-            <CustomInput placeholder="seuemail@gmail.com" onChangeText={setEmail} />
-            <CustomInput placeholder="Senha" secureTextEntry onChangeText={setSenha}/>
-            <TouchableOpacity
-            style={styles.recover}
-            onPress={() => handlePress("RedefinirSenha")}
-            >
-            <Text style={styles.recoverTexto}>Esqueci a Senha</Text>
+              <Text style={styles.botaoTexto}>Concluído</Text>
             </TouchableOpacity>
-             <View style={styles.footer}>
-            <TouchableOpacity
-            style={styles.botao}
-            onPress={login}
-            >
-            <Text style={styles.botaoTexto}>Concluído</Text>
-            </TouchableOpacity> 
+
+            <View style={styles.textContainer}>
+              <Text style={styles.text}>Já possui conta?</Text>
+              <TouchableOpacity onPress={toggleVisibility}>
+                <Text style={styles.loginText}>Fazer Login</Text>
+              </TouchableOpacity>
             </View>
-          </>
-        )}
-      </View>
-
-      <View >
-        
-
-        <View style={styles.textContainer}>
-          <Text style={styles.text}>
-            {isVisible ? 'Já possui conta? ' : 'Não possui conta? '}
-          </Text>
-          <TouchableOpacity onPress={toggleVisibility}>
-            <Text style={styles.loginText}>
-              {isVisible ? 'Fazer Login' : 'Fazer Cadastro'}
-            </Text>
-          </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      )}
     </ScrollView>
   );
 }
 
-const CustomInput = ({ placeholder, secureTextEntry,onChangeText }) => (
+const CustomInput = ({ placeholder, secureTextEntry, onChangeText }) => (
   <TextInput
     style={styles.input}
     placeholder={placeholder}
@@ -141,7 +152,7 @@ const CustomInput = ({ placeholder, secureTextEntry,onChangeText }) => (
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    justifyContent: "flex-start",
+    justifyContent: "space-around",
     alignItems: "center",
     backgroundColor: "#fff",
   },
@@ -154,7 +165,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 
-  logo: {},
+  logo: {
+    marginBottom: 20
+  },
 
   title: {
     fontFamily: "Poppins_600SemiBold",
@@ -185,6 +198,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 30,
     marginTop: 20,
+    alignItems: 'center'
   },
 
   input: {
@@ -204,12 +218,13 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_400Regular",
     fontSize: 16,
     color: "#6BBF59",
+    paddingLeft: 5
   },
 
   footer: {
     marginTop: 20,
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 40,
   },
 
   text: {
@@ -238,6 +253,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 5,
+    marginTop: 20
   },
 
   botaoTexto: {
