@@ -81,7 +81,7 @@ export default function Login() {
           <View style={styles.footer}>
             <TouchableOpacity
               style={styles.botao}
-              onPress={() => handlePress("Home")}
+              onPress={login}
             >
               <Text style={styles.botaoTexto}>Concluído</Text>
             </TouchableOpacity>

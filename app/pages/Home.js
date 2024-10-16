@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, Pressable, ActivityIndicator, Animated, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, Pressable, ActivityIndicator, Animated} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Collapsible from 'react-native-collapsible'; 
@@ -11,7 +11,7 @@ import cache from '../utils/cache'
 import getPerfil from '../utils/gerProfile';
 
 const Home = () => {
-  const [isCollapsed, setIsCollapsed] = useState(true); 
+  const [isCollapsed, setIsCollapsed] = useState(false); 
   const rotateAnim = useRef(new Animated.Value(0)).current; 
   const navigation = useNavigation();
 
@@ -29,6 +29,7 @@ const Home = () => {
   }
   },
 []);
+
 
   const [user, setUser] = useState({});
   useEffect(() => {
@@ -78,7 +79,8 @@ const Home = () => {
       <ScrollView 
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
-        style={styles.scrollView}>
+        style={styles.scrollView}
+        >
         
         <Pressable style={styles.viewPerfil} onPress={() => handlePress('Perfil')}>
           <View style={styles.iconDiv}>
