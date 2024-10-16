@@ -4,9 +4,34 @@ import { useNavigation } from '@react-navigation/native';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { LogoEcoGuia, Google } from '../../assets';
+import api from '../../services/api';
+import cache from '../../utils/cache'
 
 export default function Login() {
   const [isVisible, setIsVisible] = useState(true);
+
+  const [email, setEmail] = useState('');
+  const [pwd, setSenha] = useState('');
+
+  const login  = async (event) => {
+  event.preventDefault();
+     try{
+        console.log(email);
+        console.log(pwd);
+        const response = await api.post('/user/login', {email,pwd});
+        console.log(response.data);
+        console.log(response.data.token)
+        await cache.set("tokenID",response.data.token)
+        await cache.set("email",email),
+        handlePress("Home")
+
+        }catch(erro){
+        console.log(email);
+        console.log(pwd);
+        console.log(erro);
+        console.log(erro.response.data)
+        }
+    }
 
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
@@ -43,8 +68,8 @@ export default function Login() {
           </View>
 
           <View style={styles.inputContainer}>
-            <CustomInput placeholder="seuemail@gmail.com" />
-            <CustomInput placeholder="Senha" secureTextEntry />
+          <CustomInput placeholder="seuemail@gmail.com" onChangeText={setEmail} />
+          <CustomInput placeholder="Senha" secureTextEntry onChangeText={setSenha}/>
             <TouchableOpacity
               style={styles.recover}
               onPress={() => handlePress("RedefinirSenha")}
@@ -54,20 +79,20 @@ export default function Login() {
           </View>
 
           <View style={styles.footer}>
-        <TouchableOpacity
-          style={styles.botao}
-          onPress={() => handlePress("Home")}
-        >
-          <Text style={styles.botaoTexto}>Concluído</Text>
-        </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.botao}
+              onPress={login}
+            >
+              <Text style={styles.botaoTexto}>Concluído</Text>
+            </TouchableOpacity>
 
-        <View style={styles.textContainer}>
-          <Text style={styles.text}>Não possui conta?</Text>
-          <TouchableOpacity onPress={toggleVisibility}>
-            <Text style={styles.loginText}>Fazer Cadastro</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+            <View style={styles.textContainer}>
+              <Text style={styles.text}>Não possui conta?</Text>
+              <TouchableOpacity onPress={toggleVisibility}>
+                <Text style={styles.loginText}>Fazer Cadastro</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
       ) : (
         // Cadastro Content
@@ -108,11 +133,12 @@ export default function Login() {
   );
 }
 
-const CustomInput = ({ placeholder, secureTextEntry }) => (
+const CustomInput = ({ placeholder, secureTextEntry, onChangeText }) => (
   <TextInput
     style={styles.input}
     placeholder={placeholder}
     secureTextEntry={secureTextEntry}
+    onChangeText={onChangeText}
   />
 );
 
@@ -234,6 +260,6 @@ const styles = StyleSheet.create({
     color: "#6BBF59",
     fontSize: 14,
     textDecorationLine: 'underline',
-
+    textAlign: 'center'
   },
 });

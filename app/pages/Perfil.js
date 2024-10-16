@@ -6,14 +6,57 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Progress from 'react-native-progress';
 import Footer from '../components/Footer';
 import { ArrowRight, Edit } from '../assets';
+import cache from '../utils/cache';
+import getPerfil from '../utils/gerProfile';
+import { RefreshControl } from 'react-native-gesture-handler';
+import api from '../services/api';
 
 const Perfil = () => {
   const navigation = useNavigation();
 
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    try {
+      async function lerUser() {
+        setUser(await cache.get("dados"));
+      }
+      lerUser();
+    } catch (erro) {
+      console.log(erro);
+    }
+  }, [user]);
+
   const [isModalVisible, setModalVisible] = useState(false);
-  const [nome, setNome] = useState("Yasmin");
-  const [sobrenome, setSobrenome] = useState("Benjor");
+  const [nome, setNome] = useState('');
+  const [sobrenome, setSobrenome] = useState('');
   const [selectedIcon, setSelectedIcon] = useState(null);
+
+  const [refresh,setRefresh]  = useState(false)
+
+  const onRefresh = async  () =>{
+    setRefresh(true) 
+    setUser(await cache.get("dados")) 
+    setTimeout(() =>{
+      setRefresh(false)
+    },2000)
+  }
+  const editPerfil = async () => {
+    try {
+      const token = await cache.get("tokenID");
+      const response = await api.put('/user/profile', {
+              name: nome,
+              lastname: sobrenome,
+              avatar: selectedIcon
+      },{
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      });
+      getPerfil()
+    } catch (erro) {
+      console.log(erro);
+    }
+  };
 
   const handlePress = (screen) => {
     navigation.navigate(screen);
@@ -24,6 +67,8 @@ const Perfil = () => {
   };
 
   const handleSave = () => {
+    onRefresh();
+    editPerfil();
     toggleModal();
   };
 
@@ -45,7 +90,9 @@ const Perfil = () => {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.container} refreshControl={
+      <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+    }>
       <View style={styles.content}>
         <View style={styles.viewPerfil}>
           {/* Informações do Perfil */}
@@ -54,7 +101,7 @@ const Perfil = () => {
               <Edit maxHeight={24} maxWidth={24} />
             </TouchableOpacity>
 
-            <Text style={styles.username}>yasmin#3452</Text>
+            <Text style={styles.username}>{user.nickname_user}</Text>
 
             <TouchableOpacity onPress={() => handlePress("Config")}>
               <Ionicons name="menu-outline" size={28} color="black" />
@@ -75,7 +122,7 @@ const Perfil = () => {
             </View>
 
             <View style={styles.profileInfo}>
-              <Text style={styles.subtitle}>Yasmin Benjor</Text>
+            <Text style={styles.subtitle}>{user.name_user} {user.lastname_user}</Text>
               <View
                 style={{
                   flexDirection: "row",
@@ -84,8 +131,8 @@ const Perfil = () => {
                   width: 200,
                 }}
               >
-                <Text style={styles.textxp}>XP 120/340</Text>
-                <Text style={styles.textLvl}>level 13</Text>
+                <Text style={styles.textxp}>XP {user.XP_user}/{user.XP_level}</Text>
+                <Text style={styles.textLvl}>level {user.fk_level_user}</Text>
               </View>
               <Progress.Bar
                 width={200}
@@ -214,11 +261,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     marginTop: 10,
-    marginLeft: 20,
   },
 
   profileInfo: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "flex-start",
     paddingHorizontal: 10,
@@ -287,7 +332,8 @@ const styles = StyleSheet.create({
     gap: 10,
     marginTop: 20,
     marginHorizontal: 15,
-    maxWidth: "70%",
+    justifyContent: 'center',
+    paddingHorizontal: 35
   },
 
   badge: {
