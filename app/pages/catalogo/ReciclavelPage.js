@@ -30,14 +30,14 @@ const ReciclavelPage = () => {
     <View style={styles.container}>
      
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <ImageBackground 
-          source={BannerReciclavel} 
-          style={[styles.bannerContainer, { height: width * 0.659 }]} 
+      <BannerReciclavel
+          style={[styles.bannerContainer]}
           resizeMode="cover"
+          maxWidth="100%"
         />
         <View style={styles.content}>
           <Text style={styles.description}>
-            São materiais que podem ser descartados corretamente no lixo reciclável e destinados à reciclagem.
+            São materiais que podem ser descartados corretamente no lixo reciclável e destinados à reciclagem:
           </Text>
           <CategoryContainer
             category="Metais"
@@ -135,28 +135,33 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
   },
+
   scrollContainer: {
     flexGrow: 1,
     paddingBottom: 85,
   },
+
   content: {
     paddingHorizontal: 10,
   },
+
   bannerContainer: {
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginVertical: -180
   },
+
   description: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 14,
     textAlign: 'center',
     color: '#3F463E',
-    marginBottom: 15,
+    paddingHorizontal: 5,
+    marginBottom: 25
   },
+
   categoryContainer: {
     marginBottom: 15,
   },
+  
   categoryHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -164,42 +169,50 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 8,
   },
+
   categoryText: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 20,
     flex: 1,
   },
+  
   bullet: {
     width: 15,
     height: 15,
     borderRadius: 10,
     marginRight: 10,
   },
+  
   subList: {
     paddingLeft: 35,
   },
+  
   subItemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 5,
   },
+  
   subItemBullet: {
     width: 15,
     height: 15,
     borderRadius: 10,
     marginRight: 10,
   },
+  
   subItemText: {
     fontFamily: 'Poppins_400Regular',
     fontSize: 16,
     color: '#333',
   },
+  
   categorySeparator: {
     height: 1,
     backgroundColor: '#E0E0E0',
     marginVertical: 10,
     marginLeft: 15,
   },
+  
 });
 
 export default ReciclavelPage;

@@ -20,7 +20,7 @@ export default function Footer() {
     <ImageBackground
       source={backgroundImage} 
       style={styles.footer}
-      resizeMode="cover" // Ajusta o modo de redimensionamento da imagem
+      resizeMode="cover"
     >
       <TouchableOpacity onPress={() => handlePress('Trilha')} style={styles.iconButton}>
         <TrilhaIcon width={24} height={24} />

@@ -21,12 +21,10 @@ const DescartavelPage = () => {
       
       <ScrollView contentContainerStyle={styles.content}>
         {/* Banner como fundo */}
-        <ImageBackground 
-          source={BannerEspecial} 
-          style={[styles.bannerContainer, { height: width * 0.659 }]} // Mantém a proporção da imagem
-          resizeMode="cover"
-        >
-        </ImageBackground>
+        <BannerEspecial
+          style={[styles.bannerContainer]}
+          maxWidth={'100%'}
+        />
 
         {/* Descrição */}
         <Text style={styles.description}>
@@ -83,30 +81,34 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
   },
+
   content: {
     paddingBottom: 85,
   },
+
   bannerContainer: {
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginVertical: -40
   },
+  
   description: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 14,
     textAlign: 'center',
     color: '#3F463E',
     paddingHorizontal: 15,
-
+    marginBottom: 25
   },
+
   list: {
     paddingHorizontal: 20,
   },
+  
   listItem: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
   },
+  
   bullet: {
     width: 15,
     height: 15,
@@ -114,17 +116,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#D32F2F',
     marginRight: 10,
   },
+  
   itemText: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 20,
     color: '#333',
     flex: 1,
   },
+  
   separator: {
     height: 1,
     backgroundColor: '#E0E0E0',
     marginBottom: 10,
   },
+  
 });
 
 export default DescartavelPage;
