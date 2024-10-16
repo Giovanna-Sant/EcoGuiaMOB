@@ -68,15 +68,8 @@ export default function Login() {
           </View>
 
           <View style={styles.inputContainer}>
-            <CustomInput
-              placeholder="seuemail@gmail.com"
-              onChangeText={setEmail}
-            />
-            <CustomInput
-              placeholder="Senha"
-              secureTextEntry
-              onChangeText={setSenha}
-            />
+          <CustomInput placeholder="seuemail@gmail.com" onChangeText={setEmail} />
+          <CustomInput placeholder="Senha" secureTextEntry onChangeText={setSenha}/>
             <TouchableOpacity
               style={styles.recover}
               onPress={() => handlePress("RedefinirSenha")}

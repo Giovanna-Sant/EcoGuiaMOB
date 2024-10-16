@@ -35,7 +35,7 @@ const Catalogo = ({ navigation }) => {
         style={styles.scrollView}
       >
         <View style={styles.logoContainer}>
-          <TitleCatalogo style={styles.logo} />
+          <TitleCatalogo/>
           <Text style={styles.description}>
             Encontre toda informação necessária para ter uma vida mais sustentável e um consumo consciente!
           </Text>
@@ -192,13 +192,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 20,
-    gap: 8
-    
   },
   
   button: {
     backgroundColor: "#F1F1F1",
-    width: 180,
+    maxWidth: "49%",
     height: 180,
     borderRadius: 5,
     justifyContent: "center",
