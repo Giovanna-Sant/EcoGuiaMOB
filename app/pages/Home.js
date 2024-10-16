@@ -3,15 +3,9 @@ import { View, Text, StyleSheet, ScrollView, Image, Pressable, ActivityIndicator
 import { useNavigation } from '@react-navigation/native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Collapsible from 'react-native-collapsible'; 
-import Header from '../components/Header';
 import Footer from '../components/Footer';
 import * as Progress from 'react-native-progress';
-import Coleta from '../assets/icons/truck.svg';
-import EcoPonto from '../assets/icons/local.svg';
-import Seta from '../assets/icons/arrowRight.svg';
-import News from '../assets/backgrounds/catalogo_bg.png';
-import Trilha from '../assets/backgrounds/trilha_bg.png';
-import Abrir from '../assets/icons/arrowDown.svg'; 
+import { ArrowDown, ArrowRight, CatalogoBG, TrilhaBG, Truck, Local } from '../assets'
 import api from '../services/api'
 import cache from '../utils/cache'
 import getPerfil from '../utils/gerProfile';
@@ -21,7 +15,7 @@ const Home = () => {
   const rotateAnim = useRef(new Animated.Value(0)).current; 
   const navigation = useNavigation();
 
-const [tip,setTip] = useState([])
+  const [tip,setTip] = useState([])
   useEffect(() => {
 
   try{
@@ -50,9 +44,6 @@ useEffect(() => {
 }
 },
 [user]);
-
-
-
 
   const [fontsLoaded] = useFonts({
     Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold,
@@ -84,21 +75,40 @@ useEffect(() => {
   });
 
   return (
-    <View style={styles.container} >
-
-      <ScrollView 
+    <View style={styles.container}>
+      <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
-        style={styles.scrollView}>
-        
-        <Pressable style={styles.viewPerfil} onPress={() => handlePress('Perfil')}>
+        style={styles.scrollView}
+      >
+        <Pressable
+          style={styles.viewPerfil}
+          onPress={() => handlePress("Perfil")}
+        >
           <View style={styles.iconDiv}>
-            <Image style={styles.icon} width={60} height={60} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}} />
+            <Image
+              style={styles.icon}
+              width={60}
+              height={60}
+              source={{
+                uri: "https://cdn-icons-png.flaticon.com/256/903/903482.png",
+              }}
+            />
           </View>
           <View>
-            <Text style={styles.subtitle}>{user.name_user} {user.lastname_user}</Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={styles.text}>XP {user.XP_user}/{user.XP_level}</Text>
+            <Text style={styles.subtitle}>
+              {user.name_user} {user.lastname_user}
+            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Text style={styles.text}>
+                XP {user.XP_user}/{user.XP_level}
+              </Text>
               <Text style={styles.textLvl}>level {user.fk_level_user}</Text>
             </View>
 
@@ -107,7 +117,7 @@ useEffect(() => {
               color="#6BBF59"
               unfilledColor="#EBEBEB"
               borderWidth={1}
-              borderColor='#6BBF59'
+              borderColor="#6BBF59"
               height={10}
               borderRadius={5}
               style={styles.progressBar}
@@ -116,48 +126,74 @@ useEffect(() => {
           </View>
 
           <View style={styles.badge}>
-            <Image width={50} height={60} source={{uri: 'https://th.bing.com/th/id/OIP.KgtLpFEUvAR0-jhXUGG-pgHaHa?w=512&h=512&rs=1&pid=ImgDetMain'}} />
+            <Image
+              width={50}
+              height={60}
+              source={{
+                uri: "https://th.bing.com/th/id/OIP.KgtLpFEUvAR0-jhXUGG-pgHaHa?w=512&h=512&rs=1&pid=ImgDetMain",
+              }}
+            />
           </View>
         </Pressable>
 
-        <Pressable onPress={() => handlePress('Trilha')} maxHeight={210} style={styles.viewTrilha}>
-          <Image source={Trilha} maxHeight={210} maxWidth='100%' borderRadius={10} />
+        <Pressable
+          onPress={() => handlePress("Trilha")}
+          maxHeight={210}
+          style={styles.viewTrilha}
+        >
+          <Image
+            source={TrilhaBG}
+            maxHeight={210}
+            maxWidth="100%"
+            borderRadius={10}
+          />
         </Pressable>
 
         <Pressable onPress={toggleCollapse} style={styles.viewDica}>
           <Text style={styles.subtitle}>Dica diária</Text>
           <Animated.View style={{ transform: [{ rotate: rotateIcon }] }}>
-            <Abrir width={32} height={32} style={styles.abrir} />
+            <ArrowDown width={32} height={32} style={styles.abrir} />
           </Animated.View>
         </Pressable>
 
         <Collapsible collapsed={isCollapsed}>
-  <View style={styles.dicaContent}>
-    <Text style={styles.dicaText}>
-      {tip.description_tip}
-    </Text>
-  </View>
-</Collapsible>
+          <View style={styles.dicaContent}>
+            <Text style={styles.dicaText}>{tip.description_tip}</Text>
+          </View>
+        </Collapsible>
 
-
-        <Pressable onPress={() => handlePress('Coleta')} style={styles.iconButton}>
+        <Pressable
+          onPress={() => handlePress("Coleta")}
+          style={styles.iconButton}
+        >
           <View style={styles.viewAPI}>
             <View style={styles.contAPI}>
-              <Coleta />
-              <Text style={styles.atbAPI}>Saiba o horário de colocar seu lixo pra fora!</Text>
+              <Truck />
+              <Text style={styles.atbAPI}>
+                Saiba o horário de colocar seu lixo pra fora!
+              </Text>
             </View>
             <View style={styles.contAPI}>
-              <EcoPonto />
-              <Text style={styles.atbAPI}>Conheça os pontos de coleta perto de você!</Text>
+              <Local />
+              <Text style={styles.atbAPI}>
+                Conheça os pontos de coleta perto de você!
+              </Text>
             </View>
-            <Seta />
+            <ArrowRight />
           </View>
         </Pressable>
 
-        <Pressable onPress={() => handlePress('Catalogo')} style={styles.viewNews}>
-          <Image style={styles.imgNews} source={News} maxWidth='100%' maxHeight={205} />
+        <Pressable
+          onPress={() => handlePress("Catalogo")}
+          style={styles.viewNews}
+        >
+          <Image
+            style={styles.imgNews}
+            source={CatalogoBG}
+            maxWidth="100%"
+            maxHeight={205}
+          />
         </Pressable>
-
       </ScrollView>
 
       <Footer />
@@ -252,6 +288,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     marginVertical: -90,
+    zIndex: -2
   },
   imgNews: {
     borderRadius: 10,
