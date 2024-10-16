@@ -35,7 +35,7 @@ const Catalogo = ({ navigation }) => {
         style={styles.scrollView}
       >
         <View style={styles.logoContainer}>
-          <TitleCatalogo style={styles.logo} />
+          <TitleCatalogo/>
           <Text style={styles.description}>
             Encontre toda informação necessária para ter uma vida mais sustentável e um consumo consciente!
           </Text>
