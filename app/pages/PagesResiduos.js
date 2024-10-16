@@ -4,7 +4,7 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 // Tela principal
-export default function TabTwoScreen() {
+const Residuos = () => {
   // Carregamento das fontes
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
@@ -123,3 +123,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default Residuos;
