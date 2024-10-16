@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginHorizontal: 10, 
     backgroundColor: '#F1F1F1',
+    height: '100%'
   },
   newsContent: {
     fontSize: 14,

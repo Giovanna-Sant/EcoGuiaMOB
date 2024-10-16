@@ -11,7 +11,7 @@ import cache from '../utils/cache'
 import getPerfil from '../utils/gerProfile';
 
 const Home = () => {
-  const [isCollapsed, setIsCollapsed] = useState(true); 
+  const [isCollapsed, setIsCollapsed] = useState(false); 
   const rotateAnim = useRef(new Animated.Value(0)).current; 
   const navigation = useNavigation();
 
