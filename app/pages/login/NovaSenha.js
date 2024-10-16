@@ -4,8 +4,31 @@ import { useNavigation } from '@react-navigation/native';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_300Light } from '@expo-google-fonts/poppins';
 import { LogoEcoGuia } from '../../assets';
+import api from '../../services/api'
+import cache from '../../utils/cache'
 
 export default function RedefinirSenha() {
+  const [pwd, setPwd] = useState("");
+  const [checkPwd, setCheckPwd] = useState("");
+  const newPassword = async () => {
+    if (pwd != checkPwd) {
+      alert("As senhas estão diferentes");
+      return;
+    }
+    try {
+      const email = await cache.get("email");
+      console.log(email);
+      const response = await api.post("/user/pwd", { pwd, email });
+      console.log(response);
+      if (response.status == 200) {
+        alert("Senha alterada com sucesso");
+        navigation.navigate("Login");
+      }
+    } catch (erro) {
+      console.log(erro);
+    }
+  };
+
   const navigation = useNavigation();
   
   const [fontsLoaded] = useFonts({
@@ -30,16 +53,14 @@ export default function RedefinirSenha() {
       </View>
 
       <View style={styles.inputContainer}>
-        <CustomInput placeholder="Senha" secureTextEntry/>
-        <CustomInput placeholder="Confirmar Senha" secureTextEntry/>
-
-
+        <CustomInput placeholder="Senha" onChangeText={setPwd}/>
+        <CustomInput placeholder="Confirmar Senha" onChangeText={setCheckPwd}/>
       </View>
 
       <View style={styles.footer}>
         <TouchableOpacity
           style={styles.botao}
-          onPress={() => navigation.navigate("Login")}
+          onPress={newPassword}
         >
           <Text style={styles.botaoTexto}>Redefinir Senha</Text>
         </TouchableOpacity>
@@ -56,11 +77,12 @@ export default function RedefinirSenha() {
   );
 }
 
-const CustomInput = ({ placeholder, secureTextEntry }) => (
+const CustomInput = ({ placeholder, secureTextEntry, onChangeText }) => (
   <TextInput
     style={styles.input}
     placeholder={placeholder}
     secureTextEntry={secureTextEntry}
+    onChangeText={onChangeText}
   />
 );
 

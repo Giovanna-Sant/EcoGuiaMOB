@@ -1,16 +1,47 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, Pressable, ActivityIndicator, Animated } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, Image, Pressable, ActivityIndicator, Animated, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Collapsible from 'react-native-collapsible'; 
 import Footer from '../components/Footer';
 import * as Progress from 'react-native-progress';
 import { ArrowDown, ArrowRight, CatalogoBG, TrilhaBG, Truck, Local } from '../assets'
+import api from '../services/api'
+import cache from '../utils/cache'
+import getPerfil from '../utils/gerProfile';
 
 const Home = () => {
   const [isCollapsed, setIsCollapsed] = useState(true); 
   const rotateAnim = useRef(new Animated.Value(0)).current; 
   const navigation = useNavigation();
+
+  const [tip, setTip] = useState([])
+  useEffect(() => {
+
+  try {
+    async function getTip() {
+      const resposta = await api.get("/tip");
+      setTip(resposta.data);
+    }
+    getTip();
+  } catch (erro) {
+    console.log(erro);
+  }
+  },
+[]);
+
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    try {
+      getPerfil();
+      async function lerUser() {
+        setUser(await cache.get("dados"));
+      }
+      lerUser();
+    } catch (erro) {
+      console.log(erro);
+    }
+  }, [user]);
 
   const [fontsLoaded] = useFonts({
     Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold,
@@ -54,10 +85,10 @@ const Home = () => {
             <Image style={styles.icon} width={60} height={60} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}} />
           </View>
           <View>
-            <Text style={styles.subtitle}>Yasmin Benjor</Text>
+          <Text style={styles.subtitle}>{user.name_user} {user.lastname_user}</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={styles.text}>XP 120/340</Text>
-              <Text style={styles.textLvl}>level 13</Text>
+            <Text style={styles.text}>XP {user.XP_user}/{user.XP_level}</Text>
+            <Text style={styles.textLvl}>level {user.fk_level_user}</Text>
             </View>
 
             <Progress.Bar
@@ -91,23 +122,21 @@ const Home = () => {
 
         <Collapsible collapsed={isCollapsed}>
           <View style={styles.dicaContent}>
-            <Text style={styles.dicaText}>
-              Aqui está a sua dica do dia! Coloque o lixo para fora antes das 8h.
-            </Text>
+            <Text style={styles.dicaText}>{tip.description_tip}</Text>
           </View>
         </Collapsible>
 
         <Pressable onPress={() => handlePress('Coleta')} style={styles.iconButton}>
           <View style={styles.viewAPI}>
             <View style={styles.contAPI}>
-              <Truck />
+              <Truck/>
               <Text style={styles.atbAPI}>Saiba o horário de colocar seu lixo pra fora!</Text>
             </View>
             <View style={styles.contAPI}>
-              <Local />
+              <Local/>
               <Text style={styles.atbAPI}>Conheça os pontos de coleta perto de você!</Text>
             </View>
-            <ArrowRight />
+            <ArrowRight/>
           </View>
         </Pressable>
 
@@ -161,6 +190,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     padding: 8,
   },
+  
   badge: {
     borderRadius: 10,
     borderColor: '#A6D89B',
@@ -168,10 +198,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#E2F2DF',
     padding: 5,
   },
+  
   progressBar: {
     height: 10,
     marginTop: 8,
   },
+  
   textLvl: {
     backgroundColor: '#a6d89b',
     borderRadius: 5,
