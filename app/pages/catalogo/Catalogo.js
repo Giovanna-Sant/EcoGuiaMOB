@@ -5,15 +5,18 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } 
 import Footer from '../../components/Footer';
 import { Lixo, Recicla, TitleCatalogo, NewsBG } from '../../assets';
 
+import { Dimensions } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
+
 const Catalogo = ({ navigation }) => {
-  // Filtros
+ 
   const [selectedFilter, setSelectedFilter] = useState(null);
   
   const handleFilterPress = (filter) => {
     setSelectedFilter(filter);
   };
 
-  // Carregamento das fontes
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
@@ -75,7 +78,7 @@ const Catalogo = ({ navigation }) => {
 
         {/* Notícia */}
         <TouchableOpacity style={styles.newsContainer} onPress={() => navigation.navigate('NoticiasPage')}>
-          <NewsBG width={'100%'} height={200} style={styles.newsImage} />
+          <NewsBG style={styles.newsImage} />
           <Text style={styles.newsTitle}>Projeto do Einstein de transformação de resíduos impulsiona geração de renda em Paraisópolis</Text>
         </TouchableOpacity>
 
@@ -97,6 +100,7 @@ const Catalogo = ({ navigation }) => {
 
       <Footer />
     </View>
+    
   );
 };
 
@@ -126,8 +130,8 @@ const styles = StyleSheet.create({
     color: "#000",
     textAlign: "center",
     fontFamily: "Poppins_400Regular",
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: width * 0.04,  
+    lineHeight: width * 0.05,
     marginTop: 10,
     paddingHorizontal: 20,
   },
@@ -137,9 +141,9 @@ const styles = StyleSheet.create({
   },
 
   filterButton: {
-    height: 30,
+    height: height * 0.05,  
     paddingVertical: 1,
-    paddingHorizontal: 7,
+    paddingHorizontal: width * 0.02,  
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 12,
@@ -147,7 +151,7 @@ const styles = StyleSheet.create({
   },
 
   filterText: {
-    fontSize: 14,
+    fontSize: width * 0.035,  
     fontFamily: "Poppins_400Regular",
   },
 
@@ -161,11 +165,12 @@ const styles = StyleSheet.create({
 
   selectedText: {
     color: "#FFF",
-    paddingHorizontal: 5
+    paddingHorizontal: 5,
   },
+
   unselectedText: {
     color: "#3F463E",
-    paddingHorizontal: 5
+    paddingHorizontal: 5,
   },
 
   newsContainer: {
@@ -178,11 +183,13 @@ const styles = StyleSheet.create({
 
   newsImage: {
     borderRadius: 5,
+    width: '100%',
+    height: height * 0.25,  
   },
 
   newsTitle: {
     marginTop: 10,
-    fontSize: 14,
+    fontSize: width * 0.04,  
     color: "#000",
     fontFamily: "Poppins_500Medium",
     paddingLeft: 6,
@@ -196,8 +203,8 @@ const styles = StyleSheet.create({
   
   button: {
     backgroundColor: "#F1F1F1",
-    maxWidth: "49%",
-    height: 180,
+    width: "48%",
+    height: height * 0.25, 
     borderRadius: 5,
     justifyContent: "center",
     gap: 5,
@@ -206,7 +213,7 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    fontSize: 14,
+    fontSize: width * 0.04,  
     color: "#000",
     fontFamily: "Poppins_500Medium",
     fontWeight: "600",
@@ -214,7 +221,7 @@ const styles = StyleSheet.create({
 
   buttonDescription: {
     color: "#3F463E",
-    fontSize: 12,
+    fontSize: width * 0.03,  
     fontFamily: "Poppins_400Regular",
     fontWeight: "500",
   },
@@ -225,5 +232,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
 
 export default Catalogo;
