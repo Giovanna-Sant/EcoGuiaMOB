@@ -73,7 +73,7 @@ const Home = () => {
         
         <Pressable style={styles.viewPerfil} onPress={() => handlePress('Perfil')}>
           <View style={styles.iconDiv}>
-            <Image style={styles.icon} width={60} height={60} source={{uri:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsHlZjrl5dT0xHZeQZTVckmaeDIg-IpOpf4w&s"}} />
+            <Image style={styles.icon} width={60} height={60} source={{uri:`${user.blob_avatar}`}} />
           </View>
           <View>
           <Text style={styles.subtitle}>{user ? `${user.name_user} ${user.lastname_user}`: "carregando..."}</Text>
