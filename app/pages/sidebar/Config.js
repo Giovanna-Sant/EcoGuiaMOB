@@ -3,6 +3,7 @@ import React, { useState,useEffect } from "react";
 import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Image, Pressable, Modal, TextInput } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { Detail, ArrowRight } from "../../assets";
+import { useNavigation } from '@react-navigation/native';
 import cache from '../../utils/cache'
 import api from '../../services/api';
 const Config = () => {
@@ -11,6 +12,10 @@ const Config = () => {
     Poppins_500Medium,
     Poppins_600SemiBold,
   });
+  const navigation = useNavigation();
+  const handlePress = (screen) => {
+    navigation.navigate(screen);
+  };
 
   const [user, setUser] = useState({});
   const [email,setEmail] = useState('')
@@ -93,10 +98,12 @@ const deleteUser  = async () => {
         },
         data:{
           pwdHash:pwdHash
-        },
-        
+        },  
       }
     );
+    alert("Conta deletada com sucesso!")
+    handlePress('Login')
+    await cache.clearAll();
         }catch(erro){
         console.log(erro);
         }
@@ -108,6 +115,7 @@ const deleteUser  = async () => {
   const [tokenModalVisible, setTokenModalVisible] = useState(false);
   const [senhaModalVisible, setSenhaModalVisible] = useState(false);
   const [deletarModalVisible, setDeletarModalVisible] = useState(false);
+  const [exitModalVisible,setExitModalVisible] = useState(false)
   const [confirmarSenhaModalVisible, setConfirmarSenhaModalVisible] = useState(false);
   
   const [emailAtual, setEmailAtual] = useState('');
@@ -138,6 +146,10 @@ const deleteUser  = async () => {
     setDeletarModalVisible(!deletarModalVisible);
   };
 
+  const toggleExitModal = () => {
+    setExitModalVisible(!exitModalVisible);
+  };
+
   const toggleConfirmarSenhaModal = () => {
     setConfirmarSenhaModalVisible(!confirmarSenhaModalVisible);
   };
@@ -154,6 +166,12 @@ const deleteUser  = async () => {
   const handleDeleteAccount = () => {
     toggleDeletarModal();
     toggleConfirmarSenhaModal();
+  };
+
+  const handleExitAccount = async () => {
+    toggleExitModal();
+    handlePress('Login')
+    await cache.clearAll();
   };
 
   const handleConfirmarSenha = () => {
@@ -190,13 +208,13 @@ const deleteUser  = async () => {
           <View style={styles.iconDiv}><Image width={40} height={40} source={{ uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png' }} /></View>
           <View>
             <Text style={styles.subtitulo}>Perfil</Text>
-            <Text style={styles.info}>{user.nickname_user}</Text>
+            <Text style={styles.info}>{user?`${user.nickname_user}`: "carregando..."}</Text>
           </View>
         </View>
 
         <View style={styles.div}>
           <Text style={styles.subtitulo}>Informações Pessoais</Text>
-          <Text style={styles.info}>{user.name_user} {user.lastname_user}</Text>
+          <Text style={styles.info}>{user ? `${user.name_user} ${user.lastname_user}`: "carregando..."}</Text>
           <Text style={styles.info}>{email}</Text>
         </View>
 
@@ -211,6 +229,10 @@ const deleteUser  = async () => {
           </Pressable>
           <Pressable style={styles.operacao} onPress={toggleDeletarModal}>
             <Text style={styles.txtOperacao}>Deletar Conta</Text>
+            <ArrowRight />
+          </Pressable>
+          <Pressable style={styles.operacao} onPress={toggleExitModal}>
+            <Text style={styles.txtOperacao}>Sair da conta</Text>
             <ArrowRight />
           </Pressable>
         </View>
@@ -304,7 +326,7 @@ const deleteUser  = async () => {
         <Modal visible={confirmarSenhaModalVisible} transparent animationType="fade">
           <View style={styles.modalOverlay}>
             <View style={styles.modalContainer}>
-              <Text style={styles.title}>{user.name_user} confirme a senha da sua conta para haver a exclusão.</Text>
+              <Text style={styles.title}>{user ? `${user.name_user} confirme a senha da sua conta para haver a exclusão.` :"Por favor confirme a senha da sua conta para haver a exclusão." }</Text>
               <TextInput
                 style={styles.input}
                 onChangeText={setPwdHash}
@@ -344,8 +366,26 @@ const deleteUser  = async () => {
             </View>
           </View>
         </Modal>
+
+        {/* Modal para sair da Conta */}
+        <Modal visible={exitModalVisible} transparent animationType="fade">
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContainer}>
+              <Text style={styles.delete}>Você deseja sair da sua conta?</Text>
+              <View style={styles.buttonContainer}>
+                <Pressable style={styles.confirmButton} onPress={toggleExitModal}>
+                  <Text style={styles.buttonTextConfir}>Cancelar</Text>
+                </Pressable>
+                <Pressable style={styles.cancelButton} onPress={handleExitAccount}>
+                  <Text style={styles.buttonText}>Confirmar</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </View>
     </ScrollView>
+    
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, Pressable, ActivityIndicator, Animated} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, Pressable, ActivityIndicator, Animated, RefreshControl} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Collapsible from 'react-native-collapsible'; 
@@ -10,33 +10,22 @@ import api from '../services/api'
 import cache from '../utils/cache'
 import getPerfil from '../utils/gerProfile';
 
+
 const Home = () => {
   const [isCollapsed, setIsCollapsed] = useState(false); 
   const rotateAnim = useRef(new Animated.Value(0)).current; 
   const navigation = useNavigation();
-
+ 
   const [tip, setTip] = useState([])
-  useEffect(() => {
+  const [user, setUser] = useState([]);
 
-  try {
-    async function getTip() {
-      const resposta = await api.get("/tip");
-      setTip(resposta.data);
-    }
-    getTip();
-  } catch (erro) {
-    console.log(erro);
-  }
-  },
-[]);
-
-
-  const [user, setUser] = useState({});
   useEffect(() => {
     try {
-      getPerfil();
+      getPerfil()
       async function lerUser() {
-        setUser(await cache.get("dados"));
+      const resposta = await api.get("/tip"); 
+      setTip(resposta.data);
+      setUser(await cache.get("dados"));
       }
       lerUser();
     } catch (erro) {
@@ -84,13 +73,13 @@ const Home = () => {
         
         <Pressable style={styles.viewPerfil} onPress={() => handlePress('Perfil')}>
           <View style={styles.iconDiv}>
-            <Image style={styles.icon} width={60} height={60} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}} />
+            <Image style={styles.icon} width={60} height={60} source={{uri:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsHlZjrl5dT0xHZeQZTVckmaeDIg-IpOpf4w&s"}} />
           </View>
           <View>
-          <Text style={styles.subtitle}>{user.name_user} {user.lastname_user}</Text>
+          <Text style={styles.subtitle}>{user ? `${user.name_user} ${user.lastname_user}`: "carregando..."}</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Text style={styles.text}>XP {user.XP_user}/{user.XP_level}</Text>
-            <Text style={styles.textLvl}>level {user.fk_level_user}</Text>
+            <Text style={styles.text}>{user ? `XP ${user.XP_user}/${user.XP_level}`:"carregando..."}</Text>
+            <Text style={styles.textLvl}>{user ?` level ${user.fk_level_user}`: "carregando.."}</Text>
             </View>
 
             <Progress.Bar

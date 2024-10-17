@@ -11,6 +11,7 @@ export const getPerfil = async () => {
     },
   );
   await cache.set("dados",resposta.data.results[0][0]);
+
 }
 
 export default getPerfil;

@@ -15,6 +15,7 @@ const Perfil = () => {
   const navigation = useNavigation();
 
   const [user, setUser] = useState({});
+
   useEffect(() => {
     try {
       async function lerUser() {
@@ -40,29 +41,44 @@ const Perfil = () => {
       setRefresh(false)
     },2000)
   }
-  const editPerfil = async () => {
+
+const editPerfil = async () => {
     try {
       const token = await cache.get("tokenID");
       const response = await api.put('/user/profile', {
               name: nome,
               lastname: sobrenome,
-              avatar: selectedIcon
+              avatar: selectedIcon + 1
       },{
         headers: {
           authorization: `Bearer ${token}`
         }
       });
+      console.log(response.data)
       getPerfil()
     } catch (erro) {
       console.log(erro);
     }
   };
 
+  const [avatar,setAvatar] = useState([])
+
+  const getAllAvatar = async () =>{
+    try {
+      const response = await api.get('/avatars')
+      setAvatar(response.data)
+    }
+    catch(erro){
+      console.log(erro)
+    }
+  }
+
   const handlePress = (screen) => {
     navigation.navigate(screen);
   };
 
   const toggleModal = () => {
+    getAllAvatar();
     setModalVisible(!isModalVisible);
   };
 
@@ -116,7 +132,7 @@ const Perfil = () => {
                 width={60}
                 height={60}
                 source={{
-                  uri: "https://cdn-icons-png.flaticon.com/256/903/903482.png",
+                  uri:`${user.blob_avatar}`,
                 }}
               />
             </View>
@@ -196,7 +212,7 @@ const Perfil = () => {
             />
 
             <View style={styles.iconGrid}>
-              {[...Array(9)].map((_, index) => (
+              {avatar.map((_, index) => (
                 <TouchableOpacity
                   key={index}
                   style={[
@@ -205,16 +221,19 @@ const Perfil = () => {
                   ]}
                   onPress={() => handleIconSelect(index)}
                 >
-                  <Text style={styles.iconText}>{index + 1}</Text>
+                <Image style={styles.icon} 
+                source={{
+                  uri:`${avatar[index].blob_avatar}`,
+                }}/>
                 </TouchableOpacity>
               ))}
             </View>
 
             <View style={styles.buttonContainer}>
-              <Pressable style={styles.confirmButton} onPress={handleSave}>
+              <Pressable style={styles.confirmButton} onPress={toggleModal}>
                 <Text style={styles.buttonText}>Cancelar</Text>
               </Pressable>
-              <Pressable style={styles.cancelButton} onPress={toggleModal}>
+              <Pressable style={styles.cancelButton} onPress={handleSave}>
                 <Text style={styles.buttonTextConfir}>Confirmar</Text>
               </Pressable>
             </View>
