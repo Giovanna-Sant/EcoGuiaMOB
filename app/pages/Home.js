@@ -73,6 +73,8 @@ const Home = () => {
     outputRange: ['0deg', '180deg'],
   });
 
+  const levelProgress = user.XP_level > 0 ? (user.XP_user / user.XP_level) : 0;
+
   return (
     <View style={styles.container}>
 
@@ -102,7 +104,7 @@ const Home = () => {
               height={10}
               borderRadius={5}
               style={styles.progressBar}
-              progress={0.6}
+              progress={levelProgress}
             />
           </View>
 
