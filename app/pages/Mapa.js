@@ -5,6 +5,7 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } 
 import MapView, { Marker } from "react-native-maps";
 import * as Location from 'expo-location';
 import * as Notifications from 'expo-notifications';
+import { Local, ArrowLeft } from '../assets'
 
 const Mapa = () => {
     const [regiao, setRegiao] = useState(null);
@@ -27,7 +28,7 @@ const Mapa = () => {
                 setLoading(false)
                 return
             } else {
-                alert("Permissão concedida ;)")
+              handleCallNotification();
             }
 
             let location = await Location.getCurrentPositionAsync({})
@@ -62,17 +63,7 @@ const Mapa = () => {
       return;
     }
 
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: 'Você permitiu vermos sua localização',
-        body: 'Míssil inter-continental a caminho :)',
-        vibrate: true,
-        sound: true,
-      },
-      trigger: {
-        seconds: 5,
-      },
-    });
+
   }
     
     // Carregamento de fontes
@@ -90,10 +81,35 @@ const Mapa = () => {
 
     // Aplicação
     return (
-        <View style={styles.container}>
-            <Text>Mapa Content</Text>
+      <View style={styles.container}>
+        <View style={styles.footerMapa}>
+          <Text>Oidsii</Text>
+          <Text>Oiidsi</Text>
+          <Text>Oiii</Text>
         </View>
-    )
+
+        {/* Mapa */}
+        {regiao && (
+          <MapView
+            style={{ width: "100%", height: "100%" }}
+            region={regiao}
+            showsUserLocation={true}
+          >
+            {ecopontos.map((ecoponto, index) => (
+              <Marker
+                key={index}
+                coordinate={{
+                  latitude: ecoponto.geometry.coordinates[1],
+                  longitude: ecoponto.geometry.coordinates[0],
+                }}
+                title={ecoponto.properties.Name}
+                description={ecoponto.properties.Endere__o}
+              ></Marker>
+            ))}
+          </MapView>
+        )}
+      </View>
+    );
 }
 const styles = StyleSheet.create({
     container: {
@@ -101,6 +117,13 @@ const styles = StyleSheet.create({
       justifyContent: "center",
       alignItems: "center",
     },
+
+    footerMapa: {
+      flex: 2,
+      zIndex: 5,
+      borderWidth: 2,
+      paddingTop: 40
+    }
   });
   
 export default Mapa

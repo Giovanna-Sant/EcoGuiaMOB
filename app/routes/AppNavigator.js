@@ -102,7 +102,8 @@ export default function AppNavigator() {
       <Stack.Screen 
         name="Mapa" 
         component={Mapa} 
-        options={{ headerShown: false }}/>
+        options={{ header: () => <Header showBackButton={true} /> }} 
+        />
     </Stack.Navigator>
   );
 }

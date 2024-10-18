@@ -9,6 +9,7 @@ export { default as TrilhaBG } from './backgrounds/trilha_bg.png'
 
 // Icons
 export { default as ArrowDown } from './icons/arrowDown.svg'
+export { default as ArrowLeft } from './icons/arrowLeft.svg'
 export { default as ArrowRight } from './icons/arrowRight.svg'
 export { default as BlueLocal } from './icons/blueLocal.svg'
 export { default as Catalogo } from './icons/catalogo.svg'
