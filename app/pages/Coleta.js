@@ -45,9 +45,9 @@ const Coleta = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.newsContainer} onPress={() => navigation.navigate('NoticiasPage')}>
-          <BlueLocal maxWidth={50} maxHeight={40} marginBottom={10} />
-          <Text style={styles.subtitle}>Localização de EcoPontos</Text>
+        <TouchableOpacity style={styles.newsContainer} onPress={() => navigation.navigate('Mapa')}>
+          <BlueLocal maxWidth={50} maxHeight={40} marginBottom={10}/>
+          <Text style={styles.subtitle}>Mapa de EcoPontos</Text>
           <Text style={styles.text}>
             Acesse os pontos de coleta mais próximos de você! Use para descartar entulho de forma correta e consciente!
           </Text>

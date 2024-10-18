@@ -13,6 +13,7 @@ import Config from '../pages/sidebar/Config';
 import RedefinirSenha from '../pages/login/RedefinirSenha';
 import Token from '../pages/login/Token';
 import NovaSenha from '../pages/login/NovaSenha';
+import Mapa from '../pages/Mapa';
 import Header from '../components/Header';
 
 const Stack = createStackNavigator();
@@ -98,6 +99,11 @@ export default function AppNavigator() {
         component={Config} 
         options={{ header: () => <Header showBackButton={true} /> }} // Com seta de voltar
       />
+      <Stack.Screen 
+        name="Mapa" 
+        component={Mapa} 
+        options={{ header: () => <Header showBackButton={true} /> }} 
+        />
     </Stack.Navigator>
   );
 }
