@@ -29,6 +29,7 @@ export { default as Truck } from './icons/truck.svg'
 export { default as TitleCatalogo } from './titles/titleCatalogo.svg'
 export { default as TitleColeta } from './titles/titleColeta.svg'
 export { default as TitleTrilha } from './titles/titleTrilha.svg'
+export { default as TitleWatch  } from './titles/titleWatch.svg'
 
 // Extra
 export { default as LogoEcoGuia } from './logo.svg'

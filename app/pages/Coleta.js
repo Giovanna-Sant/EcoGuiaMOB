@@ -37,7 +37,7 @@ const Coleta = ({ navigation }) => {
           </Text>
         </View>
 
-        <TouchableOpacity style={styles.newsContainer} onPress={() => navigation.navigate('NoticiasPage')}>
+        <TouchableOpacity style={styles.newsContainer} onPress={() => navigation.navigate('Horarios')}>
           <RedTruck maxWidth={50} maxHeight={40} marginBottom={10} />
           <Text style={styles.subtitle}>Horários de Coleta</Text>
           <Text style={styles.text}>
