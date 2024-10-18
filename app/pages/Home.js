@@ -73,7 +73,11 @@ const Home = () => {
         
         <Pressable style={styles.viewPerfil} onPress={() => handlePress('Perfil')}>
           <View style={styles.iconDiv}>
-            <Image style={styles.icon} width={60} height={60} source={{uri:`${user.blob_avatar}`}} />
+            {user ?(
+               <Image style={styles.icon} width={60} height={60} source={{uri:`${user.blob_avatar}`}} />
+            ):(
+              <Text>Carregando...</Text>
+            )}
           </View>
           <View>
           <Text style={styles.subtitle}>{user ? `${user.name_user} ${user.lastname_user}`: "carregando..."}</Text>

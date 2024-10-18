@@ -91,6 +91,7 @@ const deleteUser  = async () => {
   console.log(pwdHash)
      try{
         const token = await cache.get("tokenID")
+        console.log(token)
         const response = await api.delete('/user',
           {
           headers: {
@@ -205,7 +206,13 @@ const deleteUser  = async () => {
       <View style={styles.content}>
         <Text style={styles.titulo}>Configurações da Conta</Text>
         <View style={styles.divPerfil}>
-          <View style={styles.iconDiv}><Image width={40} height={40} source={{ uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png' }} /></View>
+          <View style={styles.iconDiv}>
+          {user ?(
+               <Image style={styles.icon} width={60} height={60} source={{uri:`${user.blob_avatar}`}} />
+            ):(
+              <Text>Carregando...</Text>
+            )}
+            </View>
           <View>
             <Text style={styles.subtitulo}>Perfil</Text>
             <Text style={styles.info}>{user?`${user.nickname_user}`: "carregando..."}</Text>
