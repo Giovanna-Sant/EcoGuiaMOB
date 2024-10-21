@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Dimensions, Animated } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, ImageBackground, Dimensions, Animated } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { Ionicons } from '@expo/vector-icons'; 
 import { BannerReciclavel } from '../../assets';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const ReciclavelPage = () => {
   const [expanded, setExpanded] = useState({});
@@ -28,13 +28,13 @@ const ReciclavelPage = () => {
 
   return (
     <View style={styles.container}>
+     
       <ScrollView contentContainerStyle={styles.scrollContainer}>
       <BannerReciclavel
-      style={[styles.bannerContainer]}
-      maxWidth={'100%'}
-    />
-
-
+          style={[styles.bannerContainer]}
+          resizeMode="cover"
+          maxWidth="100%"
+        />
         <View style={styles.content}>
           <Text style={styles.description}>
             São materiais que podem ser descartados corretamente no lixo reciclável e destinados à reciclagem:
@@ -69,6 +69,7 @@ const ReciclavelPage = () => {
           />
         </View>
       </ScrollView>
+
     </View>
   );
 };
@@ -86,7 +87,7 @@ const CategoryContainer = ({ category, items, expanded, onToggleExpand, color })
 
   const rotateInterpolate = animation.interpolate({
     inputRange: [0, 1],
-    outputRange: ['0deg', '180deg'],
+    outputRange: ['0deg', '180deg'], // A seta gira 180 graus
   });
 
   const arrowStyle = {
@@ -141,23 +142,20 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    paddingHorizontal: 10,  
+    paddingHorizontal: 10,
   },
 
   bannerContainer: {
-    marginVertical: -70
+    marginVertical: -180
   },
-
-
-  
 
   description: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 14,
     textAlign: 'center',
     color: '#3F463E',
-    paddingHorizontal: '5%',
-    marginBottom: '5%',
+    paddingHorizontal: 5,
+    marginBottom: 25
   },
 
   categoryContainer: {
@@ -214,6 +212,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginLeft: 15,
   },
+  
 });
 
 export default ReciclavelPage;

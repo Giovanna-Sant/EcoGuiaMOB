@@ -51,23 +51,27 @@ const Catalogo = ({ navigation }) => {
           showsHorizontalScrollIndicator={false}
         >
           <TouchableOpacity
+            style={[styles.filterButton, selectedFilter === 'Inicial' ? styles.selected : styles.unselected]}
+            onPress={() => handleFilterPress('Inicial')}
+          >
+            <Text style={[styles.filterText, selectedFilter === 'Inicial' ? styles.selectedText : styles.unselectedText]}>Inicial</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
             style={[styles.filterButton, selectedFilter === 'Notícias' ? styles.selected : styles.unselected]}
             onPress={() => handleFilterPress('Notícias')}
           >
             <Text style={[styles.filterText, selectedFilter === 'Notícias' ? styles.selectedText : styles.unselectedText]}>Notícias</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={[styles.filterButton, selectedFilter === 'Artigos' ? styles.selected : styles.unselected]}
             onPress={() => handleFilterPress('Artigos')}
           >
             <Text style={[styles.filterText, selectedFilter === 'Artigos' ? styles.selectedText : styles.unselectedText]}>Artigos</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.filterButton, selectedFilter === 'Materiais Reciclaveis' ? styles.selected : styles.unselected]}
-            onPress={() => handleFilterPress('Materiais Reciclaveis')}
-          >
-            <Text style={[styles.filterText, selectedFilter === 'Materiais Reciclaveis' ? styles.selectedText : styles.unselectedText]}>Materiais Recicláveis</Text>
-          </TouchableOpacity>
+          
+           
           <TouchableOpacity
             style={[styles.filterButton, selectedFilter === 'Faça você mesmo' ? styles.selected : styles.unselected]}
             onPress={() => handleFilterPress('Faça você mesmo')}
@@ -174,26 +178,31 @@ const styles = StyleSheet.create({
   },
 
   newsContainer: {
-    padding: 10,
+    padding: 10, 
     borderRadius: 5,
     backgroundColor: "#E2F2DF",
     elevation: 2,
     marginBottom: 20,
+    alignItems: 'center', // Centraliza o conteúdo dentro do container
+    width: '100%', // Ocupa a largura total do container pai
   },
 
   newsImage: {
     borderRadius: 5,
-    width: '100%',
-    height: height * 0.25,  
+    width: '100%', // Ocupa toda a largura do container de notícias
+    height: height * 0.25,  // Define uma altura proporcional
+    resizeMode: 'cover', // Garante que a imagem cubra o espaço
   },
 
   newsTitle: {
     marginTop: 10,
-    fontSize: width * 0.04,  
+    fontSize: width * 0.04,
     color: "#000",
     fontFamily: "Poppins_500Medium",
-    paddingLeft: 6,
+ 
   },
+
+  // ... o
 
   buttonsContainer: {
     flexDirection: "row",

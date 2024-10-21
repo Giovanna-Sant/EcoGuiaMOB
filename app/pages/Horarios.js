@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Dimensions, TextInput } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 
 import { TitleWatch } from '../assets';
@@ -12,6 +12,7 @@ const Horarios = () => {
     Poppins_500Medium,
     Poppins_600SemiBold,
   });
+  const [cep, setCep] = React.useState('');
 
   if (!fontsLoaded) {
     return (
@@ -33,9 +34,34 @@ const Horarios = () => {
           </Text>
         </View>
 
-        {/* Tabela de horarios  */}
-        <View>
+        <View style={styles.cepContainer}>
+          <Text style={styles.cepLabel}>CEP :</Text>
+          <TextInput
+            style={styles.cepInput}
+            placeholder="Digite o CEP"
+            value={cep}
+            onChangeText={(text) => setCep(text)}
+            keyboardType="numeric"
+          />
+        </View> 
 
+        {/* Fazer a Tabela de horarios  */}
+        <View style={styles.tabelaContainer} >
+                  {/* Cabeçalho da tabela */}
+          <View style={styles.tableHeader}>
+            <Text style={styles.tableHeaderText}>Dia</Text>
+            <Text style={styles.tableHeaderText}>Comum</Text>
+            <Text style={styles.tableHeaderText}>Seletiva</Text>
+          </View>
+
+          {/* Linhas da tabela */}
+          {["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"].map((dia, index) => (
+            <View key={index} style={styles.tableRow}>
+              <Text style={styles.tableCell}>{dia}</Text>
+              <Text style={styles.tableCell}> </Text>
+              <Text style={styles.tableCell}> </Text>
+            </View>
+          ))}
         </View>
 
         <View style={styles.newsContainer}>
@@ -61,6 +87,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#ffffff",
+   
   },
   scrollView: {
     flex: 1,
@@ -68,7 +95,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: 10,
     paddingVertical: 20,
-    paddingBottom: 75,
+    paddingBottom: 30,
   },
   logoContainer: {
     alignItems: "center",
@@ -102,6 +129,7 @@ const styles = StyleSheet.create({
   },
   containerInfo: {
     flex: 1,
+    width: width * 0.9,
     alignItems: 'center',
     justifyContent: 'center',
     padding: width * 0.04,
@@ -111,12 +139,83 @@ const styles = StyleSheet.create({
     backgroundColor: "#6BBF59",
     minHeight: 80, 
   },
+
   info: {
     fontFamily: "Poppins_600SemiBold",
     color: 'white',
     fontSize: width * 0.035,
     marginVertical: height * 0.001,
-  }
+  }, 
+
+  tabelaContainer: {
+    borderColor: '#A6D89B',
+    borderWidth: 0.5,
+    borderRadius: 5,
+   
+    marginTop: height * 0.02,
+
+  }, 
+  cepContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+   
+
+  },
+  cepLabel: {
+    fontFamily: 'Poppins_500Medium',
+    fontSize: width * 0.045,
+    color: '#000',
+    marginRight: 10,
+  },
+  cepInput: {
+    flex: 1,
+
+    height: 40,
+    borderColor: '#A6D89B',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingLeft: 10,
+    fontSize: width * 0.04,
+    backgroundColor: '#E2F2DF',
+  },
+
+  tableContainer: {
+    marginTop: 20,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 10,
+  },
+  tableHeader: {
+    flexDirection: 'row',
+    backgroundColor: '#E2F2DF',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+    borderRadius: 5,
+  },
+  tableHeaderText: {
+    flex: 1,
+    textAlign: 'center',
+    fontFamily: 'Poppins_500Medium',
+    color: '#000',
+    fontSize: width * 0.04,
+    
+  },
+  tableRow: {
+    flexDirection: 'row',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+  },
+  tableCell: {
+    flex: 1,
+    textAlign: 'center',
+    fontFamily: 'Poppins_400Regular',
+    color: '#000',
+    fontSize: width * 0.04,
+  },
 });
 
 export default Horarios;
