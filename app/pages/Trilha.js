@@ -24,6 +24,7 @@ const Trilha = () => {
   return (
     <View style={styles.container}>
 
+
       {/* Conteúdo Principal */}
       <ScrollView contentContainerStyle={styles.content}>
         <TitleTrilha maxWidth={210}/>

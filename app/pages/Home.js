@@ -15,10 +15,6 @@ const Home = () => {
   const rotateAnim = useRef(new Animated.Value(0)).current; 
   const navigation = useNavigation();
 
-  const handlePress = (screen) => {
-    navigation.navigate(screen);
-  };
-  
   const [tip, setTip] = useState([])
   useEffect(() => {
 
@@ -33,6 +29,7 @@ const Home = () => {
   }
   },
 []);
+
 
   const [user, setUser] = useState({});
   useEffect(() => {
@@ -51,9 +48,14 @@ const Home = () => {
     Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold,
   });
 
+  // Verifica se as fontes estão carregadas antes de renderizar
   if (!fontsLoaded) {
     return <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />;
   }
+
+  const handlePress = (screen) => {
+    navigation.navigate(screen);
+  };
 
   const toggleCollapse = () => {
     // Alterna o estado de colapso
@@ -70,8 +72,6 @@ const Home = () => {
     inputRange: [0, 1],
     outputRange: ['0deg', '180deg'],
   });
-
-  const levelProgress = user.XP_level > 0 ? (user.XP_user / user.XP_level) : 0;
 
   return (
     <View style={styles.container}>
@@ -102,7 +102,7 @@ const Home = () => {
               height={10}
               borderRadius={5}
               style={styles.progressBar}
-              progress={levelProgress}
+              progress={0.6}
             />
           </View>
 

@@ -5,7 +5,7 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } 
 import MapView, { Marker } from "react-native-maps";
 import * as Location from 'expo-location';
 import * as Notifications from 'expo-notifications';
-import { Local, ArrowLeft } from '../assets'
+import { PointLocal } from '../assets'
 
 const Mapa = () => {
     const [regiao, setRegiao] = useState(null);
@@ -62,8 +62,6 @@ const Mapa = () => {
       Alert.alert("Permissão Negada", "Você não receberá notificações.");
       return;
     }
-
-
   }
     
     // Carregamento de fontes
@@ -83,9 +81,11 @@ const Mapa = () => {
     return (
       <View style={styles.container}>
         <View style={styles.footerMapa}>
-          <Text>Oidsii</Text>
-          <Text>Oiidsi</Text>
-          <Text>Oiii</Text>
+          <View style={styles.titleLocal}>
+            <PointLocal style={{marginRight: 10}}/>
+            <Text style={styles.subtitle}>Alceu Maynard Araújo</Text>
+          </View>
+            <Text style={styles.text}>Avenida Professor Alceu Maynard de Araújo, 330</Text>
         </View>
 
         {/* Mapa */}
@@ -118,12 +118,37 @@ const styles = StyleSheet.create({
       alignItems: "center",
     },
 
-    footerMapa: {
-      flex: 2,
-      zIndex: 5,
-      borderWidth: 2,
-      paddingTop: 40
-    }
-  });
+    mapaFrame: {
+        width: "100%",
+        height: "100%",
+      },
+      
+      footerMapa: {
+        zIndex: 5,
+        position: 'absolute',
+        backgroundColor: '#fff',
+        padding: 15,
+        margin: 15,
+        minWidth: 320,
+        borderRadius: 10,
+        elevation: 5,
+        bottom: 10
+      },
+      
+      titleLocal: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
+        marginHorizontal: 10
+      },
+      
+      subtitle: {
+        fontFamily: 'Poppins_500Medium',
+      },
+  
+      text: {
+        fontFamily: 'Poppins_400Regular',
+      },
+    })
   
 export default Mapa

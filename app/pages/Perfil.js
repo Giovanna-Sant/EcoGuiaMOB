@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator, Image,TouchableWithoutFeedback, TouchableOpacity, Modal, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator, Image, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -76,7 +76,7 @@ const Perfil = () => {
     setSelectedIcon(index);
   };
 
-
+  // Carregamento das fontes
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
@@ -179,52 +179,48 @@ const Perfil = () => {
 
       {/* Modal de Edição do Perfil */}
       <Modal visible={isModalVisible} transparent animationType="fade">
-      <TouchableWithoutFeedback onPress={toggleModal}>
         <View style={styles.modalOverlay}>
-          <TouchableWithoutFeedback>
-            <View style={styles.modalContainer}>
-              <Text style={styles.labelModal}>Nome:</Text>
-              <TextInput
-                style={styles.input}
-                value={nome}
-                onChangeText={setNome}
-              />
+          <View style={styles.modalContainer}>
+            <Text style={styles.labelModal}>Nome:</Text>
+            <TextInput
+              style={styles.input}
+              value={nome}
+              onChangeText={setNome}
+            />
 
-              <Text style={styles.labelModal}>Sobrenome:</Text>
-              <TextInput
-                style={styles.input}
-                value={sobrenome}
-                onChangeText={setSobrenome}
-              />
+            <Text style={styles.labelModal}>Sobrenome:</Text>
+            <TextInput
+              style={styles.input}
+              value={sobrenome}
+              onChangeText={setSobrenome}
+            />
 
-              <View style={styles.iconGrid}>
-                {[...Array(9)].map((_, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={[
-                      styles.iconCircle,
-                      selectedIcon === index && styles.selectedIcon,
-                    ]}
-                    onPress={() => handleIconSelect(index)}
-                  >
-                    <Text style={styles.iconText}>{index + 1}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-
-              <View style={styles.buttonContainer}>
-                <Pressable style={styles.cancelButton} onPress={toggleModal}>
-                  <Text style={styles.buttonText}>Cancelar</Text>
-                </Pressable>
-                <Pressable style={styles.confirmButton} onPress={handleSave}>
-                  <Text style={styles.buttonTextConfir}>Confirmar</Text>
-                </Pressable>
-              </View>
+            <View style={styles.iconGrid}>
+              {[...Array(9)].map((_, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.iconCircle,
+                    selectedIcon === index && styles.selectedIcon,
+                  ]}
+                  onPress={() => handleIconSelect(index)}
+                >
+                  <Text style={styles.iconText}>{index + 1}</Text>
+                </TouchableOpacity>
+              ))}
             </View>
-          </TouchableWithoutFeedback>
+
+            <View style={styles.buttonContainer}>
+              <Pressable style={styles.confirmButton} onPress={handleSave}>
+                <Text style={styles.buttonText}>Cancelar</Text>
+              </Pressable>
+              <Pressable style={styles.cancelButton} onPress={toggleModal}>
+                <Text style={styles.buttonTextConfir}>Confirmar</Text>
+              </Pressable>
+            </View>
+          </View>
         </View>
-      </TouchableWithoutFeedback>
-    </Modal>
+      </Modal>
     </ScrollView>
   );
 };
@@ -347,7 +343,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F1F1F1",
     padding: 10,
     justifyContent: "center",
-    alignItems: "center", 
+    alignItems: "center", // Centraliza o conteúdo
   },
 
   botao: {
