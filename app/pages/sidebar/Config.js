@@ -1,10 +1,10 @@
-
-import React, { useState,useEffect } from "react";
-import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Image, Pressable, Modal, TextInput } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Image, Pressable, Modal, TextInput, TouchableWithoutFeedback } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { Detail, ArrowRight } from "../../assets";
 import cache from '../../utils/cache'
 import api from '../../services/api';
+
 const Config = () => {
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
@@ -13,103 +13,94 @@ const Config = () => {
   });
 
   const [user, setUser] = useState({});
-  const [email,setEmail] = useState('')
-  
+  const [email, setEmail] = useState('');
+
   useEffect(() => {
-    async function lerUser(){
-    setUser(await cache.get("dados"))
-    setEmail(await cache.get("email")) 
+    async function lerUser() {
+      setUser(await cache.get("dados"));
+      setEmail(await cache.get("email"));
     };
     lerUser();
-  },
-[user,email]);
+  }, [user, email]);
 
-const modifyPwd = async () => {
-  try{
-    const token = await cache.get("tokenID")
-    console.log(token)
-    if(novaSenha != confirmarSenha ){
-      alert('As senhas não conferem')
-      return;
-    }
-    const response = await api.put('/user/pwd',{
-        pwdUser:senhaAtual,
-        newPwd:novaSenha
-    },{
-      headers: {
-        authorization: `Bearer ${token}`
+  const modifyPwd = async () => {
+    try {
+      const token = await cache.get("tokenID");
+      console.log(token);
+      if (novaSenha !== confirmarSenha) {
+        alert('As senhas não conferem');
+        return;
       }
-    }
-  )
-  alert("Senha alterada com sucesso!")
-  }
-  catch(erro){
-    console.log(erro)
-  }
-}
-
-
-const registerModifyEmail = async () =>{
-  try{
-    if(novoEmail != confirmarEmail){
-      alert('Os e-mails não conferem');
-      return;
-    }
-    const response = await api.put('/user/registerEmail',{
-     email:novoEmail
-    })
-    setTokenAtual(response.data.token);
-    setTokenModalVisible(!tokenModalVisible);
-  }catch(erro){
-    console.log(erro)
-  }
-}
-
-const modifyEmail = async () =>{
-  try{
-    const token = await cache.get("tokenID")
-    const response = await api.put("/user/email",{
-     email:novoEmail
-    },{
-      headers:{
-        authorization: `Bearer ${token}`
-      }
-    })
-    await cache.set("email",novoEmail)
-  }catch(erro){
-    console.log(erro)
-  } 
-}
-
-const [pwdHash,setPwdHash] = useState('')
-const deleteUser  = async () => {
-  console.log(pwdHash)
-     try{
-        const token = await cache.get("tokenID")
-        const response = await api.delete('/user',
-          {
-          headers: {
-            authorization:`Bearer ${token}`
-        },
-        data:{
-          pwdHash:pwdHash
-        },
-        
-      }
-    );
-        }catch(erro){
-        console.log(erro);
+      const response = await api.put('/user/pwd', {
+        pwdUser: senhaAtual,
+        newPwd: novaSenha
+      }, {
+        headers: {
+          authorization: `Bearer ${token}`
         }
+      });
+      alert("Senha alterada com sucesso!");
+    } catch (erro) {
+      console.log(erro);
     }
+  };
 
+  const registerModifyEmail = async () => {
+    try {
+      if (novoEmail !== confirmarEmail) {
+        alert('Os e-mails não conferem');
+        return;
+      }
+      const response = await api.put('/user/registerEmail', {
+        email: novoEmail
+      });
+      setTokenAtual(response.data.token);
+      setTokenModalVisible(!tokenModalVisible);
+    } catch (erro) {
+      console.log(erro);
+    }
+  };
 
+  const modifyEmail = async () => {
+    try {
+      const token = await cache.get("tokenID");
+      const response = await api.put("/user/email", {
+        email: novoEmail
+      }, {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      });
+      await cache.set("email", novoEmail);
+    } catch (erro) {
+      console.log(erro);
+    }
+  };
+
+  const [pwdHash, setPwdHash] = useState('');
+  const deleteUser = async () => {
+    console.log(pwdHash);
+    try {
+      const token = await cache.get("tokenID");
+      const response = await api.delete('/user', {
+        headers: {
+          authorization: `Bearer ${token}`
+        },
+        data: {
+          pwdHash: pwdHash
+        },
+      });
+    } catch (erro) {
+      console.log(erro);
+    }
+  }
 
   const [emailModalVisible, setEmailModalVisible] = useState(false);
   const [tokenModalVisible, setTokenModalVisible] = useState(false);
   const [senhaModalVisible, setSenhaModalVisible] = useState(false);
   const [deletarModalVisible, setDeletarModalVisible] = useState(false);
   const [confirmarSenhaModalVisible, setConfirmarSenhaModalVisible] = useState(false);
-  
+
   const [emailAtual, setEmailAtual] = useState('');
   const [novoEmail, setNovoEmail] = useState('');
   const [confirmarEmail, setConfirmarEmail] = useState('');
@@ -118,7 +109,7 @@ const deleteUser  = async () => {
   const [tokenAtual, setTokenAtual] = useState('');
   const [novaSenha, setNovaSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
-  
+
   const [senhaParaDeletar, setSenhaParaDeletar] = useState('');
   const [tokenParaAlterar, setTokenParaAlterar] = useState('');
 
@@ -127,7 +118,7 @@ const deleteUser  = async () => {
   };
 
   const toggleTokenModal = () => {
-   registerModifyEmail();
+    registerModifyEmail();
   };
 
   const toggleSenhaModal = () => {
@@ -168,9 +159,8 @@ const deleteUser  = async () => {
 
   const handleConfirmarToken = () => {
     if (tokenParaAlterar === tokenAtual) {
-      modifyEmail()
-      alert('Email atualizado com sucesso!')
-
+      modifyEmail();
+      alert('Email atualizado com sucesso!');
     } else {
       alert('Código de acesso incorreto!');
     }
@@ -181,9 +171,23 @@ const deleteUser  = async () => {
       <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
     );
   }
+
+  const renderModal = (visible, setVisible, content) => (
+    <Modal visible={visible} transparent animationType="fade">
+      <TouchableWithoutFeedback onPress={() => setVisible(false)}>
+        <View style={styles.modalOverlay}>
+          <TouchableWithoutFeedback>
+            <View style={styles.modalContainer}>
+              {content}
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
+  );
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-     
       <View style={styles.content}>
         <Text style={styles.titulo}>Configurações da Conta</Text>
         <View style={styles.divPerfil}>
@@ -216,139 +220,114 @@ const deleteUser  = async () => {
         </View>
         <Image source={Detail} style={styles.detalhe} />
 
-        {/* Modal para Alterar Email */}
-        <Modal visible={emailModalVisible} transparent animationType="fade">
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.title}>Atualizar seu email</Text>
-              <Text style={styles.label}>Novo email:</Text>
-              <TextInput
-                style={styles.input}
-                value={novoEmail}
-                onChangeText={setNovoEmail}
-              />
-              <Text style={styles.label}> Confirmar novo email:</Text>
-              <TextInput
-                style={styles.input}
-                value={confirmarEmail}
-                onChangeText={setConfirmarEmail}
-              />
-              <View style={styles.buttonContainer}>
-                <Pressable style={styles.confirmButton} onPress={toggleEmailModal}>
-                  <Text style={styles.buttonTextConfir}>Cancelar</Text>
-                </Pressable>
-                <Pressable style={styles.cancelButton} onPress={toggleTokenModal}>
-                  <Text style={styles.buttonText}>Confirmar</Text>
-                </Pressable>
-              </View>
+        {renderModal(emailModalVisible, setEmailModalVisible, (
+          <>
+            <Text style={styles.title}>Atualizar seu email</Text>
+            <Text style={styles.label}>Novo email:</Text>
+            <TextInput
+              style={styles.input}
+              value={novoEmail}
+              onChangeText={setNovoEmail}
+            />
+            <Text style={styles.label}> Confirmar novo email:</Text>
+            <TextInput
+              style={styles.input}
+              value={confirmarEmail}
+              onChangeText={setConfirmarEmail}
+            />
+            <View style={styles.buttonContainer}>
+              <Pressable style={styles.confirmButton} onPress={toggleEmailModal}>
+                <Text style={styles.buttonTextConfir}>Cancelar</Text>
+              </Pressable>
+              <Pressable style={styles.cancelButton} onPress={toggleTokenModal}>
+                <Text style={styles.buttonText}>Confirmar</Text>
+              </Pressable>
             </View>
-          </View>
-        </Modal>
+          </>
+        ))}
 
-        {/* Modal para Alterar Senha */}
-        <Modal visible={senhaModalVisible} transparent animationType="fade">
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.title}>Alteração Senha</Text>
-              <Text style={styles.label}>Senha Atual:</Text>
-              <TextInput
-                style={styles.input}
-                value={senhaAtual}
-                onChangeText={setSenhaAtual}
-                secureTextEntry
-              />
-              <Text style={styles.label}>Nova Senha:</Text>
-              <TextInput
-                style={styles.input}
-                value={novaSenha}
-                onChangeText={setNovaSenha}
-                secureTextEntry
-              />
-              <Text style={styles.label}>Confirma Nova Senha:</Text>
-              <TextInput
-                style={styles.input}
-                value={confirmarSenha}
-                onChangeText={setConfirmarSenha}
-                secureTextEntry
-              />
-              <View style={styles.buttonContainer}>
-                <Pressable style={styles.confirmButton} onPress={toggleSenhaModal}>
-                  <Text style={styles.buttonTextConfir}>Cancelar</Text>
-                </Pressable>
-                <Pressable style={styles.cancelButton} onPress={handleSenhaSave}>
-                  <Text style={styles.buttonText}>Confirmar</Text>
-                </Pressable>
-              </View>
+        {renderModal(senhaModalVisible, setSenhaModalVisible, (
+          <>
+            <Text style={styles.title}>Alteração Senha</Text>
+            <Text style={styles.label}>Senha Atual:</Text>
+            <TextInput
+              style={styles.input}
+              value={senhaAtual}
+              onChangeText={setSenhaAtual}
+              secureTextEntry
+            />
+            <Text style={styles.label}>Nova Senha:</Text>
+            <TextInput
+              style={styles.input}
+              value={novaSenha}
+              onChangeText={setNovaSenha}
+              secureTextEntry
+            />
+            <Text style={styles.label}>Confirmar Nova Senha:</Text>
+            <TextInput
+              style={styles.input}
+              value={confirmarSenha}
+              onChangeText={setConfirmarSenha}
+              secureTextEntry
+            />
+            <View style={styles.buttonContainer}>
+              <Pressable style={styles.confirmButton} onPress={handleSenhaSave}>
+                <Text style={styles.buttonTextConfir}>Cancelar</Text>
+              </Pressable>
+              <Pressable style={styles.cancelButton} onPress={handleSenhaSave}>
+                <Text style={styles.buttonText}>Confirmar</Text>
+              </Pressable>
             </View>
-          </View>
-        </Modal>
+          </>
+        ))}
 
-        {/* Modal para Deletar Conta */}
-        <Modal visible={deletarModalVisible} transparent animationType="fade">
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.delete}>Você deseja DELETAR sua conta?</Text>
-              <View style={styles.buttonContainer}>
-                <Pressable style={styles.confirmButton} onPress={toggleDeletarModal}>
-                  <Text style={styles.buttonTextConfir}>Cancelar</Text>
-                </Pressable>
-                <Pressable style={styles.cancelButton} onPress={handleDeleteAccount}>
-                  <Text style={styles.buttonText}>Confirmar</Text>
-                </Pressable>
-              </View>
+        {renderModal(deletarModalVisible, setDeletarModalVisible, (
+          <>
+            <Text style={styles.title}>Deletar Conta</Text>
+            <Text style={styles.label}>Você realmente deseja deletar sua conta?</Text>
+            <TextInput
+              style={styles.input}
+              value={senhaParaDeletar}
+              onChangeText={setSenhaParaDeletar}
+              secureTextEntry
+              placeholder="Confirme sua senha"
+            />
+            <View style={styles.buttonContainer}>
+              <Pressable style={styles.confirmButton} onPress={handleDeleteAccount}>
+                <Text style={styles.buttonTextConfir}>Cancelar</Text>
+              </Pressable>
+              <Pressable style={styles.cancelButton} onPress={handleDeleteAccount}>
+                <Text style={styles.buttonText}>Deletar Conta</Text>
+              </Pressable>
             </View>
-          </View>
-        </Modal>
+          </>
+        ))}
 
-        {/* Modal de confirmação para deletar conta */}
-        <Modal visible={confirmarSenhaModalVisible} transparent animationType="fade">
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.title}>{user.name_user} confirme a senha da sua conta para haver a exclusão.</Text>
-              <TextInput
-                style={styles.input}
-                onChangeText={setPwdHash}
-                secureTextEntry
-              />
-              <View style={styles.buttonContainer}>
-                <Pressable style={styles.confirmButton} onPress={toggleConfirmarSenhaModal}>
-                  <Text style={styles.buttonTextConfir}>Cancelar</Text>
-                </Pressable>
-                <Pressable style={styles.cancelButton} onPress={deleteUser}>
-                  <Text style={styles.buttonText}>Confirmar</Text>
-                </Pressable>
-              </View>
+        {renderModal(confirmarSenhaModalVisible, setConfirmarSenhaModalVisible, (
+          <>
+            <Text style={styles.title}>Confirmar Senha</Text>
+            <TextInput
+              style={styles.input}
+              value={senhaParaDeletar}
+              onChangeText={setSenhaParaDeletar}
+              secureTextEntry
+              placeholder="Digite sua senha"
+            />
+            <View style={styles.buttonContainer}>
+              <Pressable style={styles.confirmButton} onPress={handleConfirmarSenha}>
+                <Text style={styles.buttonTextConfir}>Cancelar</Text>
+              </Pressable>
+              <Pressable style={styles.cancelButton} onPress={handleConfirmarSenha}>
+                <Text style={styles.buttonText}>Confirmar</Text>
+              </Pressable>
             </View>
-          </View>
-        </Modal>
+          </>
+        ))}
 
-        {/* Token para Confirmar alteração de email. */}
-        <Modal visible={tokenModalVisible} transparent animationType="fade">
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.title}>Um código de acesso foi enviado ao novo email. Insira-o abaixo para confirmar a alteração.</Text>
-              <TextInput
-                style={styles.input}
-                value={tokenParaAlterar}
-                onChangeText={setTokenParaAlterar}
-                secureTextEntry
-              />
-              <View style={styles.buttonContainer}>
-                <Pressable style={styles.confirmButton} onPress={toggleTokenModal}>
-                  <Text style={styles.buttonTextConfir}>Cancelar</Text>
-                </Pressable>
-                <Pressable style={styles.cancelButton} onPress={handleConfirmarToken}>
-                  <Text style={styles.buttonText}>Confirmar</Text>
-                </Pressable>
-              </View>
-            </View>
-          </View>
-        </Modal>
       </View>
     </ScrollView>
   );
 };
-
 export default Config;
 
 const styles = StyleSheet.create({
@@ -420,7 +399,7 @@ const styles = StyleSheet.create({
     maxHeight: 85,
     marginTop: 40
   },
-  // Modal Styles
+
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',

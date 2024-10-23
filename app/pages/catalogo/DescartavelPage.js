@@ -17,17 +17,14 @@ const DescartavelPage = () => {
 
   return (
     <View style={styles.container}>
-
-      
-      <ScrollView contentContainerStyle={styles.content}>
-        {/* Banner como fundo */}
-        <BannerEspecial
-          style={[styles.bannerContainer]}
-          maxWidth={'100%'}
-        />
-
-        {/* Descrição */}
-        <Text style={styles.description}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <BannerEspecial
+      style={[styles.bannerContainer]}
+      maxWidth={'100%'}
+    />
+      <View  style={styles.content}>
+         {/* Descrição */}
+         <Text style={styles.description}>
           São resíduos que não podem ser descartados nem no lixo comum, nem no reciclável.
         </Text>
 
@@ -69,6 +66,8 @@ const DescartavelPage = () => {
           </View>
           <View style={styles.separator} />
         </View>
+      </View>
+       
       </ScrollView>
 
 
@@ -82,8 +81,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
 
-  content: {
+  scrollContainer: {
+    flexGrow: 1,
     paddingBottom: 85,
+  },
+
+  content: {
+    paddingHorizontal: 10,  
   },
 
   bannerContainer: {

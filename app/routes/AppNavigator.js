@@ -13,7 +13,9 @@ import Config from '../pages/sidebar/Config';
 import RedefinirSenha from '../pages/login/RedefinirSenha';
 import Token from '../pages/login/Token';
 import NovaSenha from '../pages/login/NovaSenha';
+import Mapa from '../pages/Mapa';
 import Header from '../components/Header';
+import Horarios from '../pages/Horarios';
 
 const Stack = createStackNavigator();
 
@@ -41,22 +43,22 @@ export default function AppNavigator() {
       <Stack.Screen 
         name="Home" 
         component={Home} 
-        options={{ header: () => <Header showBackButton={false} /> }} // Sem seta de voltar
+        options={{ header: () => <Header showBackButton={false} /> }}
       />
       <Stack.Screen 
         name="Trilha" 
         component={Trilha} 
-        options={{ header: () => <Header showBackButton={false} /> }} // Sem cabeçalho
+        options={{ header: () => <Header showBackButton={false} /> }} 
       />
       <Stack.Screen 
         name="Catalogo" 
         component={Catalogo} 
-        options={{ header: () => <Header showBackButton={false} /> }} // Sem cabeçalho
+        options={{ header: () => <Header showBackButton={false} /> }} 
       />
       <Stack.Screen 
         name="Coleta" 
         component={Coleta} 
-        options={{ header: () => <Header showBackButton={false} /> }} // Sem cabeçalho
+        options={{ header: () => <Header showBackButton={false} /> }} 
       />
       <Stack.Screen 
         name="Perfil" 
@@ -81,22 +83,32 @@ export default function AppNavigator() {
       <Stack.Screen 
         name="DescartavelPage" 
         component={DescartavelPage} 
-        options={{ header: () => <Header showBackButton={true} /> }} // Com seta de voltar
+        options={{ header: () => <Header showBackButton={true} /> }}
       />
       <Stack.Screen 
         name="ReciclavelPage" 
         component={ReciclavelPage} 
-        options={{ header: () => <Header showBackButton={true} /> }} // Com seta de voltar
+        options={{ header: () => <Header showBackButton={true} /> }}
       />
       <Stack.Screen 
         name="NoticiasPage" 
         component={NoticiasPage} 
-        options={{ header: () => <Header showBackButton={true} /> }} // Com seta de voltar
+        options={{ header: () => <Header showBackButton={true} /> }}
       />
       <Stack.Screen 
         name="Config" 
         component={Config} 
-        options={{ header: () => <Header showBackButton={true} /> }} // Com seta de voltar
+        options={{ header: () => <Header showBackButton={true} /> }}
+      />
+      <Stack.Screen 
+        name="Mapa" 
+        component={Mapa} 
+        options={{ header: () => <Header showBackButton={true} /> }} 
+      />
+      <Stack.Screen 
+        name="Horarios" 
+        component={Horarios} 
+        options={{ header: () => <Header showBackButton={true} /> }} 
       />
     </Stack.Navigator>
   );

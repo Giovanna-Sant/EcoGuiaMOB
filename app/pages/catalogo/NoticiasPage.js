@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   content: {
-    paddingBottom: 40, // Espaco para o Footer
+
     flexGrow: 1,
   },
   newsContainer: {
