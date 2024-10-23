@@ -58,6 +58,18 @@ const Perfil = () => {
     }
   };
 
+  const [avatar,setAvatar] = useState([])
+
+  const getAllAvatar = async () =>{
+    try {
+      const response = await api.get('/avatars')
+      setAvatar(response.data)
+    }
+    catch(erro){
+      console.log(erro)
+    }
+  }
+
   const handlePress = (screen) => {
     navigation.navigate(screen);
   };
@@ -116,7 +128,7 @@ const Perfil = () => {
                 width={60}
                 height={60}
                 source={{
-                  uri: "https://cdn-icons-png.flaticon.com/256/903/903482.png",
+                  uri: `${user.blob_avatar}`,
                 }}
               />
             </View>
@@ -198,18 +210,21 @@ const Perfil = () => {
               />
 
               <View style={styles.iconGrid}>
-                {[...Array(9)].map((_, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={[
-                      styles.iconCircle,
-                      selectedIcon === index && styles.selectedIcon,
-                    ]}
-                    onPress={() => handleIconSelect(index)}
-                  >
-                    <Text style={styles.iconText}>{index + 1}</Text>
-                  </TouchableOpacity>
-                ))}
+              {avatar.map((_, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.iconCircle,
+                    selectedIcon === index && styles.selectedIcon,
+                  ]}
+                  onPress={() => handleIconSelect(index)}
+                >
+                <Image style={styles.icon} 
+                source={{
+                  uri:`${avatar[index].blob_avatar}`,
+                }}/>
+                </TouchableOpacity>
+              ))}
               </View>
 
               <View style={styles.buttonContainer}>
