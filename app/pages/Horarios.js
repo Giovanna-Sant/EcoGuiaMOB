@@ -1,9 +1,8 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Dimensions, TextInput } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-
 import { TitleWatch } from '../assets';
-
+import api from '../services/api'
 const { width, height } = Dimensions.get('window');
 
 const Horarios = () => {
@@ -12,7 +11,21 @@ const Horarios = () => {
     Poppins_500Medium,
     Poppins_600SemiBold,
   });
-  const [cep, setCep] = React.useState('');
+  const [cep, setCep] = useState('');
+  const [dados,setDados] = useState('');
+    const getTime = async () => {
+      try{
+        console.log(cep)
+        const response = await api.post('/pickupTime',{cep})
+        setDados(response.data)
+      }catch(erro){
+        console.log(erro)
+      }
+
+    }
+
+ 
+
 
   if (!fontsLoaded) {
     return (
@@ -40,8 +53,9 @@ const Horarios = () => {
             style={styles.cepInput}
             placeholder="Digite o CEP"
             value={cep}
-            onChangeText={(text) => setCep(text)}
+            onChangeText={setCep}
             keyboardType="numeric"
+            onEndEditing={getTime}
           />
         </View> 
 
@@ -58,8 +72,12 @@ const Horarios = () => {
           {["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"].map((dia, index) => (
             <View key={index} style={styles.tableRow}>
               <Text style={styles.tableCell}>{dia}</Text>
-              <Text style={styles.tableCell}> </Text>
-              <Text style={styles.tableCell}> </Text>
+              <Text style={styles.tableCell}> 
+              {dados && dados[dia] ? dados[dia].diurno : '-'}
+              </Text>
+              <Text style={styles.tableCell}> 
+              {dados && dados[dia] ? dados[dia].noturno : '-'}
+              </Text>
             </View>
           ))}
         </View>
