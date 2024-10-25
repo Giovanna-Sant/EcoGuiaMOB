@@ -71,7 +71,10 @@ const Home = () => {
     outputRange: ['0deg', '180deg'],
   });
 
-  const levelProgress = user.XP_level > 0 ? (user.XP_user / user.XP_level) : 0;
+let levelProgress = 0
+ if(user){
+   levelProgress = user.XP_level > 0 ? (user.XP_user / user.XP_level) : 0;
+  }
 
   return (
     <View style={styles.container}>
@@ -84,13 +87,17 @@ const Home = () => {
         
         <Pressable style={styles.viewPerfil} onPress={() => handlePress('Perfil')}>
           <View style={styles.iconDiv}>
-            <Image style={styles.icon} width={60} height={60} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}} />
+            {user ?(
+               <Image style={styles.icon} width={60} height={60} source={{uri:`${user.blob_avatar}`}} />
+            ):(
+              <Text>Carregando...</Text>
+            )}
           </View>
           <View>
-          <Text style={styles.subtitle}>{user.name_user} {user.lastname_user}</Text>
+          <Text style={styles.subtitle}>{user ? `${user.name_user} ${user.lastname_user}`: "carregando..."}</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Text style={styles.text}>XP {user.XP_user}/{user.XP_level}</Text>
-            <Text style={styles.textLvl}>level {user.fk_level_user}</Text>
+            <Text style={styles.text}>{user ? `XP ${user.XP_user}/${user.XP_level}`:"carregando..."}</Text>
+            <Text style={styles.textLvl}>{user ?` level ${user.fk_level_user}`: "carregando.."}</Text>
             </View>
 
             <Progress.Bar
