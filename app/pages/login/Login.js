@@ -7,28 +7,33 @@ import { LogoEcoGuia, Google } from '../../assets';
 import api from '../../services/api';
 import cache from '../../utils/cache';
 import validator from 'validator';	// biblioteca que verifica o formato do e-mail
+import checkPwd from '../../utils/checkPwd'; // verificação de senha válida
 
 export default function Login() {
-	const [isVisible, setIsVisible] = useState(true);
-	const [email, setEmail] 		  = useState('');
-	const [pwd,   setSenha] 		  = useState('');
-	// const [pwdVisible, setpwdVisible] = useState(false);
-	const [loading,    setLoading]	  = useState(false);
-	const [disabled,   setDisabled]	  = useState(false);
-
-	//uma variável de email sem espaçamentos acidentais p validações
-	const validEmail = email.trim();
-
-	//função para validar se o campo de e-mail foi preenchido corretamente
-	const isEmailValid = (email) => {
-		return validator.isEmail(email);
-	};
+	const [isVisible, setIsVisible]      = useState(true);
+	const [nome,   	  setNome] 		     = useState('');
+	const [sobrenome, setSobrenome]      = useState('');
+	const [email_cad, setEmailCad]       = useState('');
+	const [pwd_cad,   setSenhaCad]	     = useState('')
+	const [pwd_cadcheck, setSenhaCheck]  = useState('');;
+	const [email, 	  setEmail] 	     = useState('');
+	const [pwd,  	  setSenha] 	     = useState('');
+	const [loading,   setLoading]	     = useState(false);
+	const [disabled,  setDisabled]	     = useState(false);
 
 	const login  = async (event) => {
 		event.preventDefault();
 
+		//uma variável de email sem espaçamentos acidentais p validações
+		const validEmail = email.trim();
+	
+		//função para validar se o campo de e-mail foi preenchido corretamente
+		const isEmailValid = (email) => {
+			return validator.isEmail(email);
+		};
+
 		//validação de campos
-		if (!email && !pwd){
+		if (!email || !pwd){
 			Alert.alert('Erro', 'Por favor, preencha todos os campos.');
 			return;
 		}else if (!isEmailValid(validEmail)) {
@@ -50,7 +55,7 @@ export default function Login() {
 			const controller = new AbortController();
 			const timeout	 = setTimeout(() => controller.abort(), 5000);
 
-			const data = await api.post('/user/login', {email,pwd});
+			const data = await api.post('/user/login', {email, pwd});
 			console.log(data.data.msg);
 			console.log(data.data.token);
 
@@ -104,6 +109,110 @@ export default function Login() {
 			} else {
 				// Outros tipos de erro (como erros de configuração)
 				Alert.alert('Erro', 'Erro desconhecido.');
+			}
+		} finally {
+			//desativa os estados de loading e ativa o botão de login
+			setLoading(false);
+			setDisabled(false);
+		};
+	}
+
+	const cadastro  = async (event) => {
+		event.preventDefault();
+
+		//uma variável de email sem espaçamentos acidentais p validações
+		const validEmail = email_cad.trim();
+
+		//função para validar se o campo de e-mail foi preenchido corretamente
+		const isEmailValid = (email) => {
+			return validator.isEmail(email);
+		};
+		
+		// chama função para verificar senha
+		const verificate = checkPwd(pwd_cad);
+
+		//validação de campos (Dá MUITO p/ melhorar essa validação com useEffect)
+		if (!nome || !sobrenome || !email_cad || !pwd_cad || !pwd_cadcheck){
+			Alert.alert('Aviso', 'Por favor, preencha todos os campos.');
+			return;
+		}else if (!isEmailValid(validEmail)) {
+			// se o e-mail for inválido, exibe como um alerta de campo
+			Alert.alert('Aviso', 'Por favor, insira um e-mail válido.');
+			return;
+		}else if (verificate[0] == false) {
+			const msg = verificate[1];
+			// se a senha for inválida, exibe como um alerta de campo
+			Alert.alert('Aviso', msg);
+			return;
+		}else if (pwd_cad != pwd_cadcheck) {
+			// compara se os campos de senha batem
+			Alert.alert('Aviso', 'As senhas não batem.');
+			return;
+		};
+
+		//seta os estados de loading e desativa o botão de login
+		setDisabled(true);
+		setLoading(true);
+
+		try{
+			const avatar = 1;
+			const data = await api.post('/user/register', {name: nome, lastname: sobrenome, email: email_cad, pwd: pwd_cad, avatar});
+			const response = data;
+
+			//switch para verificar o que foi retornado
+			switch (response.status) {
+				case 200:
+					const msg = response.data.msg;
+
+					// Armazena o token e o email no cache
+					cache.set("name",    nome);
+					cache.set("lastname",sobrenome);
+					cache.set("email",   email_cad);
+					cache.set("pwd",     pwd_cad);
+					cache.set("avatar",  avatar);
+					
+					Alert.alert('Token de validação', msg);
+				break;
+			}
+		} catch(error) {
+			// Se houver erro, verifica se é um erro de resposta
+			if (error.response) {
+				const status = error.response.status;
+				const msg = error.response.data.msg;
+
+				// Tratando erros com base no status
+				switch (status) {
+					case 424:
+						Alert.alert('Algo deu errado com os campos :(', msg);
+					break;
+
+					case 423:
+						Alert.alert('Algo deu errado com o email :(', msg);
+					break;
+
+					case 422:
+						Alert.alert('E-mail já está em uso :(', msg);
+					break;
+
+					case 400:
+						Alert.alert('Algo deu errado com a senha :(',   msg);
+					break;
+
+					case 500:
+						Alert.alert('Algo deu errado com a conexão :(', msg);
+					break;
+
+					default:
+					Alert.alert('Algo deu errado :(',  'Ocorreu um erro desconhecido. Tente novamente.');
+					console.error('Erro no back-end:', response);
+				}
+			} else if (error.request) {
+				// Se houver falha na requisição sem resposta do servidor
+				Alert.alert('Erro de conexão', 'Sem resposta do servidor. Verifique sua conexão');
+			} else {
+				// Outros tipos de erro (como erros de configuração)
+				Alert.alert('Erro', 'Erro desconhecido.');
+				console.error('Erro na requisição:', error);
 			}
 		} finally {
 			//desativa os estados de loading e ativa o botão de login
@@ -191,27 +300,32 @@ export default function Login() {
 				</View> */}
 
 				<View style={styles.inputContainer}>
-					<CustomInput placeholder="Nome" />
-					<CustomInput placeholder="Sobrenome" />
-					<CustomInput placeholder="Seuemail@email.com" />
-					<CustomInput placeholder="Senha" secureTextEntry />
-					<CustomInput placeholder="Confirmar senha" secureTextEntry />
+					<CustomInput placeholder="Nome" 		       onChangeText={setNome}/>
+					<CustomInput placeholder="Sobrenome" 		   onChangeText={setSobrenome}/>
+					<CustomInput placeholder="Seuemail@email.com"  onChangeText={setEmailCad}/>
+					<CustomInput placeholder="Senha" 		   	   onChangeText={setSenhaCad}   secureTextEntry />
+					<CustomInput placeholder="Confirmar senha"     onChangeText={setSenhaCheck} secureTextEntry />
 				</View>
 
 				<View style={styles.footer}>
-				<TouchableOpacity
-					style={styles.botao}
-					onPress={() => handlePress("Home")}
-				>
-					<Text style={styles.botaoTexto}>Cadastrar</Text>
-				</TouchableOpacity>
-
-				<View style={styles.textContainer}>
-					<Text style={styles.text}>Já possui uma conta?</Text>
-					<TouchableOpacity onPress={toggleVisibility}>
-					<Text style={styles.loginText}>Realizar login</Text>
+					<TouchableOpacity
+						style={styles.botao}
+						onPress={cadastro}
+						disabled={disabled || loading}
+					>
+						{loading ? (
+						<ActivityIndicator size="small" color="#fff" />
+						) : (
+						<Text style={styles.botaoTexto}>Cadastrar</Text>
+						)}
 					</TouchableOpacity>
-				</View>
+
+					<View style={styles.textContainer}>
+						<Text style={styles.text}>Já possui uma conta?</Text>
+						<TouchableOpacity onPress={toggleVisibility}>
+						<Text style={styles.loginText}>Realizar login</Text>
+						</TouchableOpacity>
+					</View>
 				</View>
 			</View>
 			)}

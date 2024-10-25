@@ -39,7 +39,7 @@ const Home = () => {
     try {
       getPerfil();
       async function lerUser() {
-        setUser(await cache.get("dados"));
+        // setUser(await cache.get("dados"));
       }
       lerUser();
     } catch (erro) {
