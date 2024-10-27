@@ -101,6 +101,11 @@ const Perfil = () => {
     );
   }
 
+  let levelProgress = 0;
+  if (user) {
+    levelProgress = user.XP_level > 0 ? user.XP_user / user.XP_level : 0;
+  }
+   
   return (
     <ScrollView contentContainerStyle={styles.container} refreshControl={
       <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
@@ -155,7 +160,7 @@ const Perfil = () => {
                 height={10}
                 borderRadius={5}
                 style={styles.progressBar}
-                progress={0.6}
+                progress={levelProgress}
               />
             </View>
           </View>
@@ -231,7 +236,7 @@ const Perfil = () => {
                 <Pressable style={styles.cancelButton} onPress={toggleModal}>
                   <Text style={styles.buttonText}>Cancelar</Text>
                 </Pressable>
-                <Pressable style={styles.confirmButton} onPress={handleSave}>
+                <Pressable style={styles.confirmButt} onPress={handleSave}>
                   <Text style={styles.buttonTextConfir}>Confirmar</Text>
                 </Pressable>
               </View>
@@ -344,6 +349,7 @@ const styles = StyleSheet.create({
   icon: {
     width: 60,
     height: 60,
+    borderRadius: 50
   },
 
   viewBadge: {
@@ -401,6 +407,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontFamily: "Poppins_500Medium",
   },
+  
   labelModal: {
     fontSize: 10,
     color: "#333",
@@ -447,7 +454,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
 
-  confirmButton: {
+  cancelButton: {
     backgroundColor: "#fff",
     padding: 10,
     borderRadius: 5,
@@ -458,7 +465,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
 
-  cancelButton: {
+  confirmButt: {
     backgroundColor: "#6BBF59",
     padding: 10,
     borderRadius: 5,

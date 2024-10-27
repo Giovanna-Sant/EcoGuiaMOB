@@ -165,21 +165,26 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
   },
+
   scrollView: {
     flex: 1,
   },
+
   scrollContent: {
     marginHorizontal: 10,
     paddingBottom: 85,
   },
+
   subtitle: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 16,
   },
+
   text: {
     fontFamily: 'Poppins_400Regular',
     fontSize: 14,
   },
+
   viewPerfil: {
     marginTop: 20,
     backgroundColor: '#E2F2DF',
@@ -192,9 +197,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+
   iconDiv: {
     borderColor: '#A6D89B',
-    backgroundColor: '#F1F1F1',
     borderWidth: 3,
     borderRadius: 50,
     padding: 8,
@@ -223,6 +228,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignSelf: 'flex-start',
   },
+  
   viewAPI: {
     backgroundColor: '#E2F2DF',
     borderWidth: 0.5,
@@ -235,26 +241,31 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 15,
   },
+  
   contAPI: {
     alignItems: 'center',
     textAlign: 'center',
     maxWidth: 150,
   },
+  
   atbAPI: {
     textAlign: 'center',
     marginTop: 8,
     fontFamily: 'Poppins_400Regular',
     fontSize: 12,
   },
+  
   viewNews: {
     borderRadius: 10,
     justifyContent: 'center',
     marginVertical: -90,
     zIndex: -2
   },
+  
   imgNews: {
     borderRadius: 10,
   },
+  
   viewDica: {
     backgroundColor: '#E2F2DF',
     borderWidth: 0.5,
@@ -266,14 +277,17 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     alignItems: 'center',
   },
+  
   abrir: {
     color: '#fff',
     backgroundColor: '#3F463E',
     borderRadius: 50,
   },
+  
   viewTrilha: {
     marginVertical: 5,
   },
+  
   dicaContent: {
     backgroundColor: '#5EB26C',
     padding: 10,
@@ -282,6 +296,11 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     marginVertical: 5,
   },
+  
+  icon: {
+    borderRadius: 50
+  },
+
   dicaText: {
     fontFamily: 'Poppins_400Regular',
     fontSize: 14,
