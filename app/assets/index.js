@@ -24,6 +24,8 @@ export { default as Recicla } from './icons/recicla.svg'
 export { default as RedTruck } from './icons/redTruck.svg'
 export { default as Trilha } from './icons/trilha.svg'
 export { default as Truck } from './icons/truck.svg'
+export { default as MissIcon } from './icons/missIcon.svg'
+export { default as ErrorIcon } from './icons/errorIcon.svg'
 
 // Titles
 export { default as TitleCatalogo } from './titles/titleCatalogo.svg'

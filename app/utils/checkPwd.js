@@ -8,23 +8,23 @@ export function checkPwd(pwd){
     let caracteres = pwd.match(/\W|_/);
 
     if(pwd.length < 8){
-        mensagem = "A senha deve ter pelo menos 8 caracteres.";
+        mensagem = "A senha deve ter pelo menos 8 caracteres";
         return [false, mensagem];
 
     }else if(minuscula == null){
-        mensagem = "Senha inválida, por favor inclua letras minúsculas na sua senha.";
+        mensagem = "Senha fraca, por favor inclua letras minúsculas na sua senha";
         return [false, mensagem];
 
     }else if(maiscula == null){
-        mensagem = "Senha inválida, por favor inclua letras maiúscula na sua senha.";
+        mensagem = "Senha fraca, por favor inclua letras maiúsculas na sua senha";
         return [false, mensagem];
 
     }else if(numero == null){
-        mensagem = "Senha inválida, por favor inclua números na sua senha.";
+        mensagem = "Senha fraca, por favor inclua números na sua senha";
         return [false, mensagem];
 
     }else if(caracteres == null){
-        mensagem = "Senha inválida, por favor inclua caracteres especiais na sua senha.";
+        mensagem = "Senha fraca, por favor inclua caracteres especiais na sua senha";
         return[false, mensagem];
 
     }else{

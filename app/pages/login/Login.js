@@ -1,56 +1,64 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Alert, ScrollView } from "react-native";
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Alert, ScrollView, Modal } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import { LogoEcoGuia, Google } from '../../assets';
+import { LogoEcoGuia, Google, MissIcon, ErrorIcon } from '../../assets';
 import api from '../../services/api';
 import cache from '../../utils/cache';
 import validator from 'validator';	// biblioteca que verifica o formato do e-mail
 import checkPwd from '../../utils/checkPwd'; // verificação de senha válida
 
 export default function Login() {
-	const [isVisible, setIsVisible]      = useState(true);
-	const [nome,   	  setNome] 		     = useState('');
-	const [sobrenome, setSobrenome]      = useState('');
-	const [email_cad, setEmailCad]       = useState('');
-	const [pwd_cad,   setSenhaCad]	     = useState('')
-	const [pwd_cadcheck, setSenhaCheck]  = useState('');;
-	const [email, 	  setEmail] 	     = useState('');
-	const [pwd,  	  setSenha] 	     = useState('');
-	const [loading,   setLoading]	     = useState(false);
-	const [disabled,  setDisabled]	     = useState(false);
+	const [isVisible, 		setIsVisible] = useState(true);
+	const [nome,   	  			 setNome] = useState('');
+	const [sobrenome, 		setSobrenome] = useState('');
+	const [email_cad,    	 setEmailCad] = useState('');
+	const [pwd_cad,   		 setSenhaCad] = useState('')
+	const [pwd_cadcheck,   setSenhaCheck] = useState('');;
+	const [email, 	  			setEmail] = useState('');
+	const [pwd,  	  			setSenha] = useState('');
+	const [loading,  		  setLoading] = useState(false);
+	const [disabled,         setDisabled] = useState(false);
+	const [modalVisible, setModalVisible] = useState(false);
+	const [modalMessage, setModalMessage] = useState('');
 
-	const login  = async (event) => {
+	// Setar modal como visível ou não
+	const showModal = (message) => {
+		setModalMessage(message);
+		setModalVisible(true);
+	};
+
+	const login = async (event) => {
 		event.preventDefault();
 
 		//uma variável de email sem espaçamentos acidentais p validações
 		const validEmail = email.trim();
-	
+
 		//função para validar se o campo de e-mail foi preenchido corretamente
 		const isEmailValid = (email) => {
 			return validator.isEmail(email);
 		};
 
 		//validação de campos
-		if (!email || !pwd){
-			Alert.alert('Erro', 'Por favor, preencha todos os campos.');
+		if (!email || !pwd) {
+			showModal('Por favor, preencha todos os campos');
 			return;
-		}else if (!isEmailValid(validEmail)) {
+		} else if (!isEmailValid(validEmail)) {
 			// se o e-mail for inválido, exibe como um alerta de campo
-			Alert.alert('Erro', 'Por favor, insira um e-mail válido.');
+			showModal('Por favor, insira um e-mail válido');
 			return;
-		}else if (pwd.length < 8) {
+		} else if (pwd.length < 8) {
 			// se a senha for inválida, exibe como um alerta de campo
-			Alert.alert('Erro', 'Por favor, insira uma senha válida.');
+			showModal('Por favor, insira uma senha válida');
 			return;
-		};
+		}
 
 		//seta os estados de loading e desativa o botão de login
 		setDisabled(true);
 		setLoading(true);
 
-		try{
+		try {
 			//define um limite para o tempo de espera de 5 segundos
 			const controller = new AbortController();
 			const timeout	 = setTimeout(() => controller.abort(), 5000);
@@ -84,31 +92,31 @@ export default function Login() {
 				// Tratando erros com base no código de status
 				switch (status) {
 					case 422:
-						Alert.alert('Algo deu errado com os campos :(', msg);
+						showModal('Algo deu errado com os campos :(', msg);
 					break;
 
 					case 404:
-						Alert.alert('Algo deu errado com o usuário :(', msg);
+						showModal('Algo deu errado com o usuário :(', msg);
 					break;
 
 					case 400:
-						Alert.alert('Algo deu errado com a senha :(',   msg);
+						showModal('Algo deu errado com a senha :(',   msg);
 					break;
 
 					case 500:
-						Alert.alert('Algo deu errado com a conexão :(', msg);
+						showModal('Algo deu errado com a conexão :(', msg);
 					break;
 
 					default:
-					Alert.alert('Algo deu errado :(',  'Ocorreu um erro desconhecido. Tente novamente.');
+					showModal('Algo deu errado :(',  'Ocorreu um erro desconhecido. Tente novamente');
 					console.error('Erro ilegal:', response);
 				}
 			} else if (error.request) {
 				// Se houver falha na requisição sem resposta do servidor
-				Alert.alert('Erro de conexão', 'Sem resposta do servidor. Verifique sua conexão');
+				showModal('Erro de conexão', 'Sem resposta do servidor. Verifique sua conexão');
 			} else {
 				// Outros tipos de erro (como erros de configuração)
-				Alert.alert('Erro', 'Erro desconhecido.');
+				showModal('Erro', 'Erro desconhecido');
 			}
 		} finally {
 			//desativa os estados de loading e ativa o botão de login
@@ -117,7 +125,7 @@ export default function Login() {
 		};
 	}
 
-	const cadastro  = async (event) => {
+	const cadastro = async (event) => {
 		event.preventDefault();
 
 		//uma variável de email sem espaçamentos acidentais p validações
@@ -133,28 +141,27 @@ export default function Login() {
 
 		//validação de campos (Dá MUITO p/ melhorar essa validação com useEffect)
 		if (!nome || !sobrenome || !email_cad || !pwd_cad || !pwd_cadcheck){
-			Alert.alert('Aviso', 'Por favor, preencha todos os campos.');
+			showModal('Aviso', 'Por favor, preencha todos os campos.');
 			return;
-		}else if (!isEmailValid(validEmail)) {
+		} else if (!isEmailValid(validEmail)) {
 			// se o e-mail for inválido, exibe como um alerta de campo
-			Alert.alert('Aviso', 'Por favor, insira um e-mail válido.');
+			showModal('Aviso', 'Por favor, insira um e-mail válido.');
 			return;
-		}else if (verificate[0] == false) {
+		} else if (verificate[0] == false) {
 			const msg = verificate[1];
 			// se a senha for inválida, exibe como um alerta de campo
-			Alert.alert('Aviso', msg);
+			showModal('Aviso', msg);
 			return;
-		}else if (pwd_cad != pwd_cadcheck) {
+		} else if (pwd_cad != pwd_cadcheck) {
 			// compara se os campos de senha batem
-			Alert.alert('Aviso', 'As senhas não batem.');
+			showModal('Aviso', 'As senhas não batem.');
 			return;
 		};
 
-		//seta os estados de loading e desativa o botão de login
 		setDisabled(true);
 		setLoading(true);
 
-		try{
+		try {
 			const avatar = 1;
 			const data = await api.post('/user/register', {name: nome, lastname: sobrenome, email: email_cad, pwd: pwd_cad, avatar});
 			const response = data;
@@ -171,7 +178,7 @@ export default function Login() {
 					cache.set("pwd",     pwd_cad);
 					cache.set("avatar",  avatar);
 					
-					Alert.alert('Token de validação', msg);
+					showModal('Token de validação', msg);
 				break;
 			}
 		} catch(error) {
@@ -183,43 +190,43 @@ export default function Login() {
 				// Tratando erros com base no status
 				switch (status) {
 					case 424:
-						Alert.alert('Algo deu errado com os campos :(', msg);
+						showModal('Algo deu errado com os campos :(', msg);
 					break;
 
 					case 423:
-						Alert.alert('Algo deu errado com o email :(', msg);
+						showModal('Algo deu errado com o email :(', msg);
 					break;
 
 					case 422:
-						Alert.alert('E-mail já está em uso :(', msg);
+						showModal('E-mail já está em uso :(', msg);
 					break;
 
 					case 400:
-						Alert.alert('Algo deu errado com a senha :(',   msg);
+						showModal('Algo deu errado com a senha :(',   msg);
 					break;
 
 					case 500:
-						Alert.alert('Algo deu errado com a conexão :(', msg);
+						showModal('Algo deu errado com a conexão :(', msg);
 					break;
 
 					default:
-					Alert.alert('Algo deu errado :(',  'Ocorreu um erro desconhecido. Tente novamente.');
+					showModal('Algo deu errado :(',  'Ocorreu um erro desconhecido. Tente novamente.');
 					console.error('Erro no back-end:', response);
 				}
 			} else if (error.request) {
 				// Se houver falha na requisição sem resposta do servidor
-				Alert.alert('Erro de conexão', 'Sem resposta do servidor. Verifique sua conexão');
+				showModal('Erro de conexão', 'Sem resposta do servidor. Verifique sua conexão');
 			} else {
 				// Outros tipos de erro (como erros de configuração)
-				Alert.alert('Erro', 'Erro desconhecido.');
+				showModal('Erro', 'Erro desconhecido.');
 				console.error('Erro na requisição:', error);
 			}
 		} finally {
 			//desativa os estados de loading e ativa o botão de login
 			setLoading(false);
 			setDisabled(false);
-		};
-	}
+		}
+	};
 
 	const toggleVisibility = () => {
 		setIsVisible(!isVisible);
@@ -245,6 +252,25 @@ export default function Login() {
 	return (
 		<ScrollView contentContainerStyle={styles.container}>
 			<StatusBar style="auto" />
+
+			{/* Modal de erro */}
+			<Modal
+				transparent={true}
+				animationType="fade"
+				visible={modalVisible}
+				onRequestClose={() => setModalVisible(false)}
+			>
+				<View style={styles.modalOverlay}>
+					<View style={styles.modalContainer}>
+						<MissIcon width={45} height={45}/>
+						<Text style={styles.textModal}>{modalMessage}</Text>
+						<TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+							<Text style={styles.recoverTexto}>Fechar</Text>
+						</TouchableOpacity>
+					</View>
+				</View>
+			</Modal>
+
 			{isVisible ? (
 			// Login Content
 			<View style={styles.fixedContent}>
@@ -425,6 +451,7 @@ const styles = StyleSheet.create({
 		fontFamily: "Poppins_400Regular",
 		fontSize: 16,
 		color: "#000",
+		textAlign: 'center'
 	},
 
 	textContainer: {
@@ -464,4 +491,28 @@ const styles = StyleSheet.create({
 		textDecorationLine: 'underline',
 		textAlign: 'center'
 	},
+
+	modalOverlay: {
+		flex: 1,
+		backgroundColor: 'rgba(0, 0, 0, 0.4)',
+		justifyContent: 'center',
+		alignItems: 'center',
+		padding: 10
+	},
+	
+	modalContainer: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		padding: 20,
+		backgroundColor: '#fff',
+		borderRadius: 10,
+		elevation: 10,
+	},
+	
+	textModal: {
+		textAlign: 'center',
+		fontFamily: "Poppins_400Regular",
+		fontSize: 14,
+		marginVertical: 5
+	  }
 });
