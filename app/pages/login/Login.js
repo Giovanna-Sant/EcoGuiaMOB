@@ -128,23 +128,35 @@ export default function Login() {
 	const cadastro = async (event) => {
 		event.preventDefault();
 
+		//uma variável de email sem espaçamentos acidentais p validações
 		const validEmail = email_cad.trim();
-		const isEmailValid = (email) => validator.isEmail(email);
+
+		//função para validar se o campo de e-mail foi preenchido corretamente
+		const isEmailValid = (email) => {
+			return validator.isEmail(email);
+		};
+		
+		// chama função para verificar senha
 		const verificate = checkPwd(pwd_cad);
 
-		if (!nome || !sobrenome || !email_cad || !pwd_cad || !pwd_cadcheck) {
-			showModal('Por favor, preencha todos os campos');
+		//validação de campos (Dá MUITO p/ melhorar essa validação com useEffect)
+		if (!nome || !sobrenome || !email_cad || !pwd_cad || !pwd_cadcheck){
+			showModal('Aviso', 'Por favor, preencha todos os campos.');
 			return;
 		} else if (!isEmailValid(validEmail)) {
-			showModal('Por favor, insira um e-mail válido');
+			// se o e-mail for inválido, exibe como um alerta de campo
+			showModal('Aviso', 'Por favor, insira um e-mail válido.');
 			return;
-		} else if (!verificate[0]) {
-			showModal(verificate[1]);
+		} else if (verificate[0] == false) {
+			const msg = verificate[1];
+			// se a senha for inválida, exibe como um alerta de campo
+			showModal('Aviso', msg);
 			return;
-		} else if (pwd_cad !== pwd_cadcheck) {
-			showModal('As senhas não batem');
+		} else if (pwd_cad != pwd_cadcheck) {
+			// compara se os campos de senha batem
+			showModal('Aviso', 'As senhas não batem.');
 			return;
-		}
+		};
 
 		setDisabled(true);
 		setLoading(true);
@@ -154,23 +166,63 @@ export default function Login() {
 			const data = await api.post('/user/register', {name: nome, lastname: sobrenome, email: email_cad, pwd: pwd_cad, avatar});
 			const response = data;
 
-			if (response.status === 200) {
-				cache.set("name", nome);
-				cache.set("lastname", sobrenome);
-				cache.set("email", email_cad);
-				cache.set("pwd", pwd_cad);
-				cache.set("avatar", avatar);
-				showModal(response.data.msg);
+			//switch para verificar o que foi retornado
+			switch (response.status) {
+				case 200:
+					const msg = response.data.msg;
+
+					// Armazena o token e o email no cache
+					cache.set("name",    nome);
+					cache.set("lastname",sobrenome);
+					cache.set("email",   email_cad);
+					cache.set("pwd",     pwd_cad);
+					cache.set("avatar",  avatar);
+					
+					showModal('Token de validação', msg);
+				break;
 			}
 		} catch(error) {
+			// Se houver erro, verifica se é um erro de resposta
 			if (error.response) {
-				showModal(error.response.data.msg || 'Erro desconhecido');
+				const status = error.response.status;
+				const msg = error.response.data.msg;
+
+				// Tratando erros com base no status
+				switch (status) {
+					case 424:
+						showModal('Algo deu errado com os campos :(', msg);
+					break;
+
+					case 423:
+						showModal('Algo deu errado com o email :(', msg);
+					break;
+
+					case 422:
+						showModal('E-mail já está em uso :(', msg);
+					break;
+
+					case 400:
+						showModal('Algo deu errado com a senha :(',   msg);
+					break;
+
+					case 500:
+						showModal('Algo deu errado com a conexão :(', msg);
+					break;
+
+					default:
+					showModal('Algo deu errado :(',  'Ocorreu um erro desconhecido. Tente novamente.');
+					console.error('Erro no back-end:', response);
+				}
 			} else if (error.request) {
-				showModal('Sem resposta do servidor. Verifique sua conexão');
+				// Se houver falha na requisição sem resposta do servidor
+				showModal('Erro de conexão', 'Sem resposta do servidor. Verifique sua conexão');
 			} else {
-				showModal('Erro desconhecido');
+				// Outros tipos de erro (como erros de configuração)
+				showModal('Erro', 'Erro desconhecido.');
+				console.error('Erro na requisição:', error);
 			}
 		} finally {
+			//desativa os estados de loading e ativa o botão de login
 			setLoading(false);
 			setDisabled(false);
 		}
