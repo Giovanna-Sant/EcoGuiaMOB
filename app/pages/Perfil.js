@@ -46,7 +46,7 @@ const Perfil = () => {
       const response = await api.put('/user/profile', {
               name: nome,
               lastname: sobrenome,
-              avatar: selectedIcon
+              avatar: selectedIcon + 1
       },{
         headers: {
           authorization: `Bearer ${token}`
@@ -64,6 +64,8 @@ const Perfil = () => {
     try {
       const response = await api.get('/avatars')
       setAvatar(response.data)
+      setNome(user.name_user)
+      setSobrenome(user.lastname_user)
     }
     catch(erro){
       console.log(erro)
@@ -75,6 +77,7 @@ const Perfil = () => {
   };
 
   const toggleModal = () => {
+    getAllAvatar()
     setModalVisible(!isModalVisible);
   };
 
@@ -205,7 +208,9 @@ const Perfil = () => {
                 style={styles.input}
                 value={nome}
                 onChangeText={setNome}
+                //placeholder={user.name_user}
               />
+                
 
               <Text style={styles.labelModal}>Sobrenome:</Text>
               <TextInput
