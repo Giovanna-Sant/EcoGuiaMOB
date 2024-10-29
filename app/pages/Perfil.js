@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Progress from 'react-native-progress';
 import Footer from '../components/Footer';
-import { ArrowRight, Edit } from '../assets';
+import { ArrowRight, Edit, Ranking } from '../assets';
 import cache from '../utils/cache';
 import getPerfil from '../utils/gerProfile';
 import { RefreshControl } from 'react-native-gesture-handler';
@@ -101,11 +101,6 @@ const Perfil = () => {
     );
   }
 
-  let levelProgress = 0;
-  if (user) {
-    levelProgress = user.XP_level > 0 ? user.XP_user / user.XP_level : 0;
-  }
-   
   return (
     <ScrollView contentContainerStyle={styles.container} refreshControl={
       <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
@@ -160,7 +155,7 @@ const Perfil = () => {
                 height={10}
                 borderRadius={5}
                 style={styles.progressBar}
-                progress={levelProgress}
+                progress={0.6}
               />
             </View>
           </View>
@@ -191,6 +186,65 @@ const Perfil = () => {
             </Pressable>
           </View>
         </View>
+
+        <View style={styles.viewRanking}>
+          
+            <View style={styles.TitleRan}> 
+                <Ranking/>
+                <Text style={styles.subtitle2}>Ranking</Text>
+                <View style={styles.botao2}/>
+            </View>
+            
+            <View style={styles.badgeInfo}>
+              <Text style={styles.text}>
+                Ganhe mais xp para avançar no ranking e ultrapasse seus adversários!
+              </Text>
+            </View>
+
+            <View style={styles.RankingInfo}>
+              <View style={styles.Rank}>
+
+                
+                <Text style={styles.position}>1</Text>
+                  <Image
+                    style={styles.icon}
+                    width={60}
+                    height={60}
+                    source={{
+                      uri: `${user.blob_avatar}`,
+                    }}
+                  />
+                <Text style={styles.username1}>User 1</Text>
+                <Text style={styles.userxp}>1320xp</Text>
+                
+              </View>
+
+              <View style={styles.ViewRank2}>
+                <View style={styles.Rank2}>  
+                  <Text style={styles.position}>2</Text>
+                  <Image source={{ uri: "https://example.com/avatar2.png" }} style={[styles.avatar, styles.avatarOverlay]} />
+                  <Text style={styles.username1}>User 2</Text>
+                  <Text style={styles.userxp}>1290xp</Text>
+                </View>
+              </View>
+
+              
+
+              <View style={styles.Rank}>
+                <Text style={styles.position}>3</Text>
+                <Image source={{ uri: "https://example.com/avatar3.png" }} style={styles.avatar} />
+                <Text style={styles.username1}>User 3</Text>
+                <Text style={styles.userxp}>1200xp</Text>
+              </View>
+            </View>
+        </View>
+
+
+
+
+
+
+
       </View>
       <Footer />
 
@@ -236,7 +290,7 @@ const Perfil = () => {
                 <Pressable style={styles.cancelButton} onPress={toggleModal}>
                   <Text style={styles.buttonText}>Cancelar</Text>
                 </Pressable>
-                <Pressable style={styles.confirmButt} onPress={handleSave}>
+                <Pressable style={styles.confirmButton} onPress={handleSave}>
                   <Text style={styles.buttonTextConfir}>Confirmar</Text>
                 </Pressable>
               </View>
@@ -349,7 +403,6 @@ const styles = StyleSheet.create({
   icon: {
     width: 60,
     height: 60,
-    borderRadius: 50
   },
 
   viewBadge: {
@@ -407,7 +460,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontFamily: "Poppins_500Medium",
   },
-  
   labelModal: {
     fontSize: 10,
     color: "#333",
@@ -454,7 +506,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
 
-  cancelButton: {
+  confirmButton: {
     backgroundColor: "#fff",
     padding: 10,
     borderRadius: 5,
@@ -465,7 +517,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
 
-  confirmButt: {
+  cancelButton: {
     backgroundColor: "#6BBF59",
     padding: 10,
     borderRadius: 5,
@@ -492,6 +544,110 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  viewRanking: {
+    flexDirection: "column",
+    gap: 10,
+    marginTop: 20,
+    marginHorizontal: 15,
+    justifyContent: 'center',
+  },
+
+  TitleRan:{
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,  
+    alignItems: 'center',
+    justifyContent: 'center'
+  }, 
+
+  botao2: {
+    backgroundColor: "#E2F2DF",
+    borderRadius: 2,
+    paddingVertical: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1, 
+    height: '20%'
+  },
+
+  Rank: {
+    width: '100%',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: 'space-between',
+    backgroundColor: "#F1F1F1",
+    padding: 10,
+    borderWidth: 0.5,
+    borderColor: 'rgba(63, 70, 62, 0.5)',
+    borderRadius: 5,
+    width: "90%",
+    elevation: 3,
+
+    
+
+
+  },
+  Rank2: {
+    position: 'absolute', 
+    zIndex: 1, 
+
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#E2F2DF",
+
+
+    padding: 10,
+    borderWidth: 0.5,
+    borderColor: 'rgba(63, 70, 62, 0.5)',
+    borderRadius: 5,
+
+
+    width: "95%",
+    elevation: 8,
+    
+    
+  },
+  position: {
+    fontFamily: "Poppins_500Medium",
+    fontSize: 16,
+    color: "#6BBF59",
+    width: 20,
+    textAlign: "center",
+  },
+
+  RankingInfo: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative', 
+    gap: 25  },
+
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    zIndex: 1, 
+  },
+
+
+  username1: {
+    fontFamily: "Poppins_500Medium",
+    fontSize: 16,
+    color: "#3F463E",
+
+  },
+  userxp: {
+    fontFamily: "Poppins_500Medium",
+    fontSize: 12,
+    color: "#3F463E",
+
+  },
+  ViewRank2: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  
 });
 
 export default Perfil;
