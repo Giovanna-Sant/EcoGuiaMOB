@@ -106,7 +106,7 @@ let levelProgress = 0
           </View>
 
           <View style={styles.badge}>
-            <Image width={50} height={60} source={{uri: 'https://th.bing.com/th/id/OIP.KgtLpFEUvAR0-jhXUGG-pgHaHa?w=512&h=512&rs=1&pid=ImgDetMain'}} />
+            <Image width={50} height={60} source={{uri: `${user.blob_badge}`}} />
           </View>
         </Pressable>
 

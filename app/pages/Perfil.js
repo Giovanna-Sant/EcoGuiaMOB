@@ -176,14 +176,14 @@ const Perfil = () => {
               width={70}
               height={80}
               source={{
-                uri: "https://th.bing.com/th/id/OIP.KgtLpFEUvAR0-jhXUGG-pgHaHa?w=512&h=512&rs=1&pid=ImgDetMain",
+                uri: `${user.blob_badge}`,
               }}
             />
           </View>
           <View style={styles.badgeInfo}>
-            <Text style={styles.subtitle2}>Árvore Iniciante</Text>
+            <Text style={styles.subtitle2}>{user.title_badge}</Text>
             <Text style={styles.text}>
-              Você está indo bem, continue assim para evoluir!
+              {user.description_badge}
             </Text>
             <Pressable
               style={styles.botao}
