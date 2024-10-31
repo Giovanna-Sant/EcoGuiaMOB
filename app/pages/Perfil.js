@@ -172,18 +172,16 @@ const Perfil = () => {
         {/* Botão da Trilha */}
         <View style={styles.viewBadge}>
           <View style={styles.badge}>
-            <Image
-              width={70}
-              height={80}
-              source={{
-                uri: `${user.blob_badge}`,
-              }}
-            />
+             {user.blob_avatar ?(
+              <Image style={styles.icon} width={70} height={80} source={{uri:`${user.blob_avatar}`}} />
+            ):(
+              <Image style={styles.icon} width={70} height={80} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}} />
+            )}
           </View>
           <View style={styles.badgeInfo}>
-            <Text style={styles.subtitle2}>{user.title_badge}</Text>
+            <Text style={styles.subtitle2}>{user.title_badge ? user.title_badge : "Árvore Iniciante"}</Text>
             <Text style={styles.text}>
-              {user.description_badge}
+              {user.description_badge ? user.description_badge : " Você está indo bem, continue assim para evoluir!"}
             </Text>
             <Pressable
               style={styles.botao}

@@ -80,9 +80,9 @@ let levelProgress = 0
         <Pressable style={styles.viewPerfil} onPress={() => handlePress('Perfil')}>
           <View style={styles.iconDiv}>
             {user ?(
-               <Image style={styles.icon} width={60} height={60} source={{uri:`${user.blob_avatar}`}} />
+              <Image style={styles.icon} width={60} height={60} source={{uri:`${user.blob_avatar}`}} />
             ):(
-              <Text>Carregando...</Text>
+              <Image style={styles.icon} width={60} height={60} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}} />
             )}
           </View>
           <View>
