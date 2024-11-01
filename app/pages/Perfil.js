@@ -21,10 +21,19 @@ const Perfil = () => {
         setUser(await cache.get("dados"));
       }
       lerUser();
+      getRank()
+      
     } catch (erro) {
       console.log(erro);
     }
   }, [user]);
+
+  const [rank,setRank] = useState('')
+  const getRank = async () => {
+    const response  = await api.get('/rank')
+    setRank(response.data) 
+
+  }
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [nome, setNome] = useState('');
@@ -53,6 +62,7 @@ const Perfil = () => {
         }
       });
       getPerfil()
+      getRank()
     } catch (erro) {
       console.log(erro);
     }
@@ -75,6 +85,7 @@ const Perfil = () => {
   };
 
   const toggleModal = () => {
+    getAllAvatar()
     setModalVisible(!isModalVisible);
   };
 
@@ -206,25 +217,50 @@ const Perfil = () => {
 
                 
                 <Text style={styles.position}>1</Text>
-                  <Image
+                {rank[0] ? (<Image
                     style={styles.icon}
                     width={60}
                     height={60}
                     source={{
-                      uri: `${user.blob_avatar}`,
+                      uri: `${rank[0].blob_avatar}`,
+                    }}
+                  />) : (
+                    <Image
+                    style={styles.icon}
+                    width={60}
+                    height={60}
+                    source={{
+                      uri: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7WFAiq-KurDygUkqoCSe2_LSpHv6vyPoWwA&s`,
                     }}
                   />
-                <Text style={styles.username1}>User 1</Text>
-                <Text style={styles.userxp}>1320xp</Text>
+                  )}
+                <Text style={styles.username1}>{rank[0] ? rank[0].nickname_user : "carregando..."}</Text>
+                <Text style={styles.userxp}>{rank[0] ? rank[0].XP_user : "carregando..."}</Text>
                 
               </View>
 
               <View style={styles.ViewRank2}>
                 <View style={styles.Rank2}>  
                   <Text style={styles.position}>2</Text>
-                  <Image source={{ uri: "https://example.com/avatar2.png" }} style={[styles.avatar, styles.avatarOverlay]} />
-                  <Text style={styles.username1}>User 2</Text>
-                  <Text style={styles.userxp}>1290xp</Text>
+                  {rank[1] ? (<Image
+                    style={styles.icon}
+                    width={60}
+                    height={60}
+                    source={{
+                      uri: `${rank[1].blob_avatar}`,
+                    }}
+                  />) : (
+                    <Image
+                    style={styles.icon}
+                    width={60}
+                    height={60}
+                    source={{
+                      uri: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7WFAiq-KurDygUkqoCSe2_LSpHv6vyPoWwA&s`,
+                    }}
+                  />
+                  )}
+                  <Text style={styles.username1}>{rank[1] ? rank[1].nickname_user : "carregando..."}</Text>
+                  <Text style={styles.userxp}>{rank[1] ? rank[1].XP_user : "carregando..."}</Text>
                 </View>
               </View>
 
@@ -232,9 +268,25 @@ const Perfil = () => {
 
               <View style={styles.Rank}>
                 <Text style={styles.position}>3</Text>
-                <Image source={{ uri: "https://example.com/avatar3.png" }} style={styles.avatar} />
-                <Text style={styles.username1}>User 3</Text>
-                <Text style={styles.userxp}>1200xp</Text>
+                {rank[2] ? (<Image
+                    style={styles.icon}
+                    width={60}
+                    height={60}
+                    source={{
+                      uri: `${rank[2].blob_avatar}`,
+                    }}
+                  />) : (
+                    <Image
+                    style={styles.icon}
+                    width={60}
+                    height={60}
+                    source={{
+                      uri: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7WFAiq-KurDygUkqoCSe2_LSpHv6vyPoWwA&s`,
+                    }}
+                  />
+                  )}
+                <Text style={styles.username1}>{rank[2] ? rank[2].nickname_user : "carregando..."}</Text>
+                <Text style={styles.userxp}>{rank[2] ? rank[2].XP_user : "carregando..."}</Text>
               </View>
             </View>
         </View>
