@@ -112,6 +112,11 @@ const Perfil = () => {
     );
   }
 
+    let levelProgress = 0;
+  if (user) {
+    levelProgress = user.XP_level > 0 ? user.XP_user / user.XP_level : 0;
+  }
+  
   return (
     <ScrollView contentContainerStyle={styles.container} refreshControl={
       <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
@@ -166,7 +171,7 @@ const Perfil = () => {
                 height={10}
                 borderRadius={5}
                 style={styles.progressBar}
-                progress={0.6}
+                progress={levelProgress}
               />
             </View>
           </View>
