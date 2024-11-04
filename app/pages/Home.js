@@ -20,32 +20,21 @@ const Home = () => {
   };
   
   const [tip, setTip] = useState([])
-  useEffect(() => {
-
-  try {
-    async function getTip() {
-      const resposta = await api.get("/tip");
-      setTip(resposta.data);
-    }
-    getTip();
-  } catch (erro) {
-    console.log(erro);
-  }
-  },
-[]);
-
   const [user, setUser] = useState({});
   useEffect(() => {
     try {
       getPerfil();
-      async function lerUser() {
+      async function getDados() {
+        const resposta = await api.get("/tip");
+        setTip(resposta.data);
         setUser(await cache.get("dados"));
       }
-      lerUser();
+      getDados();
     } catch (erro) {
       console.log(erro);
     }
-  }, [user]);
+    },
+  [user]);
 
   const [fontsLoaded] = useFonts({
     Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold,

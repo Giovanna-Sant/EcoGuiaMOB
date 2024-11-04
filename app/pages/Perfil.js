@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Progress from 'react-native-progress';
 import Footer from '../components/Footer';
-import { ArrowRight, Edit } from '../assets';
+import { ArrowRight, Edit, Ranking } from '../assets';
 import cache from '../utils/cache';
 import getPerfil from '../utils/gerProfile';
 import { RefreshControl } from 'react-native-gesture-handler';
@@ -21,10 +21,19 @@ const Perfil = () => {
         setUser(await cache.get("dados"));
       }
       lerUser();
+      getRank()
+      
     } catch (erro) {
       console.log(erro);
     }
   }, [user]);
+
+  const [rank,setRank] = useState('')
+  const getRank = async () => {
+    const response  = await api.get('/rank')
+    setRank(response.data) 
+
+  }
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [nome, setNome] = useState('');
@@ -53,6 +62,7 @@ const Perfil = () => {
         }
       });
       getPerfil()
+      getRank()
     } catch (erro) {
       console.log(erro);
     }
@@ -75,6 +85,7 @@ const Perfil = () => {
   };
 
   const toggleModal = () => {
+    getAllAvatar()
     setModalVisible(!isModalVisible);
   };
 
@@ -101,11 +112,11 @@ const Perfil = () => {
     );
   }
 
-  let levelProgress = 0;
+    let levelProgress = 0;
   if (user) {
     levelProgress = user.XP_level > 0 ? user.XP_user / user.XP_level : 0;
   }
-   
+  
   return (
     <ScrollView contentContainerStyle={styles.container} refreshControl={
       <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
@@ -191,6 +202,106 @@ const Perfil = () => {
             </Pressable>
           </View>
         </View>
+
+        <View style={styles.viewRanking}>
+          
+            <View style={styles.TitleRan}> 
+                <Ranking/>
+                <Text style={styles.subtitle2}>Ranking</Text>
+                <View style={styles.botao2}/>
+            </View>
+            
+            <View style={styles.badgeInfo}>
+              <Text style={styles.text}>
+                Ganhe mais xp para avançar no ranking e ultrapasse seus adversários!
+              </Text>
+            </View>
+
+            <View style={styles.RankingInfo}>
+              <View style={styles.Rank}>
+
+                
+                <Text style={styles.position}>1</Text>
+                {rank[0] ? (<Image
+                    style={styles.icon}
+                    width={60}
+                    height={60}
+                    source={{
+                      uri: `${rank[0].blob_avatar}`,
+                    }}
+                  />) : (
+                    <Image
+                    style={styles.icon}
+                    width={60}
+                    height={60}
+                    source={{
+                      uri: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7WFAiq-KurDygUkqoCSe2_LSpHv6vyPoWwA&s`,
+                    }}
+                  />
+                  )}
+                <Text style={styles.username1}>{rank[0] ? rank[0].nickname_user : "carregando..."}</Text>
+                <Text style={styles.userxp}>{rank[0] ? rank[0].XP_user : "carregando..."}</Text>
+                
+              </View>
+
+              <View style={styles.ViewRank2}>
+                <View style={styles.Rank2}>  
+                  <Text style={styles.position}>2</Text>
+                  {rank[1] ? (<Image
+                    style={styles.icon}
+                    width={60}
+                    height={60}
+                    source={{
+                      uri: `${rank[1].blob_avatar}`,
+                    }}
+                  />) : (
+                    <Image
+                    style={styles.icon}
+                    width={60}
+                    height={60}
+                    source={{
+                      uri: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7WFAiq-KurDygUkqoCSe2_LSpHv6vyPoWwA&s`,
+                    }}
+                  />
+                  )}
+                  <Text style={styles.username1}>{rank[1] ? rank[1].nickname_user : "carregando..."}</Text>
+                  <Text style={styles.userxp}>{rank[1] ? rank[1].XP_user : "carregando..."}</Text>
+                </View>
+              </View>
+
+              
+
+              <View style={styles.Rank}>
+                <Text style={styles.position}>3</Text>
+                {rank[2] ? (<Image
+                    style={styles.icon}
+                    width={60}
+                    height={60}
+                    source={{
+                      uri: `${rank[2].blob_avatar}`,
+                    }}
+                  />) : (
+                    <Image
+                    style={styles.icon}
+                    width={60}
+                    height={60}
+                    source={{
+                      uri: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7WFAiq-KurDygUkqoCSe2_LSpHv6vyPoWwA&s`,
+                    }}
+                  />
+                  )}
+                <Text style={styles.username1}>{rank[2] ? rank[2].nickname_user : "carregando..."}</Text>
+                <Text style={styles.userxp}>{rank[2] ? rank[2].XP_user : "carregando..."}</Text>
+              </View>
+            </View>
+        </View>
+
+
+
+
+
+
+
       </View>
       <Footer />
 
@@ -236,7 +347,7 @@ const Perfil = () => {
                 <Pressable style={styles.cancelButton} onPress={toggleModal}>
                   <Text style={styles.buttonText}>Cancelar</Text>
                 </Pressable>
-                <Pressable style={styles.confirmButt} onPress={handleSave}>
+                <Pressable style={styles.confirmButton} onPress={handleSave}>
                   <Text style={styles.buttonTextConfir}>Confirmar</Text>
                 </Pressable>
               </View>
@@ -349,7 +460,6 @@ const styles = StyleSheet.create({
   icon: {
     width: 60,
     height: 60,
-    borderRadius: 50
   },
 
   viewBadge: {
@@ -407,7 +517,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontFamily: "Poppins_500Medium",
   },
-  
   labelModal: {
     fontSize: 10,
     color: "#333",
@@ -454,7 +563,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
 
-  cancelButton: {
+  confirmButton: {
     backgroundColor: "#fff",
     padding: 10,
     borderRadius: 5,
@@ -465,7 +574,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
 
-  confirmButt: {
+  cancelButton: {
     backgroundColor: "#6BBF59",
     padding: 10,
     borderRadius: 5,
@@ -492,6 +601,110 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  viewRanking: {
+    flexDirection: "column",
+    gap: 10,
+    marginTop: 20,
+    marginHorizontal: 15,
+    justifyContent: 'center',
+  },
+
+  TitleRan:{
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,  
+    alignItems: 'center',
+    justifyContent: 'center'
+  }, 
+
+  botao2: {
+    backgroundColor: "#E2F2DF",
+    borderRadius: 2,
+    paddingVertical: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1, 
+    height: '20%'
+  },
+
+  Rank: {
+    width: '100%',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: 'space-between',
+    backgroundColor: "#F1F1F1",
+    padding: 10,
+    borderWidth: 0.5,
+    borderColor: 'rgba(63, 70, 62, 0.5)',
+    borderRadius: 5,
+    width: "90%",
+    elevation: 3,
+
+    
+
+
+  },
+  Rank2: {
+    position: 'absolute', 
+    zIndex: 1, 
+
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#E2F2DF",
+
+
+    padding: 10,
+    borderWidth: 0.5,
+    borderColor: 'rgba(63, 70, 62, 0.5)',
+    borderRadius: 5,
+
+
+    width: "95%",
+    elevation: 8,
+    
+    
+  },
+  position: {
+    fontFamily: "Poppins_500Medium",
+    fontSize: 16,
+    color: "#6BBF59",
+    width: 20,
+    textAlign: "center",
+  },
+
+  RankingInfo: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative', 
+    gap: 25  },
+
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    zIndex: 1, 
+  },
+
+
+  username1: {
+    fontFamily: "Poppins_500Medium",
+    fontSize: 16,
+    color: "#3F463E",
+
+  },
+  userxp: {
+    fontFamily: "Poppins_500Medium",
+    fontSize: 12,
+    color: "#3F463E",
+
+  },
+  ViewRank2: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  
 });
 
 export default Perfil;
