@@ -22,19 +22,19 @@ const Home = () => {
   const [tip, setTip] = useState([])
   const [user, setUser] = useState({});
   useEffect(() => {
-    try {
-      getPerfil();
-      async function getDados() {
-        const resposta = await api.get("/tip");
-        setTip(resposta.data);
-        setUser(await cache.get("dados"));
-      }
-      getDados();
-    } catch (erro) {
-      console.log(erro);
+  try {
+    getPerfil();
+    async function getDados() {
+      const resposta = await api.get("/tip");
+      setTip(resposta.data);
+      setUser(await cache.get("dados"));
     }
-    },
-  [user]);
+    getDados();
+  } catch (erro) {
+    console.log(erro);
+  }
+  },
+[user]);
 
   const [fontsLoaded] = useFonts({
     Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold,
@@ -77,9 +77,9 @@ let levelProgress = 0
         <Pressable style={styles.viewPerfil} onPress={() => handlePress('Perfil')}>
           <View style={styles.iconDiv}>
             {user ?(
-               <Image style={styles.icon} width={60} height={60} source={{uri:`${user.blob_avatar}`}} />
+              <Image style={styles.icon} width={60} height={60} source={{uri:`${user.blob_avatar}`}} />
             ):(
-              <Text>Carregando...</Text>
+              <Image style={styles.icon} width={60} height={60} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}} />
             )}
           </View>
           <View>
@@ -103,7 +103,7 @@ let levelProgress = 0
           </View>
 
           <View style={styles.badge}>
-            <Image width={50} height={60} source={{uri: 'https://th.bing.com/th/id/OIP.KgtLpFEUvAR0-jhXUGG-pgHaHa?w=512&h=512&rs=1&pid=ImgDetMain'}} />
+            <Image width={50} height={60} source={{uri: `${user.blob_badge}`}} />
           </View>
         </Pressable>
 
