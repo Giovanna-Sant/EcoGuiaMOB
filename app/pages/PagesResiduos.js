@@ -88,12 +88,14 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#F0F0F0',
   },
+
   headerText: {
     fontSize: 16,
     marginBottom: 16,
     color: '#333',
     textAlign: 'center',
   },
+
   heading: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -101,21 +103,25 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
+
   titleText: {
     marginLeft: 8,
     fontSize: 16,
     fontWeight: '600',
   },
+
   content: {
     marginTop: 8,
     marginLeft: 24,
     marginBottom: 16,
   },
+
   listItem: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 4,
   },
+
   itemText: {
     marginLeft: 8,
     fontSize: 16,

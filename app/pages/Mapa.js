@@ -35,7 +35,7 @@ const Mapa = () => {
             setRegiao({
                 latitude: location.coords.latitude,
                 longitude: location.coords.longitude,
-                latitudeDelta: 0.100,
+                latitudeDelta: 0.200,
                 longitudeDelta: 0.014
             });
 
