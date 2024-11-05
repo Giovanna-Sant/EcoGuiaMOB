@@ -13,9 +13,6 @@ export default function RedefinirSenha() {
 
   const checkToken = async () => {
     const getToken = await cache.get("token");
-    console.log("token", getToken);
-    console.log("digitado");
-    console.log(userToken);
     if (getToken != userToken) {
       alert("token inválido ou expirado");
     } else {

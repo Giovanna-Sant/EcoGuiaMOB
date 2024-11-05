@@ -50,13 +50,15 @@ const Mapa = () => {
             try {
                 let response = await fetch('https://api-ecopontos.onrender.com/ecopontos');  
                 if (!response.ok) {
-                  console.log('Network response was not ok', response.statusText);
+                  Alert.alert("Erro ao pegar os dados, tente novamente mais tarde.")
+                  console.error('Network response was not ok', response.statusText);
                   return;
               }
                 let data = await response.json();
                 setEcopontos(data.features);
               } catch (error) {
-                console.log('Erro ao buscar dados dos ecopontos:', error);
+                Alert.alert("Erro ao pegar os dados, tente novamente mais tarde.")
+                console.error('Erro ao buscar dados dos ecopontos:', error);
               }
 
               setLoading(false)

@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Dimensions, TextInput } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { TitleWatch } from '../assets';
-import axios from 'axios';
+import api from '../services/api'
 const { width, height } = Dimensions.get('window');
 
 const Horarios = () => {
@@ -13,15 +13,13 @@ const Horarios = () => {
   });
   const [cep, setCep] = useState('');
   const [dados,setDados] = useState('');
-
     const getTime = async () => {
       try{
-        console.log(cep)
-        const response = await axios.post('http://172.16.3.170:3000/pickupTime',{cep})
-        console.log(response.data)
+        const response = await api.post('/pickupTime',{cep})
         setDados(response.data)
-      }catch(erro){
-        console.log(erro)
+      }catch(error){
+        Alert.alert("Erro ao pegar os dados, tente novamente mais tarde")
+        console.error(error)
       }
 
     }

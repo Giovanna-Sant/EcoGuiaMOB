@@ -62,8 +62,6 @@ export default function Login() {
 		
 
 			const data = await api.post('/user/login', {email, pwd});
-			console.log(data.data.msg);
-			console.log(data.data.token);
 
 		
 			const response = data;
