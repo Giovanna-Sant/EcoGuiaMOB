@@ -17,14 +17,15 @@ export default function RedefinirSenha() {
     }
     try {
       const email = await cache.get("email");
+      console.log(email);
       const response = await api.post("/user/pwd", { pwd, email });
+      console.log(response);
       if (response.status == 200) {
         alert("Senha alterada com sucesso");
         navigation.navigate("Login");
       }
     } catch (erro) {
-      Alert.alert("Erro ao alterar senha");
-      console.error(erro);
+      console.log(erro);
     }
   };
 
