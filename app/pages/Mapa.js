@@ -11,13 +11,6 @@ const Mapa = () => {
     const [regiao, setRegiao] = useState(null);
     const [loading, setLoading] = useState(true);
     const [ecopontos, setEcopontos] = useState([]);
-    const [nameEco, setNameEco] = useState('');
-    const [enderecoEco, setEnderecoEco] = useState('');
-
-    const info = (nome,endereco) => {
-      setNameEco(nome)
-      setEnderecoEco(endereco)
-    }
   
     // Navegação de páginas
     const navigation = useNavigation();
@@ -90,9 +83,9 @@ const Mapa = () => {
         <View style={styles.footerMapa}>
           <View style={styles.titleLocal}>
             <PointLocal style={{marginRight: 10}}/>
-            <Text style={styles.subtitle}>{nameEco ? nameEco : "Selecione um ecoponto"}</Text>
+            <Text style={styles.subtitle}>Alceu Maynard Araújo</Text>
           </View>
-            <Text style={styles.text}>{enderecoEco  ? enderecoEco : ""}</Text>
+            <Text style={styles.text}>Avenida Professor Alceu Maynard de Araújo, 330</Text>
         </View>
 
         {/* Mapa */}
@@ -111,7 +104,6 @@ const Mapa = () => {
                 }}
                 title={ecoponto.properties.Name}
                 description={ecoponto.properties.Endere__o}
-                onPress={() => info(ecoponto.properties.Name, ecoponto.properties.Endere__o)}
               ></Marker>
             ))}
           </MapView>

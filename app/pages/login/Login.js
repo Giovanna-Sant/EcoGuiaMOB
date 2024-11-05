@@ -59,13 +59,17 @@ export default function Login() {
 		setLoading(true);
 
 		try {
-		
+			//define um limite para o tempo de espera de 5 segundos
+			const controller = new AbortController();
+			const timeout	 = setTimeout(() => controller.abort(), 5000);
 
 			const data = await api.post('/user/login', {email, pwd});
 			console.log(data.data.msg);
 			console.log(data.data.token);
 
-		
+			//caso a requisição seja atendida, desativa o timeout
+			clearTimeout(timeout);
+
 			const response = data;
 
 			//switch para verificar o que foi retornado
@@ -73,7 +77,6 @@ export default function Login() {
 				case 200:
 					// Armazena o token e o email no cache
 					await cache.set("tokenID", response.data.token);
-
 					await cache.set("email", email);
 					
 					// Redireciona para a página Home

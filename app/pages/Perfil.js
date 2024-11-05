@@ -55,7 +55,7 @@ const Perfil = () => {
       const response = await api.put('/user/profile', {
               name: nome,
               lastname: sobrenome,
-              avatar: selectedIcon + 1
+              avatar: selectedIcon
       },{
         headers: {
           authorization: `Bearer ${token}`
@@ -74,8 +74,6 @@ const Perfil = () => {
     try {
       const response = await api.get('/avatars')
       setAvatar(response.data)
-      setNome(user.name_user)
-      setSobrenome(user.lastname_user)
     }
     catch(erro){
       console.log(erro)
@@ -182,16 +180,18 @@ const Perfil = () => {
         {/* Botão da Trilha */}
         <View style={styles.viewBadge}>
           <View style={styles.badge}>
-             {user.blob_avatar ?(
-              <Image style={styles.icon} width={70} height={80} source={{uri:`${user.blob_avatar}`}} />
-            ):(
-              <Image style={styles.icon} width={70} height={80} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}} />
-            )}
+            <Image
+              width={70}
+              height={80}
+              source={{
+                uri: "https://th.bing.com/th/id/OIP.KgtLpFEUvAR0-jhXUGG-pgHaHa?w=512&h=512&rs=1&pid=ImgDetMain",
+              }}
+            />
           </View>
           <View style={styles.badgeInfo}>
-            <Text style={styles.subtitle2}>{user.title_badge ? user.title_badge : "Árvore Iniciante"}</Text>
+            <Text style={styles.subtitle2}>Árvore Iniciante</Text>
             <Text style={styles.text}>
-              {user.description_badge ? user.description_badge : " Você está indo bem, continue assim para evoluir!"}
+              Você está indo bem, continue assim para evoluir!
             </Text>
             <Pressable
               style={styles.botao}
@@ -316,9 +316,7 @@ const Perfil = () => {
                 style={styles.input}
                 value={nome}
                 onChangeText={setNome}
-                //placeholder={user.name_user}
               />
-                
 
               <Text style={styles.labelModal}>Sobrenome:</Text>
               <TextInput
