@@ -20,32 +20,21 @@ const Home = () => {
   };
   
   const [tip, setTip] = useState([])
-  useEffect(() => {
-
-  try {
-    async function getTip() {
-      const resposta = await api.get("/tip");
-      setTip(resposta.data);
-    }
-    getTip();
-  } catch (erro) {
-    console.log(erro);
-  }
-  },
-[]);
-
   const [user, setUser] = useState({});
   useEffect(() => {
     try {
       getPerfil();
-      async function lerUser() {
+      async function getDados() {
+        const resposta = await api.get("/tip");
+        setTip(resposta.data);
         setUser(await cache.get("dados"));
       }
-      lerUser();
+      getDados();
     } catch (erro) {
       console.log(erro);
     }
-  }, [user]);
+    },
+  [user]);
 
   const [fontsLoaded] = useFonts({
     Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold,
@@ -71,7 +60,10 @@ const Home = () => {
     outputRange: ['0deg', '180deg'],
   });
 
-  const levelProgress = user.XP_level > 0 ? (user.XP_user / user.XP_level) : 0;
+let levelProgress = 0
+ if(user){
+   levelProgress = user.XP_level > 0 ? (user.XP_user / user.XP_level) : 0;
+  }
 
   return (
     <View style={styles.container}>
@@ -84,13 +76,17 @@ const Home = () => {
         
         <Pressable style={styles.viewPerfil} onPress={() => handlePress('Perfil')}>
           <View style={styles.iconDiv}>
-            <Image style={styles.icon} width={60} height={60} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}} />
+            {user ?(
+               <Image style={styles.icon} width={60} height={60} source={{uri:`${user.blob_avatar}`}} />
+            ):(
+              <Text>Carregando...</Text>
+            )}
           </View>
           <View>
-          <Text style={styles.subtitle}>{user.name_user} {user.lastname_user}</Text>
+          <Text style={styles.subtitle}>{user ? `${user.name_user} ${user.lastname_user}`: "carregando..."}</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Text style={styles.text}>XP {user.XP_user}/{user.XP_level}</Text>
-            <Text style={styles.textLvl}>level {user.fk_level_user}</Text>
+            <Text style={styles.text}>{user ? `XP ${user.XP_user}/${user.XP_level}`:"carregando..."}</Text>
+            <Text style={styles.textLvl}>{user ?` level ${user.fk_level_user}`: "carregando.."}</Text>
             </View>
 
             <Progress.Bar
@@ -158,21 +154,26 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
   },
+
   scrollView: {
     flex: 1,
   },
+
   scrollContent: {
     marginHorizontal: 10,
     paddingBottom: 85,
   },
+
   subtitle: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 16,
   },
+
   text: {
     fontFamily: 'Poppins_400Regular',
     fontSize: 14,
   },
+
   viewPerfil: {
     marginTop: 20,
     backgroundColor: '#E2F2DF',
@@ -185,9 +186,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+
   iconDiv: {
     borderColor: '#A6D89B',
-    backgroundColor: '#F1F1F1',
     borderWidth: 3,
     borderRadius: 50,
     padding: 8,
@@ -216,6 +217,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignSelf: 'flex-start',
   },
+  
   viewAPI: {
     backgroundColor: '#E2F2DF',
     borderWidth: 0.5,
@@ -228,26 +230,31 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 15,
   },
+  
   contAPI: {
     alignItems: 'center',
     textAlign: 'center',
     maxWidth: 150,
   },
+  
   atbAPI: {
     textAlign: 'center',
     marginTop: 8,
     fontFamily: 'Poppins_400Regular',
     fontSize: 12,
   },
+  
   viewNews: {
     borderRadius: 10,
     justifyContent: 'center',
     marginVertical: -90,
     zIndex: -2
   },
+  
   imgNews: {
     borderRadius: 10,
   },
+  
   viewDica: {
     backgroundColor: '#E2F2DF',
     borderWidth: 0.5,
@@ -259,14 +266,17 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     alignItems: 'center',
   },
+  
   abrir: {
     color: '#fff',
     backgroundColor: '#3F463E',
     borderRadius: 50,
   },
+  
   viewTrilha: {
     marginVertical: 5,
   },
+  
   dicaContent: {
     backgroundColor: '#5EB26C',
     padding: 10,
@@ -275,6 +285,11 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     marginVertical: 5,
   },
+  
+  icon: {
+    borderRadius: 50
+  },
+
   dicaText: {
     fontFamily: 'Poppins_400Regular',
     fontSize: 14,

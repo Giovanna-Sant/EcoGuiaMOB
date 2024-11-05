@@ -1,21 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, FlatList, Dimensions, Image, ScrollView } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 
 import Footer from '../../components/Footer';
-import { Lixo, Recicla, TitleCatalogo, NewsBG } from '../../assets';
-
-import { Dimensions } from 'react-native';
+import { Lixo, Recicla, TitleCatalogo } from '../../assets';
+import api from '../../services/api';
 
 const { width, height } = Dimensions.get('window');
 
 const Catalogo = ({ navigation }) => {
- 
   const [selectedFilter, setSelectedFilter] = useState(null);
-  
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const handleFilterPress = (filter) => {
     setSelectedFilter(filter);
   };
+
+  useEffect(() => {
+    const getArticles = async () => {
+      try {
+        const resposta = await api.get("/articles");
+        setArticles(resposta.data);
+      } catch (erro) {
+        console.log(erro);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    getArticles();
+  }, []);
 
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
@@ -23,88 +38,83 @@ const Catalogo = ({ navigation }) => {
     Poppins_600SemiBold,
   });
 
-  if (!fontsLoaded) {
-    return (
-      <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
-    );
+  if (!fontsLoaded || loading) {
+    return <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />;
   }
 
   return (
     <View style={styles.container}>
-      
-      <ScrollView
+      <FlatList
+        data={articles}
+        keyExtractor={(item) => item.pk_IDarticle.toString()}
+        ListHeaderComponent={
+          <>
+            <View style={styles.logoContainer}>
+              <TitleCatalogo />
+              <Text style={styles.description}>
+                Encontre toda informação necessária para ter uma vida mais sustentável e um consumo consciente!
+              </Text>
+            </View>
+
+            {/* Filtro */}
+            <ScrollView
+              horizontal={true}
+              style={styles.filterContainer}
+              showsHorizontalScrollIndicator={false}
+            >
+              {['Inicial', 'Notícias', 'Artigos', 'Faça você mesmo'].map((filter) => (
+                <TouchableOpacity
+                  key={filter}
+                  style={[styles.filterButton, selectedFilter === filter ? styles.selected : styles.unselected]}
+                  onPress={() => handleFilterPress(filter)}
+                >
+                  <Text style={[styles.filterText, selectedFilter === filter ? styles.selectedText : styles.unselectedText]}>
+                    {filter}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </>
+        }
+        renderItem={({ item, index }) => {
+          return (
+            <View>
+              <TouchableOpacity
+                style={styles.newsContainer}
+                onPress={() => navigation.navigate('NoticiasPage', { article: item })}
+              >
+                <Text style={styles.newsCategory}>{item.category_article}</Text>
+                <Image
+                  style={styles.newsImage}
+                  source={{ uri: item.image_article }}
+                />
+                <Text style={styles.newsDate}>{item.date_article}</Text>
+                <Text style={styles.newsTitle}>{item.title_article}</Text>
+              </TouchableOpacity>
+
+              {index === 0 && (
+                <View style={styles.buttonsContainer}>
+                  <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ReciclavelPage')}>
+                    <Recicla />
+                    <Text style={styles.buttonText}>Lista de Materiais Recicláveis.</Text>
+                    <Text style={styles.buttonDescription}>Confira e descubra.</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('DescartavelPage')}>
+                    <Lixo />
+                    <Text style={styles.buttonText}>Não descarte estes materiais!</Text>
+                    <Text style={styles.buttonDescription}>Veja e aprenda.</Text> 
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+          );
+        }}
         contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-        style={styles.scrollView}
-      >
-        <View style={styles.logoContainer}>
-          <TitleCatalogo/>
-          <Text style={styles.description}>
-            Encontre toda informação necessária para ter uma vida mais sustentável e um consumo consciente!
-          </Text>
-        </View>
-
-        {/* Filtro */}
-        <ScrollView
-          horizontal={true}
-          style={styles.filterContainer}
-          showsHorizontalScrollIndicator={false}
-        >
-          <TouchableOpacity
-            style={[styles.filterButton, selectedFilter === 'Inicial' ? styles.selected : styles.unselected]}
-            onPress={() => handleFilterPress('Inicial')}
-          >
-            <Text style={[styles.filterText, selectedFilter === 'Inicial' ? styles.selectedText : styles.unselectedText]}>Inicial</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.filterButton, selectedFilter === 'Notícias' ? styles.selected : styles.unselected]}
-            onPress={() => handleFilterPress('Notícias')}
-          >
-            <Text style={[styles.filterText, selectedFilter === 'Notícias' ? styles.selectedText : styles.unselectedText]}>Notícias</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.filterButton, selectedFilter === 'Artigos' ? styles.selected : styles.unselected]}
-            onPress={() => handleFilterPress('Artigos')}
-          >
-            <Text style={[styles.filterText, selectedFilter === 'Artigos' ? styles.selectedText : styles.unselectedText]}>Artigos</Text>
-          </TouchableOpacity>
-          
-           
-          <TouchableOpacity
-            style={[styles.filterButton, selectedFilter === 'Faça você mesmo' ? styles.selected : styles.unselected]}
-            onPress={() => handleFilterPress('Faça você mesmo')}
-          >
-            <Text style={[styles.filterText, selectedFilter === 'Faça você mesmo' ? styles.selectedText : styles.unselectedText]}>Faça você mesmo</Text>
-          </TouchableOpacity>
-        </ScrollView>
-
-        {/* Notícia */}
-        <TouchableOpacity style={styles.newsContainer} onPress={() => navigation.navigate('NoticiasPage')}>
-          <NewsBG style={styles.newsImage} />
-          <Text style={styles.newsTitle}>Projeto do Einstein de transformação de resíduos impulsiona geração de renda em Paraisópolis</Text>
-        </TouchableOpacity>
-
-        {/* Lista de Materiais */}
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ReciclavelPage')}>
-            <Recicla />
-            <Text style={styles.buttonText}>Lista de Materiais Recicláveis.</Text>
-            <Text style={styles.buttonDescription}>Confira e descubra.</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('DescartavelPage')}>
-            <Lixo />
-            <Text style={styles.buttonText}>Não descarte estes materiais!</Text>
-            <Text style={styles.buttonDescription}>Veja e aprenda.</Text> 
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+      />
 
       <Footer />
     </View>
-    
   );
 };
 
@@ -114,13 +124,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
   },
 
-  scrollView: {
-    flex: 1,
-  },
-
   scrollContent: {
     paddingHorizontal: 10,
-    paddingVertical: 20,
     paddingBottom: 75,
   },
 
@@ -134,7 +139,7 @@ const styles = StyleSheet.create({
     color: "#000",
     textAlign: "center",
     fontFamily: "Poppins_400Regular",
-    fontSize: width * 0.04,  
+    fontSize: width * 0.04,
     lineHeight: width * 0.05,
     marginTop: 10,
     paddingHorizontal: 20,
@@ -145,9 +150,9 @@ const styles = StyleSheet.create({
   },
 
   filterButton: {
-    height: height * 0.05,  
+    height: height * 0.05,
     paddingVertical: 1,
-    paddingHorizontal: width * 0.02,  
+    paddingHorizontal: width * 0.02,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 12,
@@ -155,7 +160,7 @@ const styles = StyleSheet.create({
   },
 
   filterText: {
-    fontSize: width * 0.035,  
+    fontSize: width * 0.035,
     fontFamily: "Poppins_400Regular",
   },
 
@@ -177,52 +182,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
 
-  newsContainer: {
-    padding: 10, 
-    borderRadius: 5,
-    backgroundColor: "#E2F2DF",
-    elevation: 2,
-    marginBottom: 20,
-    alignItems: 'center', // Centraliza o conteúdo dentro do container
-    width: '100%', // Ocupa a largura total do container pai
-  },
-
-  newsImage: {
-    borderRadius: 5,
-    width: '100%', // Ocupa toda a largura do container de notícias
-    height: height * 0.25,  // Define uma altura proporcional
-    resizeMode: 'cover', // Garante que a imagem cubra o espaço
-  },
-
-  newsTitle: {
-    marginTop: 10,
-    fontSize: width * 0.04,
-    color: "#000",
-    fontFamily: "Poppins_500Medium",
- 
-  },
-
-  // ... o
-
   buttonsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 20,
   },
-  
+
   button: {
     backgroundColor: "#F1F1F1",
     width: "48%",
-    height: height * 0.25, 
+    height: height * 0.25,
     borderRadius: 5,
     justifyContent: "center",
-    gap: 5,
     paddingHorizontal: 10,
     elevation: 2,
   },
 
   buttonText: {
-    fontSize: width * 0.04,  
+    fontSize: width * 0.04,
     color: "#000",
     fontFamily: "Poppins_500Medium",
     fontWeight: "600",
@@ -230,9 +207,42 @@ const styles = StyleSheet.create({
 
   buttonDescription: {
     color: "#3F463E",
-    fontSize: width * 0.03,  
+    fontSize: width * 0.03,
     fontFamily: "Poppins_400Regular",
     fontWeight: "500",
+  },
+
+  newsContainer: {
+    padding: 1,
+    borderRadius: 5,
+    backgroundColor: "#E2F2DF",
+    elevation: 2,
+    marginBottom: 20,
+    width: '100%',
+  },
+
+  newsCategory: {
+    marginLeft: 15,
+    padding: 8,
+    fontFamily: "Poppins_600SemiBold",
+    fontSize: 20,
+    width: '100%',
+    justifyContent: "center"
+  },
+
+  newsImage: {
+    borderRadius: 5,
+    width: '100%',
+    height: height * 0.25,
+    resizeMode: 'cover',
+  },
+
+  newsTitle: {
+    marginLeft: 15,
+    marginTop: 10,
+    fontSize: width * 0.04,
+    color: "#000",
+    fontFamily: "Poppins_500Medium",
   },
 
   loader: {
@@ -241,6 +251,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-
 
 export default Catalogo;

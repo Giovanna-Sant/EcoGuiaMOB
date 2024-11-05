@@ -105,19 +105,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#ffffff",
-   
   },
+
   scrollView: {
     flex: 1,
   },
+
   scrollContent: {
     paddingHorizontal: 10,
     paddingVertical: 20,
     paddingBottom: 30,
   },
+
   logoContainer: {
     alignItems: "center",
   },
+
   description: {
     color: "#000",
     textAlign: "center",
@@ -127,6 +130,7 @@ const styles = StyleSheet.create({
     marginTop: height * 0.02,
     paddingHorizontal: width * 0.05,
   },
+
   newsContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -139,12 +143,14 @@ const styles = StyleSheet.create({
     borderColor: '#A6D89B',
     borderWidth: 0.5,
   },
+
   subtitle: {
     fontFamily: "Poppins_400Regular",
     fontSize: width * 0.045,
     textAlign: 'center',
     padding: width * 0.009,
   },
+
   containerInfo: {
     flex: 1,
     width: width * 0.9,
@@ -163,33 +169,31 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: width * 0.035,
     marginVertical: height * 0.001,
-  }, 
+  },
 
   tabelaContainer: {
     borderColor: '#A6D89B',
     borderWidth: 0.5,
     borderRadius: 5,
-   
     marginTop: height * 0.02,
+  },
 
-  }, 
   cepContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
-   
-
+    marginTop: 20
   },
+
   cepLabel: {
     fontFamily: 'Poppins_500Medium',
     fontSize: width * 0.045,
     color: '#000',
     marginRight: 10,
   },
+
   cepInput: {
     flex: 1,
-
     height: 40,
     borderColor: '#A6D89B',
     borderWidth: 1,
@@ -205,6 +209,7 @@ const styles = StyleSheet.create({
     borderColor: '#E0E0E0',
     borderRadius: 10,
   },
+
   tableHeader: {
     flexDirection: 'row',
     backgroundColor: '#E2F2DF',
@@ -213,20 +218,22 @@ const styles = StyleSheet.create({
     borderBottomColor: '#E0E0E0',
     borderRadius: 5,
   },
+
   tableHeaderText: {
     flex: 1,
     textAlign: 'center',
     fontFamily: 'Poppins_500Medium',
     color: '#000',
     fontSize: width * 0.04,
-    
   },
+
   tableRow: {
     flexDirection: 'row',
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#E0E0E0',
   },
+
   tableCell: {
     flex: 1,
     textAlign: 'center',

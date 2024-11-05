@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Image } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import { NewsBG } from '../../assets';
 
-const NoticiasPage = () => {
-  // Carregamento das fontes
+const NoticiasPage = ({ route }) => {
+  const { article } = route.params;
+
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
@@ -15,31 +15,32 @@ const NoticiasPage = () => {
     return (
       <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
     );
-  };
+  }
 
   return (
     <View style={styles.container}>
-      
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.newsContainer}>
-          <NewsBG width={'100%'} height={200} style={styles.newsImage} />
+          {/*Imagem*/ }
+        <Image style={styles.newsImage} source={{ uri: article.image_article }}
+        />
           <View style={styles.newsTextContainer}>
-            <Text style={styles.newsTitle}>Projeto do Einstein de transformação de resíduos impulsiona geração de renda em Paraisópolis</Text>
-            <Text style={styles.newsSubtitle}>Por Gabriella Soares, EcoGuia - São Paulo</Text>
-            <Text style={styles.newsDate}>7 de agosto de 2024</Text>
+            {/*Titulo*/ }
+            <Text style={styles.newsTitle}>{article.title_article}</Text>
+
+            {/*Fonte*/ }
+            <Text style={styles.newsSubtitle}>{article.reference_article || 'Autor Desconhecido'}</Text>
+
+            {/*Data*/ }
+            <Text style={styles.newsDate}>{article.date_article || 'Data Desconhecida'}</Text>
           </View>
         </View>
 
         <View style={styles.newsContentContainer}>
-          <Text style={styles.newsContent}>
-            O projeto Design Sustentável, feito pelo Hospital Einstein e Programa Einstein na Comunidade de Paraisópolis (PECP) em parceria com a Poiato Recicla, usina de reciclagem de bitucas do Brasil, formou sua primeira turma de mulheres em Paraisópolis, composta por 32 alunas. A iniciativa foi idealizada com o intuito de transformar resíduos, como cimento estrutural, argamassa e bitucas de cigarro em peças de design, reduzindo o impacto ambiental e promovendo a geração de renda.
-          </Text>
-          <Text style={styles.newsContent}>
-            O projeto Design Sustentável, feito pelo Hospital Einstein e Programa Einstein na Comunidade de Paraisópolis (PECP) em parceria com a Poiato Recicla, usina de reciclagem de bitucas do Brasil, formou sua primeira turma de mulheres em Paraisópolis, composta por 32 alunas. A iniciativa foi idealizada com o intuito de transformar resíduos, como cimento estrutural, argamassa e bitucas de cigarro em peças de design, reduzindo o impacto ambiental e promovendo a geração de renda.
-          </Text>
+          {/*Conteúdo/Descrição*/ }
+          <Text style={styles.newsContent}>{article.description_article || 'Conteúdo não disponível.'}</Text>
         </View>
       </ScrollView>
-
     </View>
   );
 };
@@ -50,7 +51,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   content: {
-
     flexGrow: 1,
   },
   newsContainer: {
@@ -74,20 +74,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#000',
     fontFamily: 'Poppins_500Medium', 
-    fontStyle: 'normal', 
   },
   newsSubtitle: {
     fontSize: 12,
     color: '#777',
     fontFamily: 'Poppins_400Regular',
-    fontStyle: 'normal',
     marginTop: 5,
   },
   newsDate: {
     fontSize: 12,
     color: '#777',
     fontFamily: 'Poppins_400Regular',
-    fontStyle: 'normal',
     marginTop: 5,
   },
   newsContentContainer: {
@@ -100,7 +97,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#000',
     fontFamily: 'Poppins_400Regular',
-    fontStyle: 'normal',
     marginBottom: 10,
     lineHeight: 22, 
   },
