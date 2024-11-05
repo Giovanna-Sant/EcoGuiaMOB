@@ -16,15 +16,12 @@ export default function RedefinirSenha() {
     event.preventDefault();
     try {
       const response = await api.post("/user/token", { email });
-      console.log(response.data);
-      console.log(response.data.token);
       await cache.set("token", response.data.token);
-      console.log(await cache.get("token"));
       await cache.set("email", email);
       navigation.navigate("Token");
-    } catch (erro) {
-      console.log(email);
-      console.log(erro.response.data);
+    } catch (error) {
+      Alert.alert("Erro ao mandar o token para o usuário, tente novamente mais tarde.")
+      console.error(error.response.data);
     }
   }
 

@@ -15,11 +15,11 @@ const Horarios = () => {
   const [dados,setDados] = useState('');
     const getTime = async () => {
       try{
-        console.log(cep)
         const response = await api.post('/pickupTime',{cep})
         setDados(response.data)
-      }catch(erro){
-        console.log(erro)
+      }catch(error){
+        Alert.alert("Erro ao pegar os dados, tente novamente mais tarde")
+        console.error(error)
       }
 
     }

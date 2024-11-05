@@ -64,8 +64,6 @@ export default function Login() {
 			const timeout	 = setTimeout(() => controller.abort(), 5000);
 
 			const data = await api.post('/user/login', {email, pwd});
-			console.log(data.data.msg);
-			console.log(data.data.token);
 
 			//caso a requisição seja atendida, desativa o timeout
 			clearTimeout(timeout);

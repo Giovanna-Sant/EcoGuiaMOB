@@ -26,7 +26,6 @@ const Config = () => {
   const modifyPwd = async () => {
     try {
       const token = await cache.get("tokenID");
-      console.log(token);
       if (novaSenha !== confirmarSenha) {
         alert('As senhas não conferem');
         return;
@@ -41,7 +40,8 @@ const Config = () => {
       });
       alert("Senha alterada com sucesso!");
     } catch (erro) {
-      console.log(erro);
+      Alert.alert("Erro ao alterar senha");
+      console.error(erro);
     }
   };
 
@@ -57,7 +57,8 @@ const Config = () => {
       setTokenAtual(response.data.token);
       setTokenModalVisible(!tokenModalVisible);
     } catch (erro) {
-      console.log(erro);
+      Alert.alert("Erro ao alterar e-mail");
+      console.error(erro);
     }
   };
 
@@ -73,13 +74,13 @@ const Config = () => {
       });
       await cache.set("email", novoEmail);
     } catch (erro) {
-      console.log(erro);
+      Alert.alert("Erro ao alterar e-mail");
+      console.error(erro);
     }
   };
 
   const [pwdHash, setPwdHash] = useState('');
   const deleteUser = async () => {
-    console.log(pwdHash);
     try {
       const token = await cache.get("tokenID");
       const response = await api.delete('/user', {
@@ -91,7 +92,8 @@ const Config = () => {
         },
       });
     } catch (erro) {
-      console.log(erro);
+      Alert.alert("Erro ao deletar conta");
+      console.error(erro);
     }
   }
 

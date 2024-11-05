@@ -30,8 +30,9 @@ const Home = () => {
         setUser(await cache.get("dados"));
       }
       getDados();
-    } catch (erro) {
-      console.log(erro);
+    } catch (error) {
+      Alert.alert("Erro ao pegar os dados do usuário")
+      console.error(error);
     }
     },
   [user]);
