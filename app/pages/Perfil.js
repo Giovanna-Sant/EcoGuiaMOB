@@ -24,20 +24,13 @@ const Perfil = () => {
       getRank()
       
     } catch (erro) {
-      Alert.alert("Erro ao pegar os dados do usuário, tente novamente mais tarde.")
-      console.error(erro);
+      console.log(erro);
     }
   }, [user]);
 
   const [rank,setRank] = useState('')
   const getRank = async () => {
-    const token = await cache.get("tokenID")
-    const response  = await api.get('/rank',{ 
-      headers: {
-        authorization:`Bearer ${token}`
-    }
-  },
-)
+    const response  = await api.get('/rank')
     setRank(response.data) 
 
   }
@@ -56,7 +49,6 @@ const Perfil = () => {
       setRefresh(false)
     },2000)
   }
-
   const editPerfil = async () => {
     try {
       const token = await cache.get("tokenID");
@@ -72,8 +64,7 @@ const Perfil = () => {
       getPerfil()
       getRank()
     } catch (erro) {
-      Alert.alert("Erro ao editar perfil, tente novamente mais tarde.")
-      console.error(erro);
+      console.log(erro);
     }
   };
 
@@ -87,8 +78,7 @@ const Perfil = () => {
       setSobrenome(user.lastname_user)
     }
     catch(erro){
-      Alert.alert("Erro ao pegar os dados dos avatares, tente novamente mais tarde")
-      console.error(erro)
+      console.log(erro)
     }
   }
 
@@ -231,15 +221,13 @@ const Perfil = () => {
               <View style={styles.Rank}>
 
                 
-                <Text style={styles.position}>
-                {rank[0] ? rank[0].next_positio : "carregando..."}
-                </Text>
+                <Text style={styles.position}>1</Text>
                 {rank[0] ? (<Image
                     style={styles.icon}
                     width={60}
                     height={60}
                     source={{
-                      uri: `${rank[0].next_avatar}`,
+                      uri: `${rank[0].blob_avatar}`,
                     }}
                   />) : (
                     <Image
@@ -251,22 +239,20 @@ const Perfil = () => {
                     }}
                   />
                   )}
-                <Text style={styles.username1}>{rank[0] ? rank[0].next_nickname : "carregando..."}</Text>
-                <Text style={styles.userxp}>{rank[0] ? rank[0].next_xp : "carregando..."}</Text>
+                <Text style={styles.username1}>{rank[0] ? rank[0].nickname_user : "carregando..."}</Text>
+                <Text style={styles.userxp}>{rank[0] ? rank[0].XP_user : "carregando..."}</Text>
                 
               </View>
 
               <View style={styles.ViewRank2}>
                 <View style={styles.Rank2}>  
-                  <Text style={styles.position}>
-                  {rank[0] ? rank[0].current_positio : "carregando..."}
-                  </Text>
-                  {rank[0] ? (<Image
+                  <Text style={styles.position}>2</Text>
+                  {rank[1] ? (<Image
                     style={styles.icon}
                     width={60}
                     height={60}
                     source={{
-                      uri: `${rank[0].current_avatar}`,
+                      uri: `${rank[1].blob_avatar}`,
                     }}
                   />) : (
                     <Image
@@ -278,23 +264,21 @@ const Perfil = () => {
                     }}
                   />
                   )}
-                  <Text style={styles.username1}>{rank[0] ? rank[0].current_nickname : "carregando..."}</Text>
-                  <Text style={styles.userxp}>{rank[0] ? rank[0].current_xp : "carregando..."}</Text>
+                  <Text style={styles.username1}>{rank[1] ? rank[1].nickname_user : "carregando..."}</Text>
+                  <Text style={styles.userxp}>{rank[1] ? rank[1].XP_user : "carregando..."}</Text>
                 </View>
               </View>
 
               
 
               <View style={styles.Rank}>
-                <Text style={styles.position}>
-                {rank[0] ? rank[0].previous_positio : "carregando..."}
-                </Text>
-                {rank[0] ? (<Image
+                <Text style={styles.position}>3</Text>
+                {rank[2] ? (<Image
                     style={styles.icon}
                     width={60}
                     height={60}
                     source={{
-                      uri: `${rank[0].previous_avatar}`,
+                      uri: `${rank[2].blob_avatar}`,
                     }}
                   />) : (
                     <Image
@@ -306,11 +290,14 @@ const Perfil = () => {
                     }}
                   />
                   )}
-                <Text style={styles.username1}>{rank[0] ? rank[0].previous_nickname : "carregando..."}</Text>
-                <Text style={styles.userxp}>{rank[0] ? rank[0].previous_xp : "carregando..."}</Text>
+                <Text style={styles.username1}>{rank[2] ? rank[2].nickname_user : "carregando..."}</Text>
+                <Text style={styles.userxp}>{rank[2] ? rank[2].XP_user : "carregando..."}</Text>
               </View>
             </View>
         </View>
+
+
+
 
 
 
