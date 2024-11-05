@@ -36,9 +36,6 @@ const Home = () => {
   },
 [user]);
 
-
-
-
   const [fontsLoaded] = useFonts({
     Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold,
   });
