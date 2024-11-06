@@ -460,7 +460,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     justifyContent: 'center',
     paddingHorizontal: 35,
-    borderWidth: 4
   },
 
   badge: {
@@ -599,7 +598,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginHorizontal: 15,
     justifyContent: 'center',
-    borderWidth: 3
   },
 
   TitleRan:{
