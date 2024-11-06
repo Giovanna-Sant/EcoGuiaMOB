@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView, } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_300Light } from '@expo-google-fonts/poppins';
-import { LogoEcoGuia } from '../../assets';
+import { LogoEcoGuia, ShowPassword, HidePassword } from '../../assets';
 import api from '../../services/api'
 import cache from '../../utils/cache'
 
 export default function RedefinirSenha() {
   const [pwd, setPwd] = useState("");
   const [checkPwd, setCheckPwd] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
   const newPassword = async () => {
     if (pwd != checkPwd) {
       alert("As senhas estão diferentes");
@@ -28,6 +30,11 @@ export default function RedefinirSenha() {
       console.log(erro);
     }
   };
+
+  	// ver senha
+	const togglePasswordVisibility = () => {
+		setPasswordVisible(!passwordVisible);
+	};
 
   const navigation = useNavigation();
   
@@ -53,8 +60,13 @@ export default function RedefinirSenha() {
       </View>
 
       <View style={styles.inputContainer}>
-        <CustomInput placeholder="Senha" onChangeText={setPwd}/>
-        <CustomInput placeholder="Confirmar Senha" onChangeText={setCheckPwd}/>
+        <CustomInput placeholder="Senha" onChangeText={setPwd} secureTextEntry={!passwordVisible}/>
+					<TouchableOpacity onPress={togglePasswordVisibility}>
+          {passwordVisible ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
+      	</TouchableOpacity>
+
+        <CustomInput placeholder="Confirmar Senha" onChangeText={setCheckPwd} secureTextEntry={!passwordVisible}/>
+
       </View>
 
       <View style={styles.footer}>
