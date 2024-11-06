@@ -60,10 +60,17 @@ export default function RedefinirSenha() {
       </View>
 
       <View style={styles.inputContainer}>
-        <CustomInput placeholder="Senha" onChangeText={setPwd} secureTextEntry={!passwordVisible}/>
-					<TouchableOpacity onPress={togglePasswordVisibility}>
-          {passwordVisible ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
-      	</TouchableOpacity>
+      <View style={styles.inputView}>
+        <TextInput
+          placeholder="Senha" 
+          onChangeText={setPwd} 
+          secureTextEntry={!passwordVisible}
+          style={styles.textInput}
+        />
+				<TouchableOpacity onPress={togglePasswordVisibility}>
+					{passwordVisible ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
+				</TouchableOpacity>
+			</View>
 
         <CustomInput placeholder="Confirmar Senha" onChangeText={setCheckPwd} secureTextEntry={!passwordVisible}/>
 
