@@ -460,6 +460,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     justifyContent: 'center',
     paddingHorizontal: 35,
+    marginBottom: 15,
+    marginTop: 40
   },
 
   badge: {
@@ -596,7 +598,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     gap: 10,
     marginTop: 20,
-    marginHorizontal: 15,
+    marginHorizontal: 22,
     justifyContent: 'center',
   },
 
