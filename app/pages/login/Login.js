@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Alert, ScrollView, Modal } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import { LogoEcoGuia, Google, MissIcon, ErrorIcon } from '../../assets';
+import { LogoEcoGuia, Google, MissIcon, ShowPassword, HidePassword } from '../../assets';
 import api from '../../services/api';
 import cache from '../../utils/cache';
 import validator from 'validator';	// biblioteca que verifica o formato do e-mail
@@ -22,12 +22,18 @@ export default function Login() {
 	const [disabled,         setDisabled] = useState(false);
 	const [modalVisible, setModalVisible] = useState(false);
 	const [modalMessage, setModalMessage] = useState('');
+	const [passwordVisible, setPasswordVisible] = useState(false);
 
 	// Setar modal como visível ou não
 	const showModal = (message) => {
 		setModalMessage(message);
 		setModalVisible(true);
 	};
+
+	// ver senha
+	const togglePasswordVisibility = () => {
+		setPasswordVisible(!passwordVisible);
+	  };
 
 	const login = async (event) => {
 		event.preventDefault();
@@ -284,7 +290,13 @@ export default function Login() {
 
 				<View style={styles.inputContainer}>
 					<CustomInput placeholder="seuemail@email.com" onChangeText={setEmail} />
-					<CustomInput placeholder="suasenha" secureTextEntry onChangeText={setSenha}/>
+					<View style={styles.inputView}>
+						<TextInput placeholder="suasenha123" onChangeText={setSenha} secureTextEntry={!passwordVisible} style={styles.textInput}/>
+						<TouchableOpacity onPress={togglePasswordVisibility}>
+							{passwordVisible ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
+						</TouchableOpacity>
+					</View>
+
 					<TouchableOpacity
 						style={styles.recover}
 						onPress={() => handlePress("RedefinirSenha")}
@@ -329,8 +341,29 @@ export default function Login() {
 					<CustomInput placeholder="Nome" 		       onChangeText={setNome}/>
 					<CustomInput placeholder="Sobrenome" 		   onChangeText={setSobrenome}/>
 					<CustomInput placeholder="seuemail@email.com"  onChangeText={setEmailCad}/>
-					<CustomInput placeholder="Senha" 		   	   onChangeText={setSenhaCad}   secureTextEntry />
-					<CustomInput placeholder="Confirmar senha"     onChangeText={setSenhaCheck} secureTextEntry />
+					<View style={styles.inputView}>
+						<TextInput 
+							placeholder="Senha" 
+							onChangeText={setSenhaCad}
+							secureTextEntry={!passwordVisible}
+							style={styles.textInput}
+						/>
+						<TouchableOpacity onPress={togglePasswordVisibility}>
+							{passwordVisible ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
+						</TouchableOpacity>
+					</View>
+					
+					<View style={styles.inputView}>
+						<TextInput
+							placeholder="Confirmar senha"     
+							onChangeText={setSenhaCheck} 
+							secureTextEntry={!passwordVisible}
+							style={styles.textInput}
+						/>
+						<TouchableOpacity onPress={togglePasswordVisibility}>
+							{passwordVisible ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
+						</TouchableOpacity>
+					</View>
 				</View>
 
 				<View style={styles.footer}>
@@ -430,6 +463,25 @@ const styles = StyleSheet.create({
 		borderColor: "#3F463E",
 		borderWidth: 0.5,
 		height: 40,
+		fontFamily: "Poppins_400Regular",
+	},
+	
+	inputView: {
+		backgroundColor: "#F1F1F1",
+		paddingVertical: 5,
+		paddingHorizontal: 10,
+		borderRadius: 15,
+		marginVertical: 8,
+		borderColor: "#3F463E",
+		borderWidth: 0.5,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center'
+	},
+	
+	textInput: {
+		width: 295,
+		height: 30,
 		fontFamily: "Poppins_400Regular",
 	},
 

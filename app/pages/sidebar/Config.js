@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Image, Pressable, Modal, TextInput, TouchableWithoutFeedback } from "react-native";
+import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Image, Pressable, Modal, TextInput, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import { Detail, ArrowRight } from "../../assets";
+import { Detail, ArrowRight, ShowPassword, HidePassword } from "../../assets";
 import cache from '../../utils/cache'
 import api from '../../services/api';
 
 const Config = () => {
+  const [user, setUser] = useState({});
+  const [email, setEmail] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  // ver senha
+	const togglePasswordVisibility = () => {
+		setPasswordVisible(!passwordVisible);
+	};
+
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
     Poppins_600SemiBold,
   });
-
-  const [user, setUser] = useState({});
-  const [email, setEmail] = useState('');
 
   useEffect(() => {
     async function lerUser() {
@@ -250,26 +256,44 @@ const Config = () => {
           <>
             <Text style={styles.title}>Alteração Senha</Text>
             <Text style={styles.label}>Senha Atual:</Text>
-            <TextInput
-              style={styles.input}
-              value={senhaAtual}
-              onChangeText={setSenhaAtual}
-              secureTextEntry
-            />
+            <View style={styles.inputView}>
+              <TextInput
+                value={senhaAtual}
+                onChangeText={setSenhaAtual}
+                secureTextEntry={!passwordVisible}
+							  style={styles.textInput}
+              />
+              <TouchableOpacity onPress={togglePasswordVisibility}>
+                {passwordVisible ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
+              </TouchableOpacity>
+					  </View>
+
             <Text style={styles.label}>Nova Senha:</Text>
-            <TextInput
-              style={styles.input}
-              value={novaSenha}
-              onChangeText={setNovaSenha}
-              secureTextEntry
-            />
+            <View style={styles.inputView}>
+              <TextInput 
+                value={novaSenha}
+                onChangeText={setNovaSenha}
+                secureTextEntry={!passwordVisible}
+                style={styles.textInput}
+              />
+              <TouchableOpacity onPress={togglePasswordVisibility}>
+                {passwordVisible ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
+              </TouchableOpacity>
+					  </View>
+
             <Text style={styles.label}>Confirmar Nova Senha:</Text>
-            <TextInput
-              style={styles.input}
-              value={confirmarSenha}
-              onChangeText={setConfirmarSenha}
-              secureTextEntry
-            />
+            <View style={styles.inputView}>
+              <TextInput
+                value={confirmarSenha}
+                onChangeText={setConfirmarSenha}
+                secureTextEntry={!passwordVisible}
+                style={styles.textInput}
+              />
+                <TouchableOpacity onPress={togglePasswordVisibility}>
+                  {passwordVisible ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
+                </TouchableOpacity>
+            </View>
+
             <View style={styles.buttonContainer}>
               <Pressable style={styles.confirmButton} onPress={handleSenhaSave}>
                 <Text style={styles.buttonTextConfir}>Cancelar</Text>
@@ -285,13 +309,18 @@ const Config = () => {
           <>
             <Text style={styles.title}>Deletar Conta</Text>
             <Text style={styles.label}>Você realmente deseja deletar sua conta?</Text>
-            <TextInput
-              style={styles.input}
-              value={senhaParaDeletar}
-              onChangeText={setSenhaParaDeletar}
-              secureTextEntry
-              placeholder="Confirme sua senha"
-            />
+            <View style={styles.inputView}>
+              <TextInput 
+                value={senhaParaDeletar}
+                placeholder="Confirme sua senha"
+                onChangeText={setSenhaParaDeletar}
+                secureTextEntry={!passwordVisible}
+                style={styles.textInput}
+              />
+                <TouchableOpacity onPress={togglePasswordVisibility}>
+                  {passwordVisible ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
+                </TouchableOpacity>
+            </View>
             <View style={styles.buttonContainer}>
               <Pressable style={styles.confirmButton} onPress={handleDeleteAccount}>
                 <Text style={styles.buttonTextConfir}>Cancelar</Text>
@@ -483,4 +512,20 @@ const styles = StyleSheet.create({
     color: '#6BBF59',
     fontFamily: 'Poppins_500Medium',
   },
+
+  inputView: {
+    borderColor: '#6BBF59',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center'
+  },
+
+  textInput: {
+		width: 250,
+		fontFamily: "Poppins_400Regular",
+	},
 });

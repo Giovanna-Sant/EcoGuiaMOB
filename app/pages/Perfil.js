@@ -55,7 +55,7 @@ const Perfil = () => {
       const response = await api.put('/user/profile', {
               name: nome,
               lastname: sobrenome,
-              avatar: selectedIcon
+              avatar: selectedIcon + 1
       },{
         headers: {
           authorization: `Bearer ${token}`
@@ -74,6 +74,8 @@ const Perfil = () => {
     try {
       const response = await api.get('/avatars')
       setAvatar(response.data)
+      setNome(user.name_user)
+      setSobrenome(user.lastname_user)
     }
     catch(erro){
       console.log(erro)
@@ -180,18 +182,16 @@ const Perfil = () => {
         {/* Botão da Trilha */}
         <View style={styles.viewBadge}>
           <View style={styles.badge}>
-            <Image
-              width={70}
-              height={80}
-              source={{
-                uri: "https://th.bing.com/th/id/OIP.KgtLpFEUvAR0-jhXUGG-pgHaHa?w=512&h=512&rs=1&pid=ImgDetMain",
-              }}
-            />
+             {user.blob_avatar ?(
+              <Image style={styles.icon} width={70} height={80} source={{uri:`${user.blob_avatar}`}} />
+            ):(
+              <Image style={styles.icon} width={70} height={80} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}} />
+            )}
           </View>
           <View style={styles.badgeInfo}>
-            <Text style={styles.subtitle2}>Árvore Iniciante</Text>
+            <Text style={styles.subtitle2}>{user.title_badge ? user.title_badge : "Árvore Iniciante"}</Text>
             <Text style={styles.text}>
-              Você está indo bem, continue assim para evoluir!
+              {user.description_badge ? user.description_badge : " Você está indo bem, continue assim para evoluir!"}
             </Text>
             <Pressable
               style={styles.botao}
@@ -219,7 +219,6 @@ const Perfil = () => {
 
             <View style={styles.RankingInfo}>
               <View style={styles.Rank}>
-
                 
                 <Text style={styles.position}>1</Text>
                 {rank[0] ? (<Image
@@ -269,8 +268,6 @@ const Perfil = () => {
                 </View>
               </View>
 
-              
-
               <View style={styles.Rank}>
                 <Text style={styles.position}>3</Text>
                 {rank[2] ? (<Image
@@ -295,13 +292,6 @@ const Perfil = () => {
               </View>
             </View>
         </View>
-
-
-
-
-
-
-
       </View>
       <Footer />
 
@@ -316,8 +306,9 @@ const Perfil = () => {
                 style={styles.input}
                 value={nome}
                 onChangeText={setNome}
+                //placeholder={user.name_user}
               />
-
+                
               <Text style={styles.labelModal}>Sobrenome:</Text>
               <TextInput
                 style={styles.input}
@@ -468,7 +459,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginHorizontal: 15,
     justifyContent: 'center',
-    paddingHorizontal: 35
+    paddingHorizontal: 35,
+    marginBottom: 15,
+    marginTop: 40
   },
 
   badge: {
@@ -587,7 +580,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#6BBF59",
     fontFamily: "Poppins_500Medium",
-
     textAlign: "center",
   },
 
@@ -601,11 +593,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+
   viewRanking: {
     flexDirection: "column",
     gap: 10,
     marginTop: 20,
-    marginHorizontal: 15,
+    marginHorizontal: 22,
     justifyContent: 'center',
   },
 
@@ -639,32 +632,23 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: "90%",
     elevation: 3,
-
-    
-
-
   },
+
   Rank2: {
     position: 'absolute', 
     zIndex: 1, 
-
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: "#E2F2DF",
-
-
     padding: 10,
     borderWidth: 0.5,
     borderColor: 'rgba(63, 70, 62, 0.5)',
     borderRadius: 5,
-
-
     width: "95%",
-    elevation: 8,
-    
-    
+    elevation: 8,  
   },
+  
   position: {
     fontFamily: "Poppins_500Medium",
     fontSize: 16,
@@ -678,7 +662,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative', 
-    gap: 25  },
+    gap: 25
+  },
 
   avatar: {
     width: 50,
@@ -687,24 +672,23 @@ const styles = StyleSheet.create({
     zIndex: 1, 
   },
 
-
   username1: {
     fontFamily: "Poppins_500Medium",
     fontSize: 16,
     color: "#3F463E",
 
   },
+
   userxp: {
     fontFamily: "Poppins_500Medium",
     fontSize: 12,
     color: "#3F463E",
-
   },
+
   ViewRank2: {
     justifyContent: 'center',
     alignItems: 'center'
   },
-  
 });
 
 export default Perfil;

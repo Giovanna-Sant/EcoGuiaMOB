@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Modal, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Modal, Dimensions, TouchableWithoutFeedback, Pressable } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import { TitleTrilha } from '../assets';
+import { TitleTrilha, PointNone, PointLocal } from '../assets';
 import Footer from '../components/Footer';
+import api from '../services/api';
 
 const Trilha = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedQuest, setSelectedQuest] = useState(null);
+
   const windowHeight = Dimensions.get('window').height;
 
-  // Carregamento das fontes
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
@@ -16,17 +18,55 @@ const Trilha = () => {
   });
 
   if (!fontsLoaded) {
-    return (
-      <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
-    );
+    return <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />;
+  }
+
+  const arrayObjetivos = [
+    { id: 1, descricao: "Recolha uma latinha de refrigerante e a deposite-a no lixo correto.", xp: 25, id_badge: 'null' },
+    { id: 2, descricao: "Chute quatro crianças", xp: 50, id_badge: 'null' },
+    { id: 3, descricao: "Chute dois adultos", xp: 25, id_badge: 1 },
+    { id: 4, descricao: "Acaricie um gato", xp: 25, id_badge: 'null' },
+    { id: 5, descricao: "Acaricie um cachorro", xp: 25, id_badge: 'null' },
+    { id: 6, descricao: "Chute 56 idosas", xp: 50, id_badge: 2 },
+  ];
+
+
+  const concluirObjetivo = () => {
+    setSelectedQuest(null)
   }
 
   return (
     <View style={styles.container}>
-
-      {/* Conteúdo Principal */}
       <ScrollView contentContainerStyle={styles.content}>
-        <TitleTrilha maxWidth={210}/>
+        <TitleTrilha maxWidth={210} />
+        <View style={styles.container}>
+          {arrayObjetivos.map((quest) => (
+            <View key={quest.id} style={styles.viewQuest}>
+              <Pressable onPress={() => setSelectedQuest(quest)}>
+                <PointNone width={60} />
+              </Pressable>
+
+              <Modal
+                animationType="fade"
+                transparent={true}
+                visible={selectedQuest?.id === quest.id}
+                onRequestClose={() => setSelectedQuest(null)}
+              >
+                <View style={styles.modalContent}>
+                  <Text style={styles.subtitle}>Missão {quest.id}</Text>
+                  <Text style={styles.text}>{quest.descricao}</Text>
+                  <TouchableOpacity
+                    style={styles.botaoCheck}
+                    onPress={concluirObjetivo}
+                  >
+                    <Text style={styles.textBotao}>Concluir</Text>
+                    <Text style={styles.textBotao}>+{quest.xp} XP</Text>
+                  </TouchableOpacity>
+                </View>
+              </Modal>
+            </View>
+          ))}
+        </View>
       </ScrollView>
 
       {/* Botão flutuante (a bolinha verde) */}
@@ -107,8 +147,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  text: {
-    fontSize: 18,
+	text: {
+		fontFamily: "Poppins_400Regular",
+		fontSize: 16,
+		color: "#000",
+		textAlign: 'center'
+	},
+
+	textBotao: {
+		fontFamily: "Poppins_600SemiBold",
+		fontSize: 14,
+		color: "#fff",
+		textAlign: 'center',
+    paddingHorizontal: 2
+	},
+
+  subtitle: {
+		fontFamily: "Poppins_400Regular",
+		fontSize: 14,
+		color: "#3F463E",
+		textAlign: 'center'
   },
 
   floatingButton: {
@@ -209,6 +267,30 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
     color: '#000',
+  },
+
+  // estilização quests
+
+  viewQuest: {
+  },
+
+  botaoCheck: {
+    backgroundColor: "#6BBF59",
+		justifyContent: "center",
+		borderRadius: 25,
+		alignItems: "center",
+		paddingHorizontal: 5,
+		paddingVertical: 5,
+		marginTop: 10,
+    flexDirection: 'row'
+  },
+  
+  modalContent: {
+    backgroundColor: "#fff",
+    width: 250,
+    borderRadius: 10,
+    padding: 15,
+    margin: 80
   },
 });
 
