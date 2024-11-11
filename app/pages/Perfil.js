@@ -108,7 +108,7 @@ const Perfil = () => {
     setSelectedIcon(index);
   };
 
-
+  // Carregamento das fontes
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
@@ -190,9 +190,9 @@ const Perfil = () => {
         <View style={styles.viewBadge}>
           <View style={styles.badge}>
              {user.blob_avatar ?(
-              <Image style={styles.icon} width={70} height={80} source={{uri:`${user.blob_avatar}`}} />
+              <Image style={styles.badgeImg} source={{uri:`${user.blob_badge}`}} />
             ):(
-              <Image style={styles.icon} width={70} height={80} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}} />
+              <Image style={styles.badgeImg} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}} />
             )}
           </View>
           <View style={styles.badgeInfo}>
@@ -465,6 +465,7 @@ const styles = StyleSheet.create({
   icon: {
     width: 60,
     height: 60,
+    borderRadius: 50
   },
 
   viewBadge: {
@@ -483,7 +484,7 @@ const styles = StyleSheet.create({
     borderColor: "#6BBF59",
     borderWidth: 2,
     backgroundColor: "#F1F1F1",
-    padding: 10,
+    padding: 5,
     justifyContent: "center",
     alignItems: "center", 
   },
@@ -705,6 +706,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+
+  badgeImg: {
+    width: 80,
+    height: 110
+    }
 });
 
 export default Perfil;

@@ -6,15 +6,10 @@ import api from '../services/api'
 const { width, height } = Dimensions.get('window');
 
 const Horarios = () => {
-  const [fontsLoaded] = useFonts({
-    Poppins_400Regular,
-    Poppins_500Medium,
-    Poppins_600SemiBold,
-  });
   const [cep, setCep] = useState('');
   const [dados,setDados] = useState('');
-    const getTime = async () => {
-      try{
+  const getTime = async () => {
+    try{
         console.log(cep)
         const response = await api.post('/pickupTime', { cep }, {
           timeout: 16000
@@ -25,18 +20,21 @@ const Horarios = () => {
         alert(error.response)
         console.error(error)
       }
-
     }
-
- 
-
-
-  if (!fontsLoaded) {
-    return (
-      <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
-    );
-  }
-
+    
+    // Carregamento das fontes
+    const [fontsLoaded] = useFonts({
+      Poppins_400Regular,
+      Poppins_500Medium,
+      Poppins_600SemiBold,
+    });
+    
+    if (!fontsLoaded) {
+      return (
+        <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
+      );
+    }
+    
   return (
     <View style={styles.container}>
       <ScrollView

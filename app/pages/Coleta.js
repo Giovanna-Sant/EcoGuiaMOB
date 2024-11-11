@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-
 import Footer from '../components/Footer';
 import { TitleColeta, RedTruck, BlueLocal } from '../assets';
 import { Dimensions } from 'react-native';
@@ -10,6 +9,7 @@ const { width, height } = Dimensions.get('window');
 
 const Coleta = ({ navigation }) => {
 
+  // Carregamento das fontes
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
