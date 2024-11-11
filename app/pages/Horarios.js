@@ -16,10 +16,14 @@ const Horarios = () => {
     const getTime = async () => {
       try{
         console.log(cep)
-        const response = await api.post('/pickupTime',{cep})
+        const response = await api.post('/pickupTime', { cep }, {
+          timeout: 16000
+        });
         setDados(response.data)
-      }catch(erro){
-        console.log(erro)
+        
+      }catch(error){
+        alert(error.response)
+        console.error(error)
       }
 
     }
@@ -73,10 +77,10 @@ const Horarios = () => {
             <View key={index} style={styles.tableRow}>
               <Text style={styles.tableCell}>{dia}</Text>
               <Text style={styles.tableCell}> 
-              {dados && dados[dia] ? dados[dia].diurno : '-'}
+              {dados && dados[dia] ? dados[dia].domiciliar : '-'}
               </Text>
               <Text style={styles.tableCell}> 
-              {dados && dados[dia] ? dados[dia].noturno : '-'}
+              {dados && dados[dia] ? dados[dia].seletiva : '-'}
               </Text>
             </View>
           ))}

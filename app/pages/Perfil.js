@@ -26,11 +26,18 @@ const Perfil = () => {
     } catch (erro) {
       console.log(erro);
     }
-  }, [user]);
+  }, []);
 
-  const [rank,setRank] = useState('')
+  const [rank,setRank] = useState([])
   const getRank = async () => {
-    const response  = await api.get('/rank')
+    const token = await cache.get('tokenID')
+    const response  = await api.get('/rank',{ 
+      headers: {
+        authorization:`Bearer ${token}`
+    }
+  },
+  getAllAvatar()
+)
     setRank(response.data) 
 
   }
@@ -46,7 +53,7 @@ const Perfil = () => {
     setRefresh(true) 
     setUser(await cache.get("dados")) 
     setTimeout(() =>{
-      setRefresh(false)
+      setRefresh(false) 
     },2000)
   }
   const editPerfil = async () => {
@@ -73,15 +80,15 @@ const Perfil = () => {
   const getAllAvatar = async () =>{
     try {
       const response = await api.get('/avatars')
-      setAvatar(response.data)
+      setAvatar(response.data.avatares)
       setNome(user.name_user)
       setSobrenome(user.lastname_user)
+
     }
     catch(erro){
       console.log(erro)
     }
   }
-
   const handlePress = (screen) => {
     navigation.navigate(screen);
   };
@@ -220,13 +227,13 @@ const Perfil = () => {
             <View style={styles.RankingInfo}>
               <View style={styles.Rank}>
                 
-                <Text style={styles.position}>1</Text>
+                <Text style={styles.position}>{rank[0] ? rank[0].next_positio : ""}</Text>
                 {rank[0] ? (<Image
                     style={styles.icon}
                     width={60}
                     height={60}
                     source={{
-                      uri: `${rank[0].blob_avatar}`,
+                      uri:  `${rank[0].next_avatar}`,
                     }}
                   />) : (
                     <Image
@@ -234,24 +241,24 @@ const Perfil = () => {
                     width={60}
                     height={60}
                     source={{
-                      uri: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7WFAiq-KurDygUkqoCSe2_LSpHv6vyPoWwA&s`,
+                      uri: `https://w7.pngwing.com/pngs/392/358/png-transparent-computer-icons-loading-miscellaneous-hand-computer.png`,
                     }}
                   />
                   )}
-                <Text style={styles.username1}>{rank[0] ? rank[0].nickname_user : "carregando..."}</Text>
-                <Text style={styles.userxp}>{rank[0] ? rank[0].XP_user : "carregando..."}</Text>
+                <Text style={styles.username1}>{rank[0] ? rank[0].next_nickname : ""}</Text>
+                <Text style={styles.userxp}>{rank[0] ? rank[0].next_xp : ""}</Text>
                 
               </View>
 
               <View style={styles.ViewRank2}>
                 <View style={styles.Rank2}>  
-                  <Text style={styles.position}>2</Text>
-                  {rank[1] ? (<Image
+                  <Text style={styles.position}>{rank[0] ? rank[0].current_positio : ""}</Text>
+                  {rank[0] ? (<Image
                     style={styles.icon}
                     width={60}
                     height={60}
                     source={{
-                      uri: `${rank[1].blob_avatar}`,
+                      uri: `${rank[0].current_avatar}`,
                     }}
                   />) : (
                     <Image
@@ -259,23 +266,26 @@ const Perfil = () => {
                     width={60}
                     height={60}
                     source={{
-                      uri: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7WFAiq-KurDygUkqoCSe2_LSpHv6vyPoWwA&s`,
+                      uri: `https://w7.pngwing.com/pngs/392/358/png-transparent-computer-icons-loading-miscellaneous-hand-computer.png`,
                     }}
                   />
                   )}
-                  <Text style={styles.username1}>{rank[1] ? rank[1].nickname_user : "carregando..."}</Text>
-                  <Text style={styles.userxp}>{rank[1] ? rank[1].XP_user : "carregando..."}</Text>
+                  <Text style={styles.username1}>{rank[0] ? rank[0].current_nickname : ""}</Text>
+                  <Text style={styles.userxp}>{rank[0] ? rank[0].current_xp : ""}</Text>
                 </View>
               </View>
-
+              
+              <View style={styles.ViewRank2}>
               <View style={styles.Rank}>
-                <Text style={styles.position}>3</Text>
-                {rank[2] ? (<Image
+                <Text style={styles.position}>
+                {rank[0] ? rank[0].previous_positio : ""}
+                </Text>
+                {rank[0] ? (<Image
                     style={styles.icon}
                     width={60}
                     height={60}
                     source={{
-                      uri: `${rank[2].blob_avatar}`,
+                      uri:`${rank[0].previous_avatar}`,
                     }}
                   />) : (
                     <Image
@@ -283,13 +293,14 @@ const Perfil = () => {
                     width={60}
                     height={60}
                     source={{
-                      uri: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7WFAiq-KurDygUkqoCSe2_LSpHv6vyPoWwA&s`,
+                      uri: `https://w7.pngwing.com/pngs/392/358/png-transparent-computer-icons-loading-miscellaneous-hand-computer.png`,
                     }}
                   />
                   )}
-                <Text style={styles.username1}>{rank[2] ? rank[2].nickname_user : "carregando..."}</Text>
-                <Text style={styles.userxp}>{rank[2] ? rank[2].XP_user : "carregando..."}</Text>
+                <Text style={styles.username1}>{rank[0] ? rank[0].previous_nickname : ""}</Text>
+                <Text style={styles.userxp}>{rank[0] ? rank[0].previous_xp : ""}</Text>
               </View>
+            </View>
             </View>
         </View>
       </View>
@@ -316,31 +327,34 @@ const Perfil = () => {
                 onChangeText={setSobrenome}
               />
 
-              <View style={styles.iconGrid}>
-              {avatar.map((_, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.iconCircle,
-                    selectedIcon === index && styles.selectedIcon,
-                  ]}
-                  onPress={() => handleIconSelect(index)}
-                >
-                <Image style={styles.icon} 
-                source={{
-                  uri:`${avatar[index].blob_avatar}`,
-                }}/>
-                </TouchableOpacity>
-              ))}
+              <View style={styles.iconGrid} >
+                {(avatar || []).map((_, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={[
+                      styles.iconCircle,
+                      selectedIcon === index && styles.selectedIcon,
+                    ]}
+                    onPress={() => handleIconSelect(index)}
+                  >
+                    <Image 
+                      style={styles.icon} 
+                      source={{
+                        uri: `${avatar[index].blob_avatar}`,
+                      }}
+                    />
+                  </TouchableOpacity>
+                ))}
               </View>
 
               <View style={styles.buttonContainer}>
+                <Pressable style={styles.confirmButton}  onPress={handleSave}>
+                  <Text style={styles.buttonTextConfir}>Confirmar</Text>
+                </Pressable>
                 <Pressable style={styles.cancelButton} onPress={toggleModal}>
                   <Text style={styles.buttonText}>Cancelar</Text>
                 </Pressable>
-                <Pressable style={styles.confirmButton} onPress={handleSave}>
-                  <Text style={styles.buttonTextConfir}>Confirmar</Text>
-                </Pressable>
+            
               </View>
             </View>
           </TouchableWithoutFeedback>
@@ -557,7 +571,7 @@ const styles = StyleSheet.create({
   },
 
   confirmButton: {
-    backgroundColor: "#fff",
+    backgroundColor: "#6BBF59",
     padding: 10,
     borderRadius: 5,
     alignItems: "center",
@@ -568,9 +582,11 @@ const styles = StyleSheet.create({
   },
 
   cancelButton: {
-    backgroundColor: "#6BBF59",
+    backgroundColor: "#fff",
     padding: 10,
     borderRadius: 5,
+    borderColor: "#6BBF59",
+    borderWidth: 2,
     alignItems: "center",
     flex: 1,
     marginHorizontal: 5,
