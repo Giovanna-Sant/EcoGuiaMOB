@@ -71,18 +71,18 @@ const Mapa = () => {
     }
   }
     
-    // Carregamento de fontes
-    const [fontsLoaded] = useFonts({
-      Poppins_400Regular,
-      Poppins_500Medium,
-      Poppins_600SemiBold,
-    });
+  // Carregamento das fontes
+  const [fontsLoaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
+  });
 
-    if (!fontsLoaded) {
-      return (
-        <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
-      );
-    }
+  if (!fontsLoaded) {
+    return (
+      <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
+    );
+  }
 
     // Aplicação
     return (
@@ -139,8 +139,8 @@ const styles = StyleSheet.create({
         margin: 15,
         minWidth: 320,
         borderRadius: 10,
-        elevation: 5,
-        bottom: 10
+        elevation: 6,
+        bottom: 55
       },
       
       titleLocal: {

@@ -11,6 +11,7 @@ const Trilha = () => {
 
   const windowHeight = Dimensions.get('window').height;
 
+  // Carregamento das fontes
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
@@ -18,7 +19,9 @@ const Trilha = () => {
   });
 
   if (!fontsLoaded) {
-    return <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />;
+    return (
+      <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
+    );
   }
 
   const arrayObjetivos = [
@@ -29,7 +32,6 @@ const Trilha = () => {
     { id: 5, descricao: "Acaricie um cachorro", xp: 25, id_badge: 'null' },
     { id: 6, descricao: "Chute 56 idosas", xp: 50, id_badge: 2 },
   ];
-
 
   const concluirObjetivo = () => {
     setSelectedQuest(null)
