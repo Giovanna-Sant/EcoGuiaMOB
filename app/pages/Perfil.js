@@ -348,11 +348,11 @@ const Perfil = () => {
               </View>
 
               <View style={styles.buttonContainer}>
-                <Pressable style={styles.confirmButton}  onPress={handleSave}>
-                  <Text style={styles.buttonTextConfir}>Confirmar</Text>
-                </Pressable>
                 <Pressable style={styles.cancelButton} onPress={toggleModal}>
                   <Text style={styles.buttonText}>Cancelar</Text>
+                </Pressable>
+                <Pressable style={styles.confirmButton}  onPress={handleSave}>
+                  <Text style={styles.buttonTextConfir}>Confirmar</Text>
                 </Pressable>
             
               </View>

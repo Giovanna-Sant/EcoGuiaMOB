@@ -17,6 +17,15 @@ const NoticiasPage = ({ route }) => {
     );
   }
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const year = date.getFullYear();
+    const month = date.toLocaleString('pt-BR', { month: 'long' });
+  
+    return `${day} de ${month} de ${year}`;
+  };
+  
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
@@ -32,7 +41,7 @@ const NoticiasPage = ({ route }) => {
             <Text style={styles.newsSubtitle}>{article.reference_article || 'Autor Desconhecido'}</Text>
 
             {/*Data*/ }
-            <Text style={styles.newsDate}>{article.date_article || 'Data Desconhecida'}</Text>
+            <Text style={styles.newsDate}>{formatDate(article.date_article) || 'Data Desconhecida'}</Text>
           </View>
         </View>
 

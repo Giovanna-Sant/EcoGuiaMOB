@@ -139,8 +139,8 @@ const styles = StyleSheet.create({
         margin: 15,
         minWidth: 320,
         borderRadius: 10,
-        elevation: 5,
-        bottom: 10
+        elevation: 6,
+        bottom: 55
       },
       
       titleLocal: {
