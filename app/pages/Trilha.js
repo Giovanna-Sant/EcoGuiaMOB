@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Modal, Dimensions, TouchableWithoutFeedback, Pressable } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { TitleTrilha, PointNone, PointLocal } from '../assets';
@@ -10,6 +10,22 @@ const Trilha = () => {
   const [selectedQuest, setSelectedQuest] = useState(null);
 
   const windowHeight = Dimensions.get('window').height;
+
+  const [quests,setQuests] = useState('')
+  useEffect(() => {
+    const loadQuests = async () => {
+    try{
+    const response = await api.get('/quests');
+    setQuests(response.data)
+     }catch(error){
+      Alert.alert("Erro ao buscar as missões: ", error.response.msg)
+      console.error(error)
+     }
+    }
+    loadQuests();
+  },[])
+
+
 
   // Carregamento das fontes
   const [fontsLoaded] = useFonts({
@@ -24,51 +40,10 @@ const Trilha = () => {
     );
   }
 
-  const arrayObjetivos = [
-    { id: 1, descricao: "Recolha uma latinha de refrigerante e a deposite-a no lixo correto.", xp: 25, id_badge: 'null' },
-    { id: 2, descricao: "Chute quatro crianças", xp: 50, id_badge: 'null' },
-    { id: 3, descricao: "Chute dois adultos", xp: 25, id_badge: 1 },
-    { id: 4, descricao: "Acaricie um gato", xp: 25, id_badge: 'null' },
-    { id: 5, descricao: "Acaricie um cachorro", xp: 25, id_badge: 'null' },
-    { id: 6, descricao: "Chute 56 idosas", xp: 50, id_badge: 2 },
-  ];
-
-  const concluirObjetivo = () => {
-    setSelectedQuest(null)
-  }
-
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
-        <TitleTrilha maxWidth={210} />
-        <View style={styles.container}>
-          {arrayObjetivos.map((quest) => (
-            <View key={quest.id} style={styles.viewQuest}>
-              <Pressable onPress={() => setSelectedQuest(quest)}>
-                <PointNone width={60} />
-              </Pressable>
-
-              <Modal
-                animationType="fade"
-                transparent={true}
-                visible={selectedQuest?.id === quest.id}
-                onRequestClose={() => setSelectedQuest(null)}
-              >
-                <View style={styles.modalContent}>
-                  <Text style={styles.subtitle}>Missão {quest.id}</Text>
-                  <Text style={styles.text}>{quest.descricao}</Text>
-                  <TouchableOpacity
-                    style={styles.botaoCheck}
-                    onPress={concluirObjetivo}
-                  >
-                    <Text style={styles.textBotao}>Concluir</Text>
-                    <Text style={styles.textBotao}>+{quest.xp} XP</Text>
-                  </TouchableOpacity>
-                </View>
-              </Modal>
-            </View>
-          ))}
-        </View>
+        
       </ScrollView>
 
       {/* Botão flutuante (a bolinha verde) */}
