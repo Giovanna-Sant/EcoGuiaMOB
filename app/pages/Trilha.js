@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Modal, Dimensions, TouchableWithoutFeedback, Pressable } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Modal, Dimensions, TouchableWithoutFeedback, Pressable, FlatList } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { TitleTrilha, PointNone, PointLocal } from '../assets';
 import Footer from '../components/Footer';
@@ -11,21 +11,27 @@ const Trilha = () => {
 
   const windowHeight = Dimensions.get('window').height;
 
-  const [quests,setQuests] = useState('')
+  // Trazer dados das quests
+  const [quests, setQuests] = useState('')
+
   useEffect(() => {
     const loadQuests = async () => {
-    try{
+    try {
     const response = await api.get('/quests');
     setQuests(response.data)
-     }catch(error){
+     } catch(error) {
       Alert.alert("Erro ao buscar as missões: ", error.response.msg)
       console.error(error)
      }
     }
     loadQuests();
-  },[])
+  }, [])
 
-
+  // Função modal de concluir quest
+  const concluirObjetivo = () => {
+    // Fechar modal ao apertar botão de concluído
+    setSelectedQuest(null)
+  }
 
   // Carregamento das fontes
   const [fontsLoaded] = useFonts({
@@ -42,9 +48,40 @@ const Trilha = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.content}>
-        
-      </ScrollView>
+        {/* Flatlist para listagem de missões */}
+        <FlatList
+          data={quests}
+          ListHeaderComponent={<TitleTrilha maxWidth={210} />}
+          contentContainerStyle={styles.content}
+          renderItem={({item}) => (
+            <View>
+              <Pressable onPress={() => setSelectedQuest(item)}>
+                <PointNone width={60}/>
+              </Pressable>
+             
+              {/* Modal de visualização das missões */}
+              <Modal
+                animationType='fade'
+                transparent={true}
+                visible={selectedQuest?.pk_IDquest === item.pk_IDquest}
+                onRequestClose={() => setSelectedQuest(null)}
+              >
+                <View style={styles.modalContent}>
+                  <Text style={styles.subtitle}>Missão {item.pk_IDquest}</Text>
+                  <Text style={styles.text}>{item.description_quest}</Text>
+                  <TouchableOpacity
+                    style={styles.botaoCheck}
+                    onPress={concluirObjetivo}
+                  >
+                    <Text style={styles.textBotao}>Concluir</Text>
+                    <Text style={styles.textBotao}>+{item.XP_quest} XP</Text>
+                  </TouchableOpacity>
+                </View>
+              </Modal>
+            </View>
+          )}
+          keyExtractor={(item) => item.pk_IDquest}
+        />
 
       {/* Botão flutuante (a bolinha verde) */}
       <TouchableOpacity 
@@ -119,7 +156,6 @@ const styles = StyleSheet.create({
   },
   
   content: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
