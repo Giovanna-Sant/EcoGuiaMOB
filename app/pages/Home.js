@@ -108,7 +108,7 @@ let levelProgress = 0
           </View>
 
           <View style={styles.badge}>
-             {user.blob_avatar ?(
+             {user ?(
               <Image style={styles.badgeImg} source={{uri:`${user.blob_badge}`}} />
             ):(
               <Image style={styles.badgeImg} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}} />

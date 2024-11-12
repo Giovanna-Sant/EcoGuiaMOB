@@ -36,6 +36,7 @@ const Perfil = () => {
         authorization:`Bearer ${token}`
     }
   },
+
   getAllAvatar()
 )
     setRank(response.data) 
