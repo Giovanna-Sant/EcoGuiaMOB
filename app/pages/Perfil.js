@@ -16,6 +16,7 @@ const Perfil = () => {
 
   const [user, setUser] = useState({});
   useEffect(() => {
+    setLoading(true)
     try {
       async function lerUser() {
         setUser(await cache.get("dados"));
@@ -25,6 +26,8 @@ const Perfil = () => {
       
     } catch (erro) {
       console.log(erro);
+    }finally{
+      setLoading(false)
     }
   }, []);
 
@@ -43,6 +46,7 @@ const Perfil = () => {
 
   }
 
+  const[loading,setLoading] = useState(false)
   const [isModalVisible, setModalVisible] = useState(false);
   const [nome, setNome] = useState('');
   const [sobrenome, setSobrenome] = useState('');
@@ -229,20 +233,15 @@ const Perfil = () => {
               <View style={styles.Rank}>
                 
                 <Text style={styles.position}>{rank[0] ? rank[0].next_positio : ""}</Text>
-                {rank[0] ? (<Image
-                    style={styles.icon}
-                    width={60}
-                    height={60}
-                    source={{
-                      uri:  `${rank[0].next_avatar}`,
-                    }}
-                  />) : (
+                {loading ? (
+                    <ActivityIndicator size="large" color="#fff"/>  
+                ) : (
                     <Image
                     style={styles.icon}
                     width={60}
                     height={60}
                     source={{
-                      uri: `https://w7.pngwing.com/pngs/392/358/png-transparent-computer-icons-loading-miscellaneous-hand-computer.png`,
+                      uri:  'https://logopng.com.br/logos/real-madrid-174.png',
                     }}
                   />
                   )}
@@ -254,20 +253,15 @@ const Perfil = () => {
               <View style={styles.ViewRank2}>
                 <View style={styles.Rank2}>  
                   <Text style={styles.position}>{rank[0] ? rank[0].current_positio : ""}</Text>
-                  {rank[0] ? (<Image
-                    style={styles.icon}
-                    width={60}
-                    height={60}
-                    source={{
-                      uri: `${rank[0].current_avatar}`,
-                    }}
-                  />) : (
+                  {loading ? ( 
+                    <ActivityIndicator size="large" color="#fff"/>
+                  ) : (
                     <Image
                     style={styles.icon}
                     width={60}
                     height={60}
                     source={{
-                      uri: `https://w7.pngwing.com/pngs/392/358/png-transparent-computer-icons-loading-miscellaneous-hand-computer.png`,
+                      uri: `https://logopng.com.br/logos/real-madrid-174.png`,
                     }}
                   />
                   )}
@@ -281,20 +275,15 @@ const Perfil = () => {
                 <Text style={styles.position}>
                 {rank[0] ? rank[0].previous_positio : ""}
                 </Text>
-                {rank[0] ? (<Image
-                    style={styles.icon}
-                    width={60}
-                    height={60}
-                    source={{
-                      uri:`${rank[0].previous_avatar}`,
-                    }}
-                  />) : (
+                {loading ? (
+                    <ActivityIndicator size="large" color="#fff"/>
+                  ) : (
                     <Image
                     style={styles.icon}
                     width={60}
                     height={60}
                     source={{
-                      uri: `https://w7.pngwing.com/pngs/392/358/png-transparent-computer-icons-loading-miscellaneous-hand-computer.png`,
+                      uri:`https://logopng.com.br/logos/real-madrid-174.png`,
                     }}
                   />
                   )}

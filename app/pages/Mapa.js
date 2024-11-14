@@ -101,6 +101,10 @@ const Mapa = () => {
             style={{ width: "100%", height: "100%" }}
             region={regiao}
             showsUserLocation={true}
+            loadingEnabled={true}
+            onMapLoaded={() =>
+              <ActivityIndicator style={styles.loader} size="large" color="#000"/>  
+            }
           >
             {ecopontos.map((ecoponto, index) => (
               <Marker
