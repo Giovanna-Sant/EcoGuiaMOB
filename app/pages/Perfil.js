@@ -17,13 +17,12 @@ const Perfil = () => {
   const [user, setUser] = useState({});
   useEffect(() => {
     setLoading(true)
+    getRank()
     try {
       async function lerUser() {
         setUser(await cache.get("dados"));
       }
       lerUser();
-      getRank()
-      
     } catch (erro) {
       console.log(erro);
     }finally{
@@ -56,9 +55,10 @@ const Perfil = () => {
 
   const onRefresh = async  () =>{
     setRefresh(true) 
+    getPerfil()
     setUser(await cache.get("dados")) 
     setTimeout(() =>{
-      setRefresh(false) 
+      setRefresh(false)  
     },2000)
   }
   const editPerfil = async () => {
@@ -73,8 +73,9 @@ const Perfil = () => {
           authorization: `Bearer ${token}`
         }
       });
-      getPerfil()
-      getRank()
+      await getPerfil()
+      await getRank()
+      setUser(await cache.get("dados"));
     } catch (erro) {
       console.log(erro);
     }
@@ -138,7 +139,7 @@ const Perfil = () => {
       <View style={styles.content}>
         <View style={styles.viewPerfil}>
           {/* Informações do Perfil */}
-          <View style={styles.viewPerfilInfos}>
+          <View style={styles.viewPerfilInfos} >
             <TouchableOpacity onPress={toggleModal}>
               <Edit maxHeight={24} maxWidth={24} />
             </TouchableOpacity>
@@ -233,17 +234,17 @@ const Perfil = () => {
               <View style={styles.Rank}>
                 
                 <Text style={styles.position}>{rank[0] ? rank[0].next_positio : ""}</Text>
-                {loading ? (
-                    <ActivityIndicator size="large" color="#fff"/>  
-                ) : (
-                    <Image
+                {rank[0] ? ( 
+                  <Image
                     style={styles.icon}
                     width={60}
                     height={60}
                     source={{
-                      uri:  'https://logopng.com.br/logos/real-madrid-174.png',
+                    uri: `${rank[0].next_avatar}` ,
                     }}
                   />
+                  ) : (
+                    <ActivityIndicator size="large" color="#fff"/>
                   )}
                 <Text style={styles.username1}>{rank[0] ? rank[0].next_nickname : ""}</Text>
                 <Text style={styles.userxp}>{rank[0] ? rank[0].next_xp : ""}</Text>
@@ -253,17 +254,17 @@ const Perfil = () => {
               <View style={styles.ViewRank2}>
                 <View style={styles.Rank2}>  
                   <Text style={styles.position}>{rank[0] ? rank[0].current_positio : ""}</Text>
-                  {loading ? ( 
-                    <ActivityIndicator size="large" color="#fff"/>
-                  ) : (
-                    <Image
+                  {rank[0] ? ( 
+                  <Image
                     style={styles.icon}
                     width={60}
                     height={60}
                     source={{
-                      uri: `https://logopng.com.br/logos/real-madrid-174.png`,
+                    uri: `${rank[0].current_avatar}` ,
                     }}
                   />
+                  ) : (
+                    <ActivityIndicator size="large" color="#fff"/>
                   )}
                   <Text style={styles.username1}>{rank[0] ? rank[0].current_nickname : ""}</Text>
                   <Text style={styles.userxp}>{rank[0] ? rank[0].current_xp : ""}</Text>
@@ -275,17 +276,17 @@ const Perfil = () => {
                 <Text style={styles.position}>
                 {rank[0] ? rank[0].previous_positio : ""}
                 </Text>
-                {loading ? (
-                    <ActivityIndicator size="large" color="#fff"/>
-                  ) : (
-                    <Image
+                {rank[0] ? ( 
+                  <Image
                     style={styles.icon}
                     width={60}
                     height={60}
                     source={{
-                      uri:`https://logopng.com.br/logos/real-madrid-174.png`,
+                    uri: `${rank[0].previous_avatar}` ,
                     }}
                   />
+                  ) : (
+                    <ActivityIndicator size="large" color="#fff"/>
                   )}
                 <Text style={styles.username1}>{rank[0] ? rank[0].previous_nickname : ""}</Text>
                 <Text style={styles.userxp}>{rank[0] ? rank[0].previous_xp : ""}</Text>
