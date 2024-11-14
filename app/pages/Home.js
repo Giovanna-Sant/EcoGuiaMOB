@@ -36,12 +36,17 @@ const Home = () => {
     },
   [user]);
 
+  // Carregamento das fontes
   const [fontsLoaded] = useFonts({
-    Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold,
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
   });
 
   if (!fontsLoaded) {
-    return <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />;
+    return (
+      <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
+    );
   }
 
   const toggleCollapse = () => {
@@ -103,7 +108,11 @@ let levelProgress = 0
           </View>
 
           <View style={styles.badge}>
-            <Image width={50} height={60} source={{uri: 'https://th.bing.com/th/id/OIP.KgtLpFEUvAR0-jhXUGG-pgHaHa?w=512&h=512&rs=1&pid=ImgDetMain'}} />
+             {user.blob_avatar ?(
+              <Image style={styles.badgeImg} source={{uri:`${user.blob_badge}`}} />
+            ):(
+              <Image style={styles.badgeImg} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}} />
+            )}
           </View>
         </Pressable>
 
@@ -196,10 +205,8 @@ const styles = StyleSheet.create({
   
   badge: {
     borderRadius: 10,
-    borderColor: '#A6D89B',
-    borderWidth: 3,
     backgroundColor: '#E2F2DF',
-    padding: 5,
+    padding: 2,
   },
   
   progressBar: {
@@ -295,6 +302,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'white',
   },
+
+  badgeImg: {
+    width: 60,
+    height: 80
+    }
 });
 
 export default Home;
