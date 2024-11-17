@@ -12,6 +12,7 @@ import getPerfil from '../utils/gerProfile';
 
 const Home = () => {
   const [isCollapsed, setIsCollapsed] = useState(false); 
+  const [loading,setLoading] = useState(false);
   const rotateAnim = useRef(new Animated.Value(0)).current; 
   const navigation = useNavigation();
 
@@ -22,6 +23,7 @@ const Home = () => {
   const [tip, setTip] = useState([])
   const [user, setUser] = useState({});
   useEffect(() => {
+    setLoading(true)
     try {
       getPerfil();
       async function getDados() {
@@ -32,6 +34,8 @@ const Home = () => {
       getDados();
     } catch (erro) {
       console.log(erro);
+    }finally{
+        setLoading(false)
     }
     },
   [user]);
@@ -68,7 +72,7 @@ const Home = () => {
 let levelProgress = 0
  if(user){
    levelProgress = user.XP_level > 0 ? (user.XP_user / user.XP_level) : 0;
-  }
+  } 
 
   return (
     <View style={styles.container}>
@@ -78,20 +82,22 @@ let levelProgress = 0
         showsVerticalScrollIndicator={false}
         style={styles.scrollView}
         >
-        
-        <Pressable style={styles.viewPerfil} onPress={() => handlePress('Perfil')}>
+          {loading ?(
+            <ActivityIndicator style={styles.loading} size="large" color="#fff"/>  
+          ):( 
+          <Pressable style={styles.viewPerfil} onPress={() => handlePress('Perfil')}> 
           <View style={styles.iconDiv}>
-            {user ?(
+          {user ?(
                <Image style={styles.icon} width={60} height={60} source={{uri:`${user.blob_avatar}`}} />
             ):(
-              <Text>Carregando...</Text>
+              <ActivityIndicator style={styles.loading} size="small" color="#fff"/> 
             )}
           </View>
           <View>
-          <Text style={styles.subtitle}>{user ? `${user.name_user} ${user.lastname_user}`: "carregando..."}</Text>
+          <Text style={styles.subtitle}>{user && user.name_user ? `${user.name_user} ${user.lastname_user}`: ""}</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Text style={styles.text}>{user ? `XP ${user.XP_user}/${user.XP_level}`:"carregando..."}</Text>
-            <Text style={styles.textLvl}>{user ?` level ${user.fk_level_user}`: "carregando.."}</Text>
+            <Text style={styles.text}>{user && user.XP_level ? `XP ${user.XP_user}/${user.XP_level}`:""}</Text>
+            <Text style={styles.textLvl}>{user && user.fk_level_user  ?` level ${user.fk_level_user}`: ""}</Text>
             </View>
 
             <Progress.Bar
@@ -108,13 +114,17 @@ let levelProgress = 0
           </View>
 
           <View style={styles.badge}>
-             {user.blob_avatar ?(
-              <Image style={styles.badgeImg} source={{uri:`${user.blob_badge}`}} />
-            ):(
-              <Image style={styles.badgeImg} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}} />
-            )}
+            {user ?  
+            <Image style={styles.badgeImg} source={{uri:`${user.blob_badge}`}} />
+             :
+            <Text></Text>
+              }
           </View>
-        </Pressable>
+          
+      </Pressable>
+        )}
+
+        
 
         <Pressable onPress={() => handlePress('Trilha')} maxHeight={210} style={styles.viewTrilha}>
           <Image source={TrilhaBG} maxHeight={210} maxWidth='100%' borderRadius={10} />
@@ -191,6 +201,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 5,
     flexDirection: 'row',
+    padding: 10,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  loading:{
+    marginTop: 20,
+    backgroundColor: '#E2F2DF',
+    borderWidth: 0.5,
+    borderColor: '#6BBF59',
+    borderRadius: 10,
+    marginVertical: 5,
     padding: 10,
     justifyContent: 'space-between',
     alignItems: 'center',

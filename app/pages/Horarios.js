@@ -8,17 +8,21 @@ const { width, height } = Dimensions.get('window');
 const Horarios = () => {
   const [cep, setCep] = useState('');
   const [dados,setDados] = useState('');
+  const [loading, setLoading] = useState(false);
   const getTime = async () => {
     try{
+      setLoading(true)
         console.log(cep)
         const response = await api.post('/pickupTime', { cep }, {
-          timeout: 16000
+          timeout: 17000
         });
         setDados(response.data)
         
       }catch(error){
-        alert(error.response)
+        alert(error.response.data.msg)
         console.error(error)
+      }finally{
+        setLoading(false)
       }
     }
     
@@ -49,7 +53,7 @@ const Horarios = () => {
           </Text>
         </View>
 
-        <View style={styles.cepContainer}>
+      <View style={styles.cepContainer}>
           <Text style={styles.cepLabel}>CEP :</Text>
           <TextInput
             style={styles.cepInput}
@@ -62,7 +66,7 @@ const Horarios = () => {
         </View> 
 
         {/* Fazer a Tabela de horarios  */}
-        <View style={styles.tabelaContainer} >
+        <View style={styles.tabelaContainer}>
                   {/* Cabeçalho da tabela */}
           <View style={styles.tableHeader}>
             <Text style={styles.tableHeaderText}>Dia</Text>
