@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Alert, ScrollView, Modal } from "react-native";
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Alert, ScrollView, Modal, Pressable } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { LogoEcoGuia, Google, MissIcon, ShowPassword, HidePassword } from '../../assets';
 import api from '../../services/api';
 import cache from '../../utils/cache';
 import validator from 'validator';	// biblioteca que verifica o formato do e-mail
 import checkPwd from '../../utils/checkPwd'; // verificação de senha válida
+import { useModal } from './ModalContext'; //abrir modal do token
 
 export default function Login() {
 	const [isVisible, setIsVisible] = useState(true);
@@ -25,6 +26,8 @@ export default function Login() {
 	const [modalErro, setModalErro] = useState('');
 	const [passwordVisible, setPasswordVisible] = useState(false);
 	const [passwordVisible1, setPasswordVisible1] = useState(false);
+	const [modalToken, setModalToken] = useState('')
+	const { openModal } = useModal();
 
 	// Setar modal como visível ou não
 	const showModal = (message, erro) => {
@@ -32,6 +35,10 @@ export default function Login() {
 		setModalVisible(true);
 		setModalErro(erro)
 	};
+
+	const showModalToken = () => {
+		setModalToken
+	}
 
 	// Visualização da senha
 	const togglePasswordVisibility = () => {
@@ -195,7 +202,8 @@ export default function Login() {
 					cache.set("pwd",     pwd_cad);
 					cache.set("avatar",  avatar);
 					
-					showModal('Token de validação', msg);
+					showModal('Token de validação AAA');
+					setModalErro(msg)
 				break;
 			}
 		} catch(error) {
@@ -215,15 +223,15 @@ export default function Login() {
 					break;
 
 					case 422:
-						showModal('E-mail já está em uso :(', msg);
+						showModal(msg);
 					break;
 
 					case 400:
-						showModal('Algo deu errado com a senha :(',   msg);
+						showModal(msg);
 					break;
 
 					case 500:
-						showModal('Algo deu errado com a conexão :(', msg);
+						showModal(msg);
 					break;
 
 					default:
@@ -329,6 +337,12 @@ export default function Login() {
 						<Text style={styles.botaoTexto}>Entrar</Text>
 						)}
 					</TouchableOpacity>
+
+					<Pressable style={styles.botao} onPress={openModal}>
+						<Text>
+							Oiii
+						</Text>
+					</Pressable>
 
 					<View style={styles.textContainer}>
 						<Text style={styles.text}>Ainda não possui uma conta?</Text>
