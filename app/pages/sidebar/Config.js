@@ -9,12 +9,23 @@ const Config = () => {
   const [user, setUser] = useState({});
   const [email, setEmail] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordVisibleA, setPasswordVisibleA] = useState(false);
+  const [passwordVisibleB, setPasswordVisibleB] = useState(false);
 
-  // ver senha
+  // Visualização de senha
 	const togglePasswordVisibility = () => {
 		setPasswordVisible(!passwordVisible);
 	};
 
+	const togglePasswordVisibilityA = () => {
+		setPasswordVisibleA(!passwordVisibleA);
+	};
+
+	const togglePasswordVisibilityB = () => {
+		setPasswordVisibleB(!passwordVisibleB);
+	};
+
+  // Carregamento de fontes
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
@@ -231,13 +242,13 @@ const Config = () => {
             <Text style={styles.title}>Atualizar seu email</Text>
             <Text style={styles.label}>Novo email:</Text>
             <TextInput
-              style={styles.input}
+              style={styles.inputView}
               value={novoEmail}
               onChangeText={setNovoEmail}
             />
             <Text style={styles.label}> Confirmar novo email:</Text>
             <TextInput
-              style={styles.input}
+              style={styles.inputView}
               value={confirmarEmail}
               onChangeText={setConfirmarEmail}
             />
@@ -273,11 +284,11 @@ const Config = () => {
               <TextInput 
                 value={novaSenha}
                 onChangeText={setNovaSenha}
-                secureTextEntry={!passwordVisible}
+                secureTextEntry={!passwordVisibleA}
                 style={styles.textInput}
               />
-              <TouchableOpacity onPress={togglePasswordVisibility}>
-                {passwordVisible ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
+              <TouchableOpacity onPress={togglePasswordVisibilityA}>
+                {passwordVisibleA ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
               </TouchableOpacity>
 					  </View>
 
@@ -286,11 +297,11 @@ const Config = () => {
               <TextInput
                 value={confirmarSenha}
                 onChangeText={setConfirmarSenha}
-                secureTextEntry={!passwordVisible}
+                secureTextEntry={!passwordVisibleB}
                 style={styles.textInput}
               />
-                <TouchableOpacity onPress={togglePasswordVisibility}>
-                  {passwordVisible ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
+                <TouchableOpacity onPress={togglePasswordVisibilityB}>
+                  {passwordVisibleB ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
                 </TouchableOpacity>
             </View>
 
@@ -453,9 +464,10 @@ const styles = StyleSheet.create({
   },
   
   label: {
-    fontSize: 10,
+    fontSize: 12,
     color: '#333',
     fontFamily: 'Poppins_500Medium',
+    marginTop: 10
   },
   
   delete: {
@@ -514,18 +526,22 @@ const styles = StyleSheet.create({
   },
 
   inputView: {
-    borderColor: '#6BBF59',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+		backgroundColor: "#F1F1F1",
+		height: 40,
+		paddingHorizontal: 10,
+		borderRadius: 5,
+		marginVertical: 2,
+		borderColor: "#3F463E",
+		borderWidth: 0.5,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		alignItems: 'center'
-  },
+		alignItems: 'center',
+	},
 
-  textInput: {
-		width: 250,
+	textInput: {
+    height: 50,
 		fontFamily: "Poppins_400Regular",
+    alignItems: 'center',
+    width: 260
 	},
 });

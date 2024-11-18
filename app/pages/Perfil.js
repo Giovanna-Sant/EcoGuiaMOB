@@ -463,11 +463,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 10,
     marginTop: 20,
-    marginHorizontal: 15,
+    marginLeft: 38,
     justifyContent: 'center',
     paddingHorizontal: 35,
     marginBottom: 15,
-    marginTop: 40
+    marginTop: 40,
+    maxWidth: '80%'
   },
 
   badge: {
