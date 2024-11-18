@@ -10,31 +10,38 @@ import validator from 'validator';	// biblioteca que verifica o formato do e-mai
 import checkPwd from '../../utils/checkPwd'; // verificação de senha válida
 
 export default function Login() {
-	const [isVisible, 		  setIsVisible] = useState(true);
-	const [nome,   	  			     setNome] = useState('');
-	const [sobrenome, 		  setSobrenome] = useState('');
-	const [email_cad,    	   setEmailCad] = useState('');
-	const [pwd_cad,   		   setSenhaCad] = useState('')
-	const [pwd_cadcheck,   setSenhaCheck] = useState('');;
-	const [email, 	  			    setEmail] = useState('');
-	const [pwd,  	  			      setSenha] = useState('');
-	const [loading,  		      setLoading] = useState(false);
-	const [disabled,         setDisabled] = useState(false);
+	const [isVisible, setIsVisible] = useState(true);
+	const [nome, setNome] = useState('');
+	const [sobrenome, setSobrenome] = useState('');
+	const [email_cad, setEmailCad] = useState('');
+	const [pwd_cad, setSenhaCad] = useState('')
+	const [pwd_cadcheck, setSenhaCheck] = useState('');;
+	const [email, setEmail] = useState('');
+	const [pwd, setSenha] = useState('');
+	const [loading, setLoading] = useState(false);
+	const [disabled, setDisabled] = useState(false);
 	const [modalVisible, setModalVisible] = useState(false);
 	const [modalMessage, setModalMessage] = useState('');
+	const [modalErro, setModalErro] = useState('');
 	const [passwordVisible, setPasswordVisible] = useState(false);
+	const [passwordVisible1, setPasswordVisible1] = useState(false);
 
 	// Setar modal como visível ou não
-	const showModal = (message) => {
+	const showModal = (message, erro) => {
 		setModalMessage(message);
 		setModalVisible(true);
+		setModalErro(erro)
 	};
 
-	// ver senha
+	// Visualização da senha
 	const togglePasswordVisibility = () => {
 		setPasswordVisible(!passwordVisible);
 	  };
+	  const togglePasswordVisibility1 = () => {
+		setPasswordVisible1(!passwordVisible1);
+	  };
 
+	// Configurações de login
 	const login = async (event) => {
 		event.preventDefault();
 
@@ -99,18 +106,22 @@ export default function Login() {
 				switch (status) {
 					case 422:
 						showModal('Algo deu errado com os campos :(', msg);
+						setModalErro(msg)
 					break;
 
 					case 404:
-						showModal('Algo deu errado com o usuário :(', msg);
-					break;
+						showModal('Algo deu errado com o usuário :(');
+						setModalErro(msg)
+						break;
 
 					case 400:
 						showModal('Algo deu errado com a senha :(',   msg);
+						setModalErro(msg)
 					break;
 
 					case 500:
 						showModal('Algo deu errado com a conexão :(', msg);
+						setModalErro(msg)
 					break;
 
 					default:
@@ -270,6 +281,7 @@ export default function Login() {
 					<View style={styles.modalContainer}>
 						<MissIcon width={45} height={45}/>
 						<Text style={styles.textModal}>{modalMessage}</Text>
+						<Text style={styles.textModal}>{modalErro}</Text>
 						<TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
 							<Text style={styles.recoverTexto}>Fechar</Text>
 						</TouchableOpacity>
@@ -357,11 +369,11 @@ export default function Login() {
 						<TextInput
 							placeholder="Confirmar senha"     
 							onChangeText={setSenhaCheck} 
-							secureTextEntry={!passwordVisible}
+							secureTextEntry={!passwordVisible1}
 							style={styles.textInput}
 						/>
-						<TouchableOpacity onPress={togglePasswordVisibility}>
-							{passwordVisible ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
+						<TouchableOpacity onPress={togglePasswordVisibility1}>
+							{passwordVisible1 ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
 						</TouchableOpacity>
 					</View>
 				</View>
@@ -465,10 +477,10 @@ const styles = StyleSheet.create({
 		height: 40,
 		fontFamily: "Poppins_400Regular",
 	},
-	
-	inputView: {
+
+  inputView: {
 		backgroundColor: "#F1F1F1",
-		paddingVertical: 5,
+		height: 40,
 		paddingHorizontal: 10,
 		borderRadius: 15,
 		marginVertical: 8,
@@ -478,11 +490,12 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		alignItems: 'center'
 	},
-	
+
 	textInput: {
 		width: 295,
-		height: 30,
+    	height: 50,
 		fontFamily: "Poppins_400Regular",
+    	alignItems: 'center'
 	},
 
 	loginText: {
@@ -565,6 +578,5 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		fontFamily: "Poppins_400Regular",
 		fontSize: 14,
-		marginVertical: 5
 	  }
 });

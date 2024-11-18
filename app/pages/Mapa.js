@@ -13,6 +13,7 @@ const Mapa = () => {
     const [ecopontos, setEcopontos] = useState([]);
     const [nameEco, setNameEco] = useState('');
     const [enderecoEco, setEnderecoEco] = useState('');
+    const [modalVisible, setModalVisible] = useState('')
 
     const info = (nome,endereco) => {
       setNameEco(nome)
@@ -87,6 +88,25 @@ const Mapa = () => {
     // Aplicação
     return (
       <View style={styles.container}>
+
+        			{/* Modal de erro */}
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContainer}>
+              <MissIcon width={45} height={45}/>
+              <Text style={styles.textModal}>{modalMessage}</Text>
+              <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+                <Text style={styles.recoverTexto}>Fechar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
         <View style={styles.footerMapa}>
           <View style={styles.titleLocal}>
             <PointLocal style={{marginRight: 10}}/>

@@ -11,6 +11,7 @@ export default function RedefinirSenha() {
   const [pwd, setPwd] = useState("");
   const [checkPwd, setCheckPwd] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordVisible1, setPasswordVisible1] = useState(false);
 
   const newPassword = async () => {
     if (pwd != checkPwd) {
@@ -34,6 +35,10 @@ export default function RedefinirSenha() {
   	// ver senha
 	const togglePasswordVisibility = () => {
 		setPasswordVisible(!passwordVisible);
+	};
+	
+  const togglePasswordVisibility1 = () => {
+		setPasswordVisible1(!passwordVisible1);
 	};
 
   const navigation = useNavigation();
@@ -62,7 +67,7 @@ export default function RedefinirSenha() {
       <View style={styles.inputContainer}>
       <View style={styles.inputView}>
         <TextInput
-          placeholder="Senha" 
+          placeholder="Nova senha" 
           onChangeText={setPwd} 
           secureTextEntry={!passwordVisible}
           style={styles.textInput}
@@ -72,7 +77,17 @@ export default function RedefinirSenha() {
 				</TouchableOpacity>
 			</View>
 
-        <CustomInput placeholder="Confirmar Senha" onChangeText={setCheckPwd} secureTextEntry={!passwordVisible}/>
+      <View style={styles.inputView}>
+        <TextInput
+          placeholder="Confirmar nova senha" 
+          onChangeText={setCheckPwd} 
+          secureTextEntry={!passwordVisible1}
+          style={styles.textInput}
+        />
+				<TouchableOpacity onPress={togglePasswordVisibility1}>
+					{passwordVisible1 ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
+				</TouchableOpacity>
+			</View>
 
       </View>
 
@@ -191,11 +206,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 10,
   },
+
   loader: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
+
   botao: {
     backgroundColor: "#6BBF59",
     justifyContent: "center",
@@ -204,14 +221,36 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 5,
   },
+
   botaoTexto: {
     fontFamily: "Poppins_600SemiBold",
     color: "#fff",
     fontSize: 16,
   },
+
   passoTexto: {
     fontFamily: "Poppins_400Regular",
     color: "#6BBF59",
     fontSize: 14,
   },
+
+  textInput: {
+		width: 295,
+    height: 50,
+		fontFamily: "Poppins_400Regular",
+    alignItems: 'center'
+	},
+
+  inputView: {
+		backgroundColor: "#F1F1F1",
+		height: 40,
+		paddingHorizontal: 10,
+		borderRadius: 15,
+		marginVertical: 8,
+		borderColor: "#3F463E",
+		borderWidth: 0.5,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center'
+	},
 });

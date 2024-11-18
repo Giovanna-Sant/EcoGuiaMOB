@@ -20,8 +20,10 @@ const Home = () => {
     navigation.navigate(screen);
   };
   
+  // Trazer dicas
   const [tip, setTip] = useState([])
   const [user, setUser] = useState({});
+
   useEffect(() => {
     setLoading(true)
     try {
