@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TextInput, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Modal, Dimensions, TouchableWithoutFeedback, Pressable,  Alert } from 'react-native';
-import { TitleTrilha, PointNone, PointLocal } from '../assets';
+import { TitleTrilha, PointNone, PointDone, PointLocal } from '../assets';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Footer from '../components/Footer';
 import api from '../services/api';
@@ -74,7 +74,6 @@ const Trilha = () => {
     );
   }
 
-
   return (
     <View style={styles.container}>
        {/* Flatlist para listagem de missões */}
@@ -89,10 +88,14 @@ const Trilha = () => {
             </View>
           }
           contentContainerStyle={styles.content}
-          renderItem={({ item }) => (
+          renderItem={({ item }) => {
+            // const isCompleted = item.fk_quest_user <= quests.length;
+            
+            return (
             <View>
+              {/* Adicionar lógica de completo e incompleto deste componente */}
               <Pressable onPress={() => setSelectedQuest(item)}>
-                <PointNone width={60} />
+                {isCompleted ? <PointDone width={60} /> : <PointNone width={60} />}
               </Pressable>
 
               {/* Modal de visualização das missões */}
@@ -100,7 +103,7 @@ const Trilha = () => {
                 animationType="fade"
                 transparent={true}
                 visible={selectedQuest?.pk_IDquest === item.pk_IDquest}
-                onRequestClose={() => setSelectedQuest(null)}
+                onPress={() => setSelectedQuest(null)}
               >
                 <Pressable 
                   style={styles.modalBackdrop} 
@@ -120,7 +123,7 @@ const Trilha = () => {
                 </Pressable>
               </Modal>
             </View>
-          )}
+          ) }}
           keyExtractor={(item) => item.pk_IDquest}
         />
 
@@ -173,7 +176,7 @@ const Trilha = () => {
       <Modal
   visible={modalQuantidadeVisivel}
   transparent={true} 
-  animationType="slide"
+  animationType="fade"
 >
   <Pressable
     style={styles.overlay}  
@@ -264,7 +267,7 @@ const styles = StyleSheet.create({
 
   overlay: {
     flex: 1, 
-    backgroundColor: 'rgba(0, 0, 0, 0)',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },  
 
   modalContainer: {
@@ -309,7 +312,6 @@ const styles = StyleSheet.create({
   },
   
   botaoMaterial: {
-  
     width: 100,
     height: 100,
     borderRadius: 50,
@@ -426,12 +428,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   
+  modalBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  },
+
   modalContent: {
     backgroundColor: "#fff",
     width: 250,
     borderRadius: 10,
     padding: 15,
-    margin: 80
+    margin: 80,
+    elevation: 5
   },
 
   subtitle: {
