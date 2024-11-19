@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Dimensions, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Dimensions, TextInput, Pressable } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { TitleWatch } from '../assets';
 import api from '../services/api'
@@ -8,17 +8,25 @@ const { width, height } = Dimensions.get('window');
 const Horarios = () => {
   const [cep, setCep] = useState('');
   const [dados,setDados] = useState('');
+  const [loading, setLoading] = useState(false);
+	const [disabled, setDisabled] = useState(false);
+
   const getTime = async () => {
     try{
+      setLoading(true)
+      setDisabled(true);
         console.log(cep)
         const response = await api.post('/pickupTime', { cep }, {
-          timeout: 16000
+          timeout: 17000
         });
         setDados(response.data)
         
       }catch(error){
-        alert(error.response)
+        alert(error.response.data.msg)
         console.error(error)
+      }finally{
+        setLoading(false)
+        setDisabled(false);
       }
     }
     
@@ -49,20 +57,33 @@ const Horarios = () => {
           </Text>
         </View>
 
-        <View style={styles.cepContainer}>
+      <View style={styles.cepContainer}>
           <Text style={styles.cepLabel}>CEP :</Text>
+          <View style={styles.inputView}>
           <TextInput
-            style={styles.cepInput}
+            style={styles.textInput}
             placeholder="Digite o CEP"
             value={cep}
             onChangeText={setCep}
             keyboardType="numeric"
-            onEndEditing={getTime}
-          />
+            />
+          </View>
+
+          <Pressable
+						style={styles.cepEnvio}
+            onPress={getTime}
+						disabled={disabled || loading}
+					>
+						{loading ? (
+						<ActivityIndicator size="small" color="#fff" />
+						) : (
+              <Text style={styles.cepEnvioText}>OK</Text>
+						)}
+          </Pressable>
         </View> 
 
         {/* Fazer a Tabela de horarios  */}
-        <View style={styles.tabelaContainer} >
+        <View style={styles.tabelaContainer}>
                   {/* Cabeçalho da tabela */}
           <View style={styles.tableHeader}>
             <Text style={styles.tableHeaderText}>Dia</Text>
@@ -194,16 +215,40 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 
-  cepInput: {
-    flex: 1,
-    height: 40,
-    borderColor: '#A6D89B',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingLeft: 10,
-    fontSize: width * 0.04,
-    backgroundColor: '#E2F2DF',
+  cepEnvio: {
+    backgroundColor: "#6BBF59",
+		justifyContent: "center",
+		borderRadius: 5,
+		alignItems: "center",
+		paddingHorizontal: 15,
+		paddingVertical: 6,
+    marginLeft: 5,
   },
+
+  cepEnvioText: {
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#fff'
+  },
+
+  inputView: {
+		backgroundColor: "#F1F1F1",
+		height: 40,
+		paddingHorizontal: 10,
+		borderRadius: 10,
+		borderColor: "#3F463E",
+		borderWidth: 0.5,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center'
+  },
+
+  textInput: {
+		width: 200,
+    height: 50,
+		fontFamily: "Poppins_400Regular",
+    alignItems: 'center',
+    fontSize: 16
+	},
 
   tableContainer: {
     marginTop: 20,
@@ -243,6 +288,8 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: width * 0.04,
   },
+
+
 });
 
 export default Horarios;
