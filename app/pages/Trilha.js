@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TextInput, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Modal, Dimensions, TouchableWithoutFeedback, Pressable,  Alert } from 'react-native';
-import { TitleTrilha, PointNone, PointLocal } from '../assets';
+import { TitleTrilha, PointNone, PointDone } from '../assets';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Footer from '../components/Footer';
 import api from '../services/api';
-
+import cache from '../utils/cache';
 
 const Trilha = () => {
   const [modalMateriaisVisivel, setModalMateriaisVisivel] = useState(false);
@@ -41,12 +41,14 @@ const Trilha = () => {
 
   // Trazer dados das quests
   const [quests, setQuests] = useState('')
-
+  const [questUser,setQuestUser] = useState('')
   useEffect(() => {
     const loadQuests = async () => {
     try {
     const response = await api.get('/quests');
     setQuests(response.data)
+    const quest = await cache.get('dados')
+    setQuestUser(quest.fk_quest_user)
      } catch(error) {
       Alert.alert("Erro ao buscar as missões: ", error.response.msg)
       console.error(error)
@@ -74,7 +76,6 @@ const Trilha = () => {
     );
   }
 
-
   return (
     <View style={styles.container}>
        {/* Flatlist para listagem de missões */}
@@ -85,22 +86,33 @@ const Trilha = () => {
             <View style={{justifyContent: "center",
               alignItems: "center", paddingHorizontal: 15}}>
               <TitleTrilha maxWidth={210} style={{marginBottom: -50}}/>
-              <Text style={styles.text}>Complete os objetivos para desbloquear badges e ganhar xp!</Text>
+              <Text style={styles.text}>Complete as missões abaixo para desbloquear badges e ganhar xp!</Text>
             </View>
           }
           contentContainerStyle={styles.content}
-          renderItem={({ item }) => (
+          renderItem={({ item }) => {
+            return (
             <View>
-              <Pressable onPress={() => setSelectedQuest(item)}>
-                <PointNone width={60} />
-              </Pressable>
+              {/* Estrutura para setar quest como concluída ou não */}
+       
+                {item.pk_IDquest <= questUser ? 
+                // Quests completas
+                <Pressable onPress={() => setSelectedQuest(item)} style={styles.missaoButton}>
+                  <PointDone width={60} height={60} />
+                </Pressable>
+                // Quests incompletas
+                 : 
+                <Pressable onPress={() => setSelectedQuest(item)} style={styles.missaoButton}>
+                  <PointDone width={60} height={60} />
+                </Pressable>
+               }
 
               {/* Modal de visualização das missões */}
               <Modal
                 animationType="fade"
                 transparent={true}
                 visible={selectedQuest?.pk_IDquest === item.pk_IDquest}
-                onRequestClose={() => setSelectedQuest(null)}
+                onPress={() => setSelectedQuest(null)}
               >
                 <Pressable 
                   style={styles.modalBackdrop} 
@@ -120,7 +132,7 @@ const Trilha = () => {
                 </Pressable>
               </Modal>
             </View>
-          )}
+          ) }}
           keyExtractor={(item) => item.pk_IDquest}
         />
 
@@ -173,7 +185,7 @@ const Trilha = () => {
       <Modal
   visible={modalQuantidadeVisivel}
   transparent={true} 
-  animationType="slide"
+  animationType="fade"
 >
   <Pressable
     style={styles.overlay}  
@@ -264,7 +276,7 @@ const styles = StyleSheet.create({
 
   overlay: {
     flex: 1, 
-    backgroundColor: 'rgba(0, 0, 0, 0)',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },  
 
   modalContainer: {
@@ -309,7 +321,6 @@ const styles = StyleSheet.create({
   },
   
   botaoMaterial: {
-  
     width: 100,
     height: 100,
     borderRadius: 50,
@@ -426,12 +437,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   
+  modalBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  },
+
+  missaoButton: {
+    padding: 10
+  },
+
   modalContent: {
     backgroundColor: "#fff",
     width: 250,
     borderRadius: 10,
     padding: 15,
-    margin: 80
+    margin: 80,
+    elevation: 5
   },
 
   subtitle: {
