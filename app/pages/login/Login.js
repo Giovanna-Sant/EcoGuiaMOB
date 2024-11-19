@@ -26,8 +26,7 @@ export default function Login() {
 	const [modalErro, setModalErro] = useState('');
 	const [passwordVisible, setPasswordVisible] = useState(false);
 	const [passwordVisible1, setPasswordVisible1] = useState(false);
-	const [modalToken, setModalToken] = useState('')
-	const { openModal } = useModal();
+	const { openModal } = useModal(); //abrir modal externa
 
 	// Setar modal como visível ou não
 	const showModal = (message, erro) => {
@@ -35,10 +34,6 @@ export default function Login() {
 		setModalVisible(true);
 		setModalErro(erro)
 	};
-
-	const showModalToken = () => {
-		setModalToken
-	}
 
 	// Visualização da senha
 	const togglePasswordVisibility = () => {
@@ -320,6 +315,8 @@ export default function Login() {
 					<TouchableOpacity
 						style={styles.recover}
 						onPress={() => handlePress("RedefinirSenha")}
+						// Nesta versão, o esqueci a senha parará de funcionar temporariamente pela atribuição da nova modal
+					
 						>
 						<Text style={styles.recoverTexto}>Esqueci a senha</Text>
 					</TouchableOpacity>
@@ -337,12 +334,6 @@ export default function Login() {
 						<Text style={styles.botaoTexto}>Entrar</Text>
 						)}
 					</TouchableOpacity>
-
-					<Pressable style={styles.botao} onPress={openModal}>
-						<Text>
-							Oiii
-						</Text>
-					</Pressable>
 
 					<View style={styles.textContainer}>
 						<Text style={styles.text}>Ainda não possui uma conta?</Text>
@@ -392,10 +383,11 @@ export default function Login() {
 					</View>
 				</View>
 
+				{/* Implementação da modal, caso precise trazer algum parametro, adicionar */}
 				<View style={styles.footer}>
 					<TouchableOpacity
 						style={styles.botao}
-						onPress={cadastro}
+						onPress={openModal}
 						disabled={disabled || loading}
 					>
 						{loading ? (

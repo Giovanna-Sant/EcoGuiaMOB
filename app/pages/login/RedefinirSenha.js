@@ -6,10 +6,12 @@ import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_300Light } f
 import { LogoEcoGuia } from '../../assets';
 import api from '../../services/api'
 import cache from '../../utils/cache'
+import { useModal } from './ModalContext'; //abrir modal do token
 
 export default function RedefinirSenha() {
   const navigation = useNavigation();
 
+	const { openModal } = useModal(); //abrir modal externa
   const [email, setEmail] =  useState('')
 
   const sendEmail = async (event) => {
@@ -56,7 +58,8 @@ export default function RedefinirSenha() {
       <View style={styles.footer}>
         <TouchableOpacity
           style={styles.botao}
-          onPress={sendEmail}
+          // abrir modal externa - adicionar função
+          onPress={openModal}
         >
           <Text style={styles.botaoTexto}>Enviar Código</Text>
         </TouchableOpacity>
