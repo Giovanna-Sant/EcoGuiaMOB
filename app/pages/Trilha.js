@@ -80,7 +80,14 @@ const Trilha = () => {
        {/* Flatlist para listagem de missões */}
        <FlatList
           data={quests}
-          ListHeaderComponent={<TitleTrilha maxWidth={210} />}
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponent={
+            <View style={{justifyContent: "center",
+              alignItems: "center", paddingHorizontal: 15}}>
+              <TitleTrilha maxWidth={210} style={{marginBottom: -50}}/>
+              <Text style={styles.text}>Complete os objetivos para desbloquear badges e ganhar xp!</Text>
+            </View>
+          }
           contentContainerStyle={styles.content}
           renderItem={({ item }) => (
             <View>
@@ -193,7 +200,7 @@ const Trilha = () => {
               onChangeText={handleQuantidadeChange}
               keyboardType="numeric"
             />
-            <Text style={styles.unidadeMedida}>kg</Text>
+            <Text style={styles.textoQuantidade}>kg</Text>
           </View>
 
           <TouchableOpacity
@@ -227,6 +234,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: "#E2F2DF"
   },
+
+  content: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
   botaoFlutuante: {
     position: 'absolute',
     width: 60,
@@ -243,14 +256,17 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 4,  
   },
+
   textoBotao: { 
     fontSize: 24,
     color: '#FFF' 
   },
+
   overlay: {
     flex: 1, 
-    backgroundColor: 'rgba(0, 0, 0, 0)', // Transparência para overlay
+    backgroundColor: 'rgba(0, 0, 0, 0)',
   },  
+
   modalContainer: {
     position: 'absolute',
     bottom: 0,
@@ -267,26 +283,33 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 50,
   },
+
   titulo: { 
     fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10 
+    marginBottom: 5,
+    fontFamily: 'Poppins_600SemiBold',
   },
+  
   subtitulo: {
     fontSize: 14,
     color: '#666',
     marginBottom: 20,
-    textAlign: 'center' 
+    textAlign: 'center',
+    fontFamily: 'Poppins_400Regular',
   },
+  
   listaMateriais: {
     alignItems: 'center',
     justifyContent: 'center' 
   },
+  
   colunaMateriais: {
     justifyContent: 'space-around',
     marginBottom: 20 
   },
+  
   botaoMaterial: {
+  
     width: 100,
     height: 100,
     borderRadius: 50,
@@ -294,11 +317,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 10,
   },
+  
   textoMaterial: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#FFF'
+    fontSize: 14,    
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#fff'
   },
+  
   bolhaXp: {
     position: 'absolute',
     bottom: 5,
@@ -307,10 +332,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 5,
   },
+  
   textoXp: {
     color: '#FFF',
     fontSize: 10
   },
+  
   modalQuantidade: {
     position: 'absolute',
     bottom: 0,
@@ -326,62 +353,67 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 10,
   },
+  
   inputmaterial: {
     flexDirection: 'row',   
     alignItems: 'center',    
     justifyContent: 'center',
     gap: 10,
   },
+  
   textoMaterialSelecionado: {
     fontSize: 16,
-    fontWeight: 'bold',
     marginBottom: 15,
-    padding: 25,
+    padding: 10,
     borderRadius: 10,
     backgroundColor: '#fff',
     marginHorizontal: 20,
+    fontFamily: 'Poppins_500Medium',
   },
+  
   controleQuantidade: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 15,
-    padding: 15,
+    paddingHorizontal: 10,
     borderRadius: 10,
     backgroundColor: '#fff',
   },
+
   botaoControle: {
     backgroundColor: '#E0E0E0',
     borderRadius: 5,
-    padding: 10,
-    marginHorizontal: 20,
+    paddingHorizontal: 7,
+    alignItems: 'center'
   },
+
   textoControle: { 
-    fontSize: 16,
-    fontWeight: 'bold', 
+    fontSize: 16, 
+    fontFamily: 'Poppins_600SemiBold',
   },
+
   textoQuantidade: {
     fontSize: 16,
-    fontWeight: 'bold',
     width: 50,
+    fontFamily: 'Poppins_500Medium',
     textAlign: 'center',
   },
+
   botaoFinalizar: {
     backgroundColor: '#4CAF50',
-    padding: 25,
+    padding: 10,
     borderRadius: 10,
     alignItems: 'center',
     width: '100%'
   },
+
   textoFinalizar: {
+    fontFamily: 'Poppins_600SemiBold',
     color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 16
   },
-
+  
   // estilização quests
-
-  viewQuest: {
-  },
 
   botaoCheck: {
     backgroundColor: "#6BBF59",
@@ -401,18 +433,20 @@ const styles = StyleSheet.create({
     padding: 15,
     margin: 80
   },
+
   subtitle: {
 		fontFamily: "Poppins_400Regular",
 		fontSize: 14,
 		color: "#3F463E",
 		textAlign: 'center'
   },
+
   text: {
 		fontFamily: "Poppins_400Regular",
 		fontSize: 16,
-		color: "#000",
 		textAlign: 'center'
 	},
+  
   textBotao: {
 		fontFamily: "Poppins_600SemiBold",
 		fontSize: 14,
@@ -421,16 +455,11 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
     paddingHorizontal: 2
 	},
+
   quantidadeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  
-  unidadeMedida: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  }
-
 });
 
 export default Trilha;
