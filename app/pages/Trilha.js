@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TextInput, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Modal, Dimensions, TouchableWithoutFeedback, Pressable,  Alert } from 'react-native';
-import { TitleTrilha, PointNone, PointDone, PointLocal } from '../assets';
+import { TitleTrilha, PointNone, PointDone } from '../assets';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Footer from '../components/Footer';
 import api from '../services/api';
-
+import cache from '../utils/cache';
 
 const Trilha = () => {
   const [modalMateriaisVisivel, setModalMateriaisVisivel] = useState(false);
@@ -41,12 +41,14 @@ const Trilha = () => {
 
   // Trazer dados das quests
   const [quests, setQuests] = useState('')
-
+  const [questUser,setQuestUser] = useState('')
   useEffect(() => {
     const loadQuests = async () => {
     try {
     const response = await api.get('/quests');
     setQuests(response.data)
+    const quest = await cache.get('dados')
+    setQuestUser(quest.fk_quest_user)
      } catch(error) {
       Alert.alert("Erro ao buscar as missões: ", error.response.msg)
       console.error(error)
@@ -84,19 +86,26 @@ const Trilha = () => {
             <View style={{justifyContent: "center",
               alignItems: "center", paddingHorizontal: 15}}>
               <TitleTrilha maxWidth={210} style={{marginBottom: -50}}/>
-              <Text style={styles.text}>Complete os objetivos para desbloquear badges e ganhar xp!</Text>
+              <Text style={styles.text}>Complete as missões abaixo para desbloquear badges e ganhar xp!</Text>
             </View>
           }
           contentContainerStyle={styles.content}
           renderItem={({ item }) => {
-            // const isCompleted = item.fk_quest_user <= quests.length;
-            
             return (
             <View>
-              {/* Adicionar lógica de completo e incompleto deste componente */}
-              <Pressable onPress={() => setSelectedQuest(item)}>
-                {isCompleted ? <PointDone width={60} /> : <PointNone width={60} />}
-              </Pressable>
+              {/* Estrutura para setar quest como concluída ou não */}
+       
+                {item.pk_IDquest <= questUser ? 
+                // Quests completas
+                <Pressable onPress={() => setSelectedQuest(item)} style={styles.missaoButton}>
+                  <PointDone width={60} height={60} />
+                </Pressable>
+                // Quests incompletas
+                 : 
+                <Pressable onPress={() => setSelectedQuest(item)} style={styles.missaoButton}>
+                  <PointDone width={60} height={60} />
+                </Pressable>
+               }
 
               {/* Modal de visualização das missões */}
               <Modal
@@ -431,6 +440,10 @@ const styles = StyleSheet.create({
   modalBackdrop: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  },
+
+  missaoButton: {
+    padding: 10
   },
 
   modalContent: {
