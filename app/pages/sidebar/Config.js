@@ -4,17 +4,30 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } 
 import { Detail, ArrowRight, ShowPassword, HidePassword } from "../../assets";
 import cache from '../../utils/cache'
 import api from '../../services/api';
+import { useModal } from '../login/ModalContext'; //abrir modal do token
 
 const Config = () => {
   const [user, setUser] = useState({});
   const [email, setEmail] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordVisibleA, setPasswordVisibleA] = useState(false);
+  const [passwordVisibleB, setPasswordVisibleB] = useState(false);
+	const { openModal } = useModal(); //abrir modal externa
 
-  // ver senha
+  // Visualização de senha
 	const togglePasswordVisibility = () => {
 		setPasswordVisible(!passwordVisible);
 	};
 
+	const togglePasswordVisibilityA = () => {
+		setPasswordVisibleA(!passwordVisibleA);
+	};
+
+	const togglePasswordVisibilityB = () => {
+		setPasswordVisibleB(!passwordVisibleB);
+	};
+
+  // Carregamento de fontes
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
@@ -230,22 +243,30 @@ const Config = () => {
           <>
             <Text style={styles.title}>Atualizar seu email</Text>
             <Text style={styles.label}>Novo email:</Text>
+            <View style={styles.inputView}>
             <TextInput
-              style={styles.input}
+              style={styles.textInput}
               value={novoEmail}
               onChangeText={setNovoEmail}
+              placeholder="novoemail@gmail.com"
             />
+            </View>
             <Text style={styles.label}> Confirmar novo email:</Text>
-            <TextInput
-              style={styles.input}
-              value={confirmarEmail}
-              onChangeText={setConfirmarEmail}
-            />
+            
+            <View style={styles.inputView}>
+              <TextInput
+                style={styles.textInput}
+                value={confirmarEmail}
+                onChangeText={setConfirmarEmail}
+                placeholder="novoemail@gmail.com"
+                />
+            </View>
             <View style={styles.buttonContainer}>
               <Pressable style={styles.confirmButton} onPress={toggleEmailModal}>
                 <Text style={styles.buttonTextConfir}>Cancelar</Text>
               </Pressable>
-              <Pressable style={styles.cancelButton} onPress={toggleTokenModal}>
+              {/* <Pressable style={styles.cancelButton} onPress={toggleTokenModal}> */}
+              <Pressable style={styles.cancelButton} onPress={openModal}>
                 <Text style={styles.buttonText}>Confirmar</Text>
               </Pressable>
             </View>
@@ -273,11 +294,11 @@ const Config = () => {
               <TextInput 
                 value={novaSenha}
                 onChangeText={setNovaSenha}
-                secureTextEntry={!passwordVisible}
+                secureTextEntry={!passwordVisibleA}
                 style={styles.textInput}
               />
-              <TouchableOpacity onPress={togglePasswordVisibility}>
-                {passwordVisible ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
+              <TouchableOpacity onPress={togglePasswordVisibilityA}>
+                {passwordVisibleA ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
               </TouchableOpacity>
 					  </View>
 
@@ -286,11 +307,11 @@ const Config = () => {
               <TextInput
                 value={confirmarSenha}
                 onChangeText={setConfirmarSenha}
-                secureTextEntry={!passwordVisible}
+                secureTextEntry={!passwordVisibleB}
                 style={styles.textInput}
               />
-                <TouchableOpacity onPress={togglePasswordVisibility}>
-                  {passwordVisible ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
+                <TouchableOpacity onPress={togglePasswordVisibilityB}>
+                  {passwordVisibleB ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
                 </TouchableOpacity>
             </View>
 
@@ -373,6 +394,7 @@ const styles = StyleSheet.create({
   titulo: {
     fontFamily: 'Poppins_600SemiBold',
     fontSize: 30,
+		color: "#3F463E",
     textAlign: 'center',
     maxWidth: 300,
     marginBottom: 10
@@ -453,9 +475,10 @@ const styles = StyleSheet.create({
   },
   
   label: {
-    fontSize: 10,
+    fontSize: 12,
     color: '#333',
     fontFamily: 'Poppins_500Medium',
+    marginTop: 10
   },
   
   delete: {
@@ -514,18 +537,22 @@ const styles = StyleSheet.create({
   },
 
   inputView: {
-    borderColor: '#6BBF59',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+		backgroundColor: "#F1F1F1",
+		height: 40,
+		paddingHorizontal: 10,
+		borderRadius: 5,
+		marginVertical: 5,
+		borderColor: "#3F463E",
+		borderWidth: 0.5,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center'
-  },
+	},
 
-  textInput: {
-		width: 250,
+	textInput: {
+		width: 260,
+    height: 50,
 		fontFamily: "Poppins_400Regular",
+    alignItems: 'center'
 	},
 });
