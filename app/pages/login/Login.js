@@ -1,18 +1,34 @@
-import React, { useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { useNavigation } from '@react-navigation/native';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView, Modal } from "react-native";
-import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import { LogoEcoGuia, Google, MissIcon, ShowPassword, HidePassword } from '../../assets';
-import api from '../../services/api';
-import cache from '../../utils/cache';
-import cacheTemp from '../../utils/cacheTemp';
-import isEmail from 'validator/lib/isEmail';	// biblioteca que verifica o formato do e-mail
-import checkPwd from '../../utils/checkPwd'; // verificação de senha válida
-import { useModal } from './ModalContext'; //abrir modal do token
+//bibliotecas nativas
+import React, { useState } 	from 'react';					  // biblioteca React
+import { useNavigation } 	from '@react-navigation/native';  // navegação de páginas
+import { StatusBar } 		from 'expo-status-bar';           // componente de barra
+import { isEmail   }	 	from 'validator'; 	  			  // função de validar e-mail
 
+//biblioteca Native
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView, Modal } from "react-native";
+
+//importação de fontes 
+import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';  
+
+//funções e configurações externas
+import { LogoEcoGuia, MissIcon, ShowPassword, HidePassword } from '../../assets'; // importação de imagens
+import { useModal } from './ModalContext'; 	      // configuração de Modal Token
+import api 		    from '../../services/api';    // configuração de conexão com a API através de Axios e DotEnv
+import checkPwd 	from '../../utils/checkPwd';  // verificação de senha válida
+import cache 		from '../../utils/cache';     // cachê de 30 minutos
+import cacheTemp 	from '../../utils/cacheTemp'; // cachê temporário de 5 minutos
+
+//função de página react native
 export default function Login() {
-	const [isVisible, setIsVisible] = useState(true);
+	//variáveis com mudança de estado 				(alteradas por funções ou chamadas)
+	const [isVisible, 		 setIsVisible] 		  = useState(true);
+	const [loading, 		 setLoading] 		  = useState(false);
+	const [disabled, 		 setDisabled] 		  = useState(false);
+	const [modalVisible,	 setModalVisible] 	  = useState(false);
+	const [passwordVisible,  setPasswordVisible]  = useState(false);
+	const [passwordVisible1, setPasswordVisible1] = useState(false);
+
+	//variáveis que aceitam valores posteriormente  (alteradas por funções ou chamadas)
 	const [nome, setNome] = useState('');
 	const [sobrenome, setSobrenome] = useState('');
 	const [email_cad, setEmailCad] = useState('');
@@ -20,124 +36,135 @@ export default function Login() {
 	const [pwd_cadcheck, setSenhaCheck] = useState('');;
 	const [email, setEmail] = useState('');
 	const [pwd, setSenha] = useState('');
-	const [loading, setLoading] = useState(false);
-	const [disabled, setDisabled] = useState(false);
-	const [modalVisible, setModalVisible] = useState(false);
 	const [modalMessage, setModalMessage] = useState('');
 	const [modalErro, setModalErro] = useState('');
-	const [passwordVisible, setPasswordVisible] = useState(false);
-	const [passwordVisible1, setPasswordVisible1] = useState(false);
-	const { openModal } = useModal(); //abrir modal externa
 
-	// Setar modal como visível ou não
+	//variável responsável pelo chamado de Modal Token
+	const { openModal } = useModal();
+
+	//variável de configuração de modais de mensagem e erro
 	const showModal = (message, erro) => {
 		setModalMessage(message);
 		setModalVisible(true);
-		setModalErro(erro)
+		setModalErro(erro);
 	};
 
-	// Visualização da senha
+	//variáveis de configuração de campo vísivel ou não
 	const togglePasswordVisibility = () => {
 		setPasswordVisible(!passwordVisible);
-	  };
-	  const togglePasswordVisibility1 = () => {
+	};
+	const togglePasswordVisibility1 = () => {
 		setPasswordVisible1(!passwordVisible1);
-	  };
+	};
 
-	// Configurações de login
+	//função de login
 	const login = async () => {
 		//uma variável de email sem espaçamentos acidentais p validações
 		let validEmail;
-		if(!email){
+
+		//verifica se o chamado é direto de cadastro
+		if(email_cad && pwd_cad){
 			validEmail = email_cad
 			.trim()
 			.toLowerCase();
-
 		}else{
+		//caso contrário, procede normalmente
 			validEmail = email
 			.trim()
 			.toLowerCase();
 
 			//validação de campos
 			if ((!email || !pwd)) {
-				showModal('Por favor, preencha todos os campos');
+				showModal();
+				setModalMessage('Por favor, preencha todos os campos');
 				return;
 			} else if (!isEmail(validEmail)) {
 				// se o e-mail for inválido, exibe como um alerta de campo
-				showModal('Por favor, insira um e-mail válido. (log)');
+				showModal();
+				setModalMessage('Por favor, insira um e-mail válido');
 				return;
 			} else if (pwd.length < 8) {
 				// se a senha for inválida, exibe como um alerta de campo
-				showModal('Por favor, insira uma senha válida');
+				showModal();
+				setModalMessage('Formato de senha inválido');
 				return;
 			}
-		}
+		};
 
 		//seta os estados de loading e desativa o botão de login
 		setDisabled(true);
 		setLoading(true);
 
-		try {
-			let data;
-			if(!email){
-				data = await api.post('/user/login', {email: email_cad, pwd: pwd_cad});
-			}else{
-				data = await api.post('/user/login', {email, pwd});
-			}
-			console.log(data.data.msg);
-			console.log(data.data.token);
+		try{
+			//estado variável de dados de requisição
+			let response;
 
-			const response = data;
+			//verifica se o chamado é direto do cadastro
+			if(email_cad && pwd_cad){
+				response = await api.post('/user/login', {email: email_cad, pwd: pwd_cad});
+				console.log(response.data.msg);
+			}else{
+			//caso contrário, procede normalmente
+				response = await api.post('/user/login', {email, pwd});
+				console.log(response.data.msg);
+			}
+			
+			const data = response;
 
 			//switch para verificar o que foi retornado
-			switch (response.status) {
+			switch (data.status) {
 				case 200:
-					// Armazena o token e o email no cache
-					await cache.set("tokenID", response.data.token);
-					await cache.set("email", email);
+					//armazena o token e o email no cachê
+					await cache.set("tokenID", data.data.token);
+					await cache.set("email",   email);
 					
-					// Redireciona para a página Home
+					//redireciona para a página 'Home'
 					handlePress("Home");
 				break;
 			}
-		} catch(error) {
+		}catch(error) {
 			// Se houver erro, verifica se é um erro de resposta
 			if (error.response) {
 				const status = error.response.status;
-				const msg = error.response.data.msg || 'Erro desconhecido'; // mensagem de erro
+				const msg    = error.response.data.msg || 'Erro desconhecido'; // mensagem de erro
 
 				// Tratando erros com base no código de status
 				switch (status) {
 					case 422:
-						showModal('Algo deu errado com os campos :(', msg);
-						setModalErro(msg)
+						showModal('Algo deu errado :(');
+						setModalErro(msg);
 					break;
 
 					case 404:
-						showModal('Algo deu errado com o usuário :(');
-						setModalErro(msg)
+						showModal('Algo deu errado :(');
+						setModalErro(msg);
 						break;
 
 					case 400:
-						showModal('Algo deu errado com a senha :(',   msg);
-						setModalErro(msg)
+						showModal('Algo deu errado :(');
+						setModalErro(msg);
 					break;
 
 					case 500:
-						showModal('Algo deu errado com a conexão :(', msg);
-						setModalErro(msg)
+						showModal('Algo deu errado :(');
+						setModalErro(msg);
 					break;
 
 					default:
-					showModal('Algo deu errado :(',  'Ocorreu um erro desconhecido. Tente novamente');
-					console.error('Erro ilegal:', response);
+					showModal('Algo deu errado :(');
+					setModalErro('Ocorreu um erro desconhecido. Tente novamente');
+					console.error('Erro ilegal #01:', response);
 				}
 			} else if (error.request) {
 				// Se houver falha na requisição sem resposta do servidor
-				showModal('Erro de conexão', 'Sem resposta do servidor. Verifique sua conexão');
+				showModal('Erro de conexão :(');
+				setModalErro('Sem resposta do servidor. Verifique sua conexão');
+				console.error('Erro ilegal #02:', response);
 			} else {
 				// Outros tipos de erro (como erros de configuração)
-				showModal('Erro', 'Erro desconhecido');
+				showModal('Erro :(');
+				setModalErro('Erro desconhecido.');
+				console.error('Erro ilegal #03:', response);
 			}
 		} finally {
 			//desativa os estados de loading e ativa o botão de login
@@ -146,6 +173,7 @@ export default function Login() {
 		};
 	}
 
+	//função de cadastro
 	const cadastro = async () => {
 		//uma variável de email sem espaçamentos acidentais p validações
 		const validEmail = email_cad
@@ -161,7 +189,7 @@ export default function Login() {
 			return;
 		} else if (!isEmail(validEmail)) {
 			// se o e-mail for inválido, exibe como um alerta de campo
-			showModal('Por favor, insira um e-mail válido (cad)');
+			showModal('Por favor, insira um e-mail válido');
 			return;
 		} else if (verificate[0] == false) {
 			const msg = verificate[1];
