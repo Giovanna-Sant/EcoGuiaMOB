@@ -4,7 +4,7 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } 
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Progress from 'react-native-progress';
-import Footer from '../components/Footer';
+
 import { ArrowRight, Edit, Ranking } from '../assets';
 import cache from '../utils/cache';
 import getPerfil from '../utils/gerProfile';
@@ -295,7 +295,7 @@ const Perfil = () => {
             </View>
         </View>
       </View>
-      <Footer />
+      
 
       {/* Modal de Edição do Perfil */}
       <Modal visible={isModalVisible} transparent animationType="fade">

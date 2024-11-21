@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TextInput, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Modal, Dimensions, TouchableWithoutFeedback, Pressable,  Alert } from 'react-native';
 import { TitleTrilha, PointNone, PointLocal } from '../assets';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import Footer from '../components/Footer';
+
 import api from '../services/api';
 
 
@@ -55,13 +55,13 @@ const Trilha = () => {
     loadQuests();
   }, [])
 
-  // Função modal de concluir quest
+
   const concluirObjetivo = () => {
-    // Fechar modal ao apertar botão de concluído
+
     setSelectedQuest(null)
   }
 
-  // Carregamento das fontes
+
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
@@ -222,7 +222,7 @@ const Trilha = () => {
   </Pressable>
 </Modal>
 
-      <Footer/>
+   
     </View>
   );
 };
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
-    bottom: 100,  
+    bottom: 60,  
     right: 20,  
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },

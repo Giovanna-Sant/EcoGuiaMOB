@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, FlatList, Dimensions, Image, ScrollView } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import Footer from '../../components/Footer';
+
 import { Lixo, Recicla, TitleCatalogo } from '../../assets';
 import api from '../../services/api';
 
@@ -182,7 +182,7 @@ const Catalogo = ({ navigation }) => {
         contentContainerStyle={styles.scrollContent}
       />
 
-      <Footer />
+
     </View>
   );
 };
