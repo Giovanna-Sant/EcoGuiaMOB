@@ -11,7 +11,6 @@ import Login from '../pages/login/Login';
 import NoticiasPage from '../pages/catalogo/NoticiasPage';
 import Config from '../pages/sidebar/Config';
 import RedefinirSenha from '../pages/login/RedefinirSenha';
-import Token from '../pages/login/Token';
 import NovaSenha from '../pages/login/NovaSenha';
 import Mapa from '../pages/Mapa';
 import Header from '../components/Header';
@@ -68,11 +67,6 @@ export default function AppNavigator() {
       <Stack.Screen 
         name="RedefinirSenha" 
         component={RedefinirSenha} 
-        options={{ headerShown: false }}/>
-
-      <Stack.Screen 
-        name="Token" 
-        component={Token} 
         options={{ headerShown: false }}/>
 
       <Stack.Screen 

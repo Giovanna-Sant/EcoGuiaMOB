@@ -4,7 +4,6 @@ import { useNavigation } from '@react-navigation/native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import MapView, { Marker } from "react-native-maps";
 import * as Location from 'expo-location';
-import * as Notifications from 'expo-notifications';
 import { PointLocal } from '../assets'
 
 const Mapa = () => {
@@ -63,13 +62,6 @@ const Mapa = () => {
         })()
     }, [])
 
-      async function handleCallNotification() {
-    const { status } = await Notifications.requestPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert("Permissão Negada", "Você não receberá notificações.");
-      return;
-    }
-  }
     
   // Carregamento das fontes
   const [fontsLoaded] = useFonts({

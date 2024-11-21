@@ -21,7 +21,7 @@ export default function RedefinirSenha() {
     try {
       const email = await cache.get("email");
       console.log(email);
-      const response = await api.post("/user/pwd", { pwd, email });
+      const response = await api.post("/user/pwd/new", { pwd, email });
       console.log(response);
       if (response.status == 200) {
         alert("Senha alterada com sucesso");
