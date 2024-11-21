@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TextInput, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Modal, Dimensions, TouchableWithoutFeedback, Pressable,  Alert } from 'react-native';
 import { TitleTrilha, PointNone, PointDone } from '../assets';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import Footer from '../components/Footer';
+
+
 import api from '../services/api';
 import cache from '../utils/cache';
 
@@ -234,7 +235,6 @@ const Trilha = () => {
   </Pressable>
 </Modal>
 
-      <Footer/>
     </View>
   );
 };
