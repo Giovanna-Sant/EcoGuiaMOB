@@ -1,133 +1,191 @@
-import React from "react";
-import { Ionicons } from '@expo/vector-icons';  // Ou qualquer pacote de ícones que você esteja usando
-import { TouchableOpacity } from 'react-native';
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import { TrilhaIcon, CatalogoIcon, HomeIcon, ColetaIcon, PerfilIcon } from "./app/assets";
-import { ModalProvider } from './app/pages/login/ModalContext'
-import CustomModal from './app/pages/login/CustomModal';
+  import React from "react";
+  import { Ionicons } from '@expo/vector-icons';  // Ou qualquer pacote de ícones que você esteja usando
+  import { TouchableOpacity, View } from 'react-native';
+  import { NavigationContainer } from "@react-navigation/native";
+  import { createNativeStackNavigator } from "@react-navigation/native-stack";
+  import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+  import { createDrawerNavigator } from "@react-navigation/drawer";
+  import { TrilhaIcon, CatalogoIcon, HomeIcon, ColetaIcon, PerfilIcon } from "./app/assets";
+  import { ModalProvider } from './app/pages/login/ModalContext'
+  import CustomModal from './app/pages/login/CustomModal';
+  import LogoEcoGuia  from './app/assets/logo.svg'
 
-import Trilha from './app/pages/Trilha';
-import Home from './app/pages/Home';
+  import Trilha from './app/pages/Trilha';
+  import Home from './app/pages/Home';
 
-import Catalogo from './app/pages/catalogo/Catalogo';
-import NoticiasPage from './app/pages/catalogo/NoticiasPage';
-import DescartavelPage from './app/pages/catalogo/DescartavelPage';
-import ReciclavelPage from './app/pages/catalogo/ReciclavelPage';
+  import Catalogo from './app/pages/catalogo/Catalogo';
+  import NoticiasPage from './app/pages/catalogo/NoticiasPage';
+  import DescartavelPage from './app/pages/catalogo/DescartavelPage';
+  import ReciclavelPage from './app/pages/catalogo/ReciclavelPage';
 
-import Coleta from './app/pages/Coleta';
-import Horarios from './app/pages/Horarios';
-import Mapa from './app/pages/Mapa';
+  import Coleta from './app/pages/Coleta';
+  import Horarios from './app/pages/Horarios';
+  import Mapa from './app/pages/Mapa';
 
-import Perfil from './app/pages/Perfil';
+  import Perfil from './app/pages/Perfil';
 
-import Config from './app/pages/sidebar/Config';
+  import Config from './app/pages/sidebar/Config';
 
-import Login from './app/pages/login/Login';
-import RedefinirSenha from './app/pages/login/RedefinirSenha';
-import NovaSenha from './app/pages/login/NovaSenha';
+  import Login from './app/pages/login/Login';
+  import RedefinirSenha from './app/pages/login/RedefinirSenha';
+  import NovaSenha from './app/pages/login/NovaSenha';
 
-const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
-const Drawer = createDrawerNavigator();
+  const Stack = createNativeStackNavigator();
+  const Tab = createBottomTabNavigator();
+  const Drawer = createDrawerNavigator();
 
-function TrilhaStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Trilha"
-        component={Trilha}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
-  );
-}
+  function TrilhaStack() {
+    return (
+      <Stack.Navigator
+        screenOptions={({ navigation }) => ({
+          headerShown: true,
+          title: "",
+          headerRight: () => (
+            <TouchableOpacity onPress={() => navigation.openDrawer()}>
+              <Ionicons name="menu" size={30} color="black" />
+            </TouchableOpacity>
+          ),
+          headerTitle: () => (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: '10' }}>
+              <LogoEcoGuia width={120} height={50} /> 
+            </View>
+          ),
+        })}
+      >
+        <Stack.Screen name="Trilha" component={Trilha} />
+      </Stack.Navigator>
+    );
+  }
 
-function LoginStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{ headerShown: false }}
-      />
+  function CatalogoStack() {
+    return (
+    <Stack.Navigator
+        screenOptions={({ route, navigation }) => ({
+          headerShown: true,
+          title: "", 
+          headerRight: () =>
+            route.name === "Catalogo" ? (
+              <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                <Ionicons name="menu" size={30} color="black" />
+              </TouchableOpacity>
+            ) : null,
+          headerTitle: () => (
+            <LogoEcoGuia width={120} height={50} paddingVertical={35}   />  
+          ),
+          headerStyle: {
+            alignItems: 'center', 
+            justifyContent: 'center',
+            
+          },
+          headerTitleAlign: 'center',
+          
+        })}
+      >
+        <Stack.Screen
+          name="Catalogo"
+          component={Catalogo}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen name="NoticiasPage" component={NoticiasPage} options={{ headerShown: false }} />
+        <Stack.Screen name="DescartavelPage" component={DescartavelPage} />
+        <Stack.Screen name="ReciclavelPage" component={ReciclavelPage} />
+      </Stack.Navigator>
+    );
+  }
 
-      <Stack.Screen name="RedefinirSenha" component={RedefinirSenha} />
 
-      <Stack.Screen name="NovaSenha" component={NovaSenha} />
-    </Stack.Navigator>
-  );
-}
+  function HomeStack() {
+    return (
+      <Stack.Navigator
+        screenOptions={({ navigation }) => ({
+          headerShown: true,
+          title: "",
+          headerRight: () => (
+            <TouchableOpacity onPress={() => navigation.openDrawer()}>
+              <Ionicons name="menu" size={30} color="black" />
+            </TouchableOpacity>
+          ),
+          headerTitle: () => (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: '10'  }}>
+              <LogoEcoGuia width={120} height={50} /> 
+            </View>
+          ),
+        })}
+      >
+        <Stack.Screen name="Home" component={Home} />
+      </Stack.Navigator>
+    );
+  }
 
-function CatalogoStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Catalogo"
-        component={Catalogo}
-        options={{ headerShown: false }}
-      />
+  function ColetaStack() {
+    return (
+      <Stack.Navigator
+        screenOptions={({ route, navigation }) => ({
+          headerShown: true,
+          title: "", 
+          headerRight: () =>
+            route.name === "Coleta" ? (
+              <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                <Ionicons name="menu" size={30} color="black" />
+              </TouchableOpacity>
+            ) : null,
+          headerTitle: () => (
+            <LogoEcoGuia width={120} height={50}  paddingVertical={35}/>  
+          ),
+          headerStyle: {
+            alignItems: 'center', 
+            justifyContent: 'center', 
+          },
+          headerTitleAlign: 'center', 
+        })}
+      >
+        <Stack.Screen name="Coleta" component={Coleta} />
+        <Stack.Screen name="Horarios" component={Horarios} />
+        <Stack.Screen name="Mapa" component={Mapa} />
+      </Stack.Navigator>
+    );
+  }
 
 
-      <Stack.Screen name="NoticiasPage" component={NoticiasPage} />
-      <Stack.Screen name="DescartavelPage" component={DescartavelPage} />
-      <Stack.Screen name="ReciclavelPage" component={ReciclavelPage} />
-    </Stack.Navigator>
-  );
-}
 
-function HomeStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Home"
-        component={Home}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
-  );
-}
 
-function ColetaStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Catalogo"
-        component={Coleta}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen name="Horarios" component={Horarios}  options={{title: ""} }/>
-      <Stack.Screen name="Mapa" component={Mapa} options={{title: ""} } />
+  function PerfilStack() {
+    return (
+      <Stack.Navigator
+        screenOptions={({ navigation }) => ({
+          headerShown: true,
+          title: "",
+          headerRight: () => (
+            <TouchableOpacity onPress={() => navigation.openDrawer()}>
+              <Ionicons name="menu" size={30} color="black" />
+            </TouchableOpacity>
+          ),
+          headerTitle: () => (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: '10' }}>
+              <LogoEcoGuia width={120} height={50} /> 
+            </View>
+          ),
+        })}
+      >
+        <Stack.Screen name="Perfil" component={Perfil} />
+      </Stack.Navigator>
+    );
+  }
 
-    </Stack.Navigator>
-  );
-}
-
-function PerfilStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="Perfil" component={Perfil} options={{ headerShown: false }} />
-      <Stack.Screen name="Config" component={Config} />
-    </Stack.Navigator>
-  );
-}
-
-function TabsNavigator() {
-  return (
-    <Tab.Navigator
-    initialRouteName="Home"  
-    screenOptions={{
-      tabBarStyle: {
-        height: 80,  
-        paddingBottom: 6,
-        elevation: 50  
-      },
-      tabBarLabel: () => null,  
-    }}
-  >
-      
+  function TabsNavigator() {
+    return (
+      <Tab.Navigator
+        initialRouteName="Home"  
+        screenOptions={{
+        tabBarStyle: {
+          height: 80,  
+          paddingBottom: 6,
+          elevation: 50  
+        },
+        tabBarLabel: () => null,  
+      }}
+    >
+        
       <Tab.Screen
         name="Trilha"
         component={TrilhaStack}
@@ -147,58 +205,58 @@ function TabsNavigator() {
         }}
       />
 
-      <Tab.Screen
-              name="Home"
-              component={HomeStack}
-              options={{
-                title: "",  
-                headerShown: false,
-                tabBarIcon: () => <HomeIcon />,  
-              }}
-      />
+        <Tab.Screen
+          name="Home"
+          component={HomeStack}
+          options={{
+            title: "",  
+            headerShown: false,
+            tabBarIcon: () => <HomeIcon />,  
+          }}
+        />
 
-      <Tab.Screen
-        name="Coleta"
-        component={ColetaStack}
-        options={{
-          title: "",  
-          headerShown: false,
-          tabBarIcon: () => <ColetaIcon />,  
-        }}
-      />
-      <Tab.Screen
-        name="Perfil"
-        component={PerfilStack}
-        options={{
-          title: "",  
-          headerShown: false,
-          tabBarIcon: () => <PerfilIcon />,  
-        }}
-      />
-    </Tab.Navigator>
-  );
-}
+        <Tab.Screen
+          name="Coleta"
+          component={ColetaStack}
+          options={{
+            title: "",  
+            headerShown: false,
+            tabBarIcon: () => <ColetaIcon />,  
+          }}  
+        />
+        <Tab.Screen
+          name="Perfil"
+          component={PerfilStack}
+          options={{
+            title: "",  
+            headerShown: false,
+            tabBarIcon: () => <PerfilIcon />,  
+          }}
+        />
+      </Tab.Navigator>
+    );
+  }
 
 
-export default function App() {
-  return (
-    <NavigationContainer>
+  function DrawerNavigator() {
+    return (
       <Drawer.Navigator
-        initialRouteName="Tabs"
-        screenOptions={({ navigation }) => ({
-          drawerPosition: 'right', 
-          headerRight: () => (
-            <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <Ionicons name="menu" size={30} color="black" marginRight={30} />
-            </TouchableOpacity>
-          ),
-          headerLeft: () => null, 
-        })}
+        initialRouteName="Casa"
+        screenOptions={{
+          drawerPosition: "right", // Drawer abre pela direita
+          headerShown: false,
+        }}
       >
-        <Drawer.Screen name="Tabs" component={TabsNavigator} />
+        <Drawer.Screen name="Casa" component={TabsNavigator} />
         <Drawer.Screen name="Config" component={Config} />
       </Drawer.Navigator>
-</NavigationContainer>
+    );
+  }
 
-  );
-}
+  export default function App() {
+    return (
+      <NavigationContainer>
+        <DrawerNavigator />
+      </NavigationContainer>
+    );
+  }
