@@ -72,7 +72,7 @@ const Trilha = () => {
 	const concluirObjetivo = async () => {
 		//capta o tokenID do cachê
 		const tokenID  = await cache.get('tokenID')
-		
+		onRefresh()
 		//chama a função de atualizar level que atualiza o ID de missão
 		try {
 			const data = await api.put(
@@ -86,9 +86,10 @@ const Trilha = () => {
 			switch (response.status) {
 				case 200:
 				// reload das quests
-				loadQuests()
-					break;
+				onRefresh()
+				break;
 				}
+
 		} catch(error) {
 			// Se houver erro, verifica se é um erro de resposta
 			if (error.response) {
@@ -148,11 +149,13 @@ const Trilha = () => {
 							<Text style={styles.text}>Complete as missões abaixo para desbloquear badges e ganhar xp!</Text>
 						</View>
 					}
-					renderItem={({ item }) => {
+					renderItem={({ item, index }) => {
+						const espaco = index % 2; // valor impar 
+						const paddingLeft = espaco === 0 ? 0 : 200
+
 						return (
-						<View>
+						<View style={{paddingLeft, justifyContent: 'center'}}>
 							{/* Estrutura para setar quest como concluída ou não */}
-			 
 								{item.pk_IDquest < questUser ? 
 								// Quests completas
 								<Pressable onPress={() => setSelectedQuest(item)} style={styles.missaoButton}>
@@ -337,7 +340,7 @@ const styles = StyleSheet.create({
 
 	textoBotao: { 
 		fontSize: 24,
-		color: '#FFF' 
+		color: '#000' 
 	},
 
 	overlay: {
