@@ -33,7 +33,8 @@ const Perfil = () => {
   const [rank,setRank] = useState([])
   const getRank = async () => {
     const token = await cache.get('tokenID')
-    const response  = await api.get('/rank',{ 
+    console.log(token);
+    const response  = await api.get('user/ranking',{ 
       headers: {
         authorization:`Bearer ${token}`
     }
@@ -45,13 +46,13 @@ const Perfil = () => {
 
   }
 
-  const[loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [isModalVisible, setModalVisible] = useState(false);
   const [nome, setNome] = useState('');
   const [sobrenome, setSobrenome] = useState('');
   const [selectedIcon, setSelectedIcon] = useState(null);
 
-  const [refresh,setRefresh]  = useState(false)
+  const [refresh, setRefresh]  = useState(false)
 
   const onRefresh = async  () =>{
     setRefresh(true) 
