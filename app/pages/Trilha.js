@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TextInput, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Modal, Dimensions, TouchableWithoutFeedback, Pressable,  Alert } from 'react-native';
+import { View, Text, FlatList, TextInput, StyleSheet, Image, ActivityIndicator, TouchableOpacity, Modal, Dimensions, TouchableWithoutFeedback, Pressable,  Alert } from 'react-native';
 import { TitleTrilha, PointNone, PointDone } from '../assets';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { RefreshControl } from 'react-native-gesture-handler';
@@ -138,35 +138,74 @@ const Trilha = () => {
 			 {/* Flatlist para listagem de missões */}
 			 <FlatList
 					data={quests} // base de dados da flatlist
-					showsVerticalScrollIndicator={false}
-					contentContainerStyle={styles.content}
+					showsVerticalScrollIndicator={false} //scroll invisivel
+					contentContainerStyle={styles.content} //estilo
 					refreshControl={  //reload da página
 						<RefreshControl refreshing={refresh} onRefresh={onRefresh} />}
 					ListHeaderComponent={ //header
-						<View style={{justifyContent: "center",
-							alignItems: "center", paddingHorizontal: 15}}>
+						<View style={{justifyContent: "center", alignItems: "center"}}>
 							<TitleTrilha maxWidth={210} style={{marginBottom: -50}}/>
 							<Text style={styles.text}>Complete as missões abaixo para desbloquear badges e ganhar xp!</Text>
 						</View>
 					}
 					renderItem={({ item, index }) => {
-						const espaco = index % 2; // valor impar 
-						const paddingLeft = espaco === 0 ? 0 : 200
-
+						const paddingLeft = index % 2 === 0 ? 25 : 200;
+						const nextQuest = quests[index + 1];
 						return (
-						<View style={{paddingLeft, justifyContent: 'center'}}>
+						<View>
 							{/* Estrutura para setar quest como concluída ou não */}
 								{item.pk_IDquest < questUser ? 
 								// Quests completas
-								<Pressable onPress={() => setSelectedQuest(item)} style={styles.missaoButton}>
-									<PointDone width={60} height={60}/>
-								</Pressable>
+								<View style={{paddingLeft}}>
+									<Pressable onPress={() => setSelectedQuest(item)} style={styles.missaoButton}>
+										<PointDone width={60} height={60}/>
+									</Pressable>
+								</View>
 								// Quests incompletas
 								 : 
+								 <View style={{paddingLeft}}>
 								<Pressable onPress={() => setSelectedQuest(item)} style={styles.missaoButton}>
 									<PointNone width={60} height={60}/>
 								</Pressable>
-							 }
+								</View>
+							}
+
+              {/* Linha de progressão */}
+              {nextQuest && (
+                <View
+                  style={[styles.line,
+                    {left: index % 2 === 0 ? paddingLeft + 120 : paddingLeft - 50,
+                      top: 10, // Ajuste para começar da borda do ponto
+                      transform: [{ rotate: index % 2 === 0 ? '-55deg' : '55deg' }],
+                    },
+                  ]}
+                />
+              )}
+
+          {/* Aparecer badge a cada 3 quests */}
+          {index % 3 === 2 && (
+            <View style={styles.contentBadge}>
+							{item.pk_IDquest < questUser ?
+								<View>
+									<Text style={styles.badgeTitle}>{item.title_badge}</Text>
+									<Text style={styles.badgeState}>Badge concluída!</Text>
+									<Text style={styles.badgeDescription}>{item.description_badge}</Text>
+								</View>
+							:
+								<View>
+									<Text style={styles.badgeTitle}>{item.title_badge}</Text>
+									<Text style={styles.badgeState}>Badge bloqueada!</Text>
+									<Text style={styles.badgeDescription}>Complete mais missões para desbloquear essa badge</Text>
+								</View>
+							}
+							   <Image
+                style={styles.badgeImg}
+                source={{
+                  uri: `${item.blob_badge}`,
+                }}/>
+            </View>
+          )}
+
 
 							{/* Modal de visualização das missões */}
 							<Modal
@@ -317,7 +356,6 @@ const styles = StyleSheet.create({
 
 	content: {
 		justifyContent: "center",
-		alignItems: "center",
 		paddingBottom: 100
 	},
 
@@ -512,7 +550,7 @@ const styles = StyleSheet.create({
 	},
 
 	missaoButton: {
-		padding: 10
+		paddingVertical: 20
 	},
 
 	modalContent: {
@@ -561,6 +599,54 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 	},
+
+  line: {
+    position: 'absolute',
+    width: 5,
+    height: 170,
+    backgroundColor: 'gray',
+    zIndex: -1, 
+  },
+
+	contentBadge: {
+		backgroundColor: "#6BBF59",
+		position: 'absolute',
+		zIndex: 4,
+		borderRadius: 15,
+		padding: 15,
+		flexDirection: 'row',
+	},
+
+	badgeImg: {
+		width: 60,
+		height: 80,
+	},
+
+	badgeTitle: {
+		fontFamily: 'Poppins_500Medium',
+		fontSize: 16,
+		color: '#000', // cor do texto principal
+    textShadowColor: '#FFF', // cor da borda (branco nesse caso)
+    textShadowOffset: { width: 0, height: 0 }, // deslocamento do sombreamento
+    textShadowRadius: 1, // intensidade do sombreamento
+	},
+
+	badgeDescription: {
+		fontFamily: 'Poppins_400Regular',
+		fontSize: 14,
+		color: '#fff'
+	},
+
+	badgeState: {
+		fontFamily: 'Poppins_400Regular',
+		fontSize: 14,
+		backgroundColor: "#E2F2DF",
+		borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
+		paddingHorizontal: 10,
+		paddingVertical: 3
+	}
+
 });
 
 export default Trilha;
