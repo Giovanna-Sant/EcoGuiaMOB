@@ -57,6 +57,21 @@
     );
   }
 
+  function LoginStack() {
+	return (
+	  <Stack.Navigator>
+		<Stack.Screen 
+		  name="Login" 
+		  component={Login} 
+		  options={{ headerShown: false }} 
+		/>
+		<Stack.Screen name="RedefinirSenha" component={RedefinirSenha} />
+		<Stack.Screen name="NovaSenha" component={NovaSenha} />
+	  </Stack.Navigator>
+	);
+  }
+  
+
   function CatalogoStack() {
     return (
     <Stack.Navigator
@@ -116,6 +131,8 @@
       </Stack.Navigator>
     );
   }
+
+  
 
   function ColetaStack() {
     return (
@@ -241,22 +258,46 @@
   function DrawerNavigator() {
     return (
       <Drawer.Navigator
-        initialRouteName="Casa"
+        initialRouteName="Login"
         screenOptions={{
           drawerPosition: "right", // Drawer abre pela direita
           headerShown: false,
         }}
       >
         <Drawer.Screen name="Casa" component={TabsNavigator} />
-        <Drawer.Screen name="Config" component={Config} />
+        <Drawer.Screen name="Configurações" component={Config} />
       </Drawer.Navigator>
     );
   }
 
+
+
   export default function App() {
-    return (
-      <NavigationContainer>
+    const [isAuthenticated, setIsAuthenticated] = React.useState(false); // Aqui esta o controle de login
+  
+    function MainNavigator() {
+      return (
         <DrawerNavigator />
-      </NavigationContainer>
+      );
+    }
+  
+    return (
+      <ModalProvider>
+        <CustomModal />
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            {/* Se não autenticado, mostra a tela de LoginStack */}
+            {!isAuthenticated ? (
+              <Stack.Screen name="LoginStack">
+                {() => <LoginStack />}
+              </Stack.Screen>
+            ) : (
+              // Após login, mostra a navegação principal
+              <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ModalProvider>
     );
   }
+  
