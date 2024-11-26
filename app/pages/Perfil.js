@@ -4,7 +4,7 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } 
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Progress from 'react-native-progress';
-import Footer from '../components/Footer';
+
 import { ArrowRight, Edit, Ranking } from '../assets';
 import cache from '../utils/cache';
 import getPerfil from '../utils/gerProfile';
@@ -146,9 +146,7 @@ const Perfil = () => {
 
             <Text style={styles.username}>{user.nickname_user}</Text>
 
-            <TouchableOpacity onPress={() => handlePress("Config")}>
-              <Ionicons name="menu-outline" size={28} color="black" />
-            </TouchableOpacity>
+       
           </View>
 
           {/* Detalhes do Perfil */}
@@ -295,7 +293,7 @@ const Perfil = () => {
             </View>
         </View>
       </View>
-      <Footer />
+
 
       {/* Modal de Edição do Perfil */}
       <Modal visible={isModalVisible} transparent animationType="fade">
@@ -371,7 +369,7 @@ const styles = StyleSheet.create({
     paddingTop: 35,
     paddingBottom: 15,
     backgroundColor: "#F1F1F1",
-    borderRadius: 20,
+
     padding: 10,
     elevation: 5,
     alignItems: "center",
