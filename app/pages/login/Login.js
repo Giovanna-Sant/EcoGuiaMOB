@@ -97,7 +97,7 @@ export default function Login() {
 					await cache.set("email", email);
 					
 					// Redireciona para a página Home
-					handlePress("Home");
+					handlePress("DrawerNavigator");
 				break;
 			}
 		} catch(error) {
