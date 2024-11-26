@@ -146,9 +146,7 @@ const Perfil = () => {
 
             <Text style={styles.username}>{user.nickname_user}</Text>
 
-            <TouchableOpacity onPress={() => handlePress("Config")}>
-              <Ionicons name="menu-outline" size={28} color="black" />
-            </TouchableOpacity>
+       
           </View>
 
           {/* Detalhes do Perfil */}
@@ -371,7 +369,7 @@ const styles = StyleSheet.create({
     paddingTop: 35,
     paddingBottom: 15,
     backgroundColor: "#F1F1F1",
-    borderRadius: 20,
+
     padding: 10,
     elevation: 5,
     alignItems: "center",

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Ionicons } from '@expo/vector-icons'; 
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View, Text,  Modal, StyleSheet } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -8,6 +8,12 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { ModalProvider } from './app/pages/login/ModalContext';
 import CustomModal from './app/pages/login/CustomModal';
 import LogoEcoGuia  from './app/assets/logo.svg';
+import { TrilhaIcon, CatalogoIcon, HomeIcon, ColetaIcon, PerfilIcon } from "./app/assets";
+
+
+
+import { Ionicons } from '@expo/vector-icons'; 
+
 
 import Trilha from './app/pages/Trilha';
 import Home from './app/pages/Home';
@@ -28,6 +34,26 @@ import NovaSenha from './app/pages/login/NovaSenha';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
+
+
+
+
+function LoginStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen 
+        name="Login" 
+        component={Login} 
+        options={{ headerShown: false }} 
+      />
+
+      <Stack.Screen name="RedefinirSenha" component={RedefinirSenha} options={{ headerShown: false }} />
+      <Stack.Screen name="NovaSenha" component={NovaSenha} options={{ headerShown: false }} />
+      <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} options={{ headerShown: false }} />
+
+    </Stack.Navigator>
+  );
+}
 
 function TrilhaStack() {
   return (
@@ -52,19 +78,7 @@ function TrilhaStack() {
   );
 }
 
-function LoginStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen 
-        name="Login" 
-        component={Login} 
-        options={{ headerShown: false }} 
-      />
-      <Stack.Screen name="RedefinirSenha" component={RedefinirSenha} />
-      <Stack.Screen name="NovaSenha" component={NovaSenha} />
-    </Stack.Navigator>
-  );
-}
+
 
 function CatalogoStack() {
   return (
@@ -144,6 +158,7 @@ function ColetaStack() {
       <Stack.Screen name="Coleta" component={Coleta} />
       <Stack.Screen name="Horarios" component={Horarios} />
       <Stack.Screen name="Mapa" component={Mapa} />
+      <Stack.Screen name="Config" component={Config} />
     </Stack.Navigator>
   );
 }
@@ -160,7 +175,7 @@ function PerfilStack() {
           </TouchableOpacity>
         ),
         headerTitle: () => (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: '10' }}>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: '10',  }}>
             <LogoEcoGuia width={120} height={50} />
           </View>
         ),
@@ -236,14 +251,33 @@ function TabsNavigator() {
 function DrawerNavigator() {
   return (
     <Drawer.Navigator
-      initialRouteName="Login"
+      initialRouteName="Home"
       screenOptions={{
         drawerPosition: "right", // Drawer abre pela direita
-        headerShown: false,
+        headerShown: false,      // Header desativado por padrão
       }}
     >
       <Drawer.Screen name="Casa" component={TabsNavigator} />
-      <Drawer.Screen name="Configurações" component={Config} />
+      <Drawer.Screen
+        name="Configurações"
+        component={Config}
+        options={({ navigation }) => ({
+          headerShown: true, // Ativa o header para esta tela
+          headerTitle: () => (
+            <LogoEcoGuia width={120} height={50} paddingVertical={45} />
+          ),
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons name="arrow-back" size={24} color="black" marginLeft={16}  />
+            </TouchableOpacity>
+          ),
+          headerStyle: {
+          
+          },
+          headerTitleAlign: "center", // Centraliza o título
+         
+        })}
+      />
     </Drawer.Navigator>
   );
 }
