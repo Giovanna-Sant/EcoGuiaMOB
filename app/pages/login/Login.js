@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Alert, ScrollView, Modal, Pressable } from "react-native";
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView, Modal } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { LogoEcoGuia, Google, MissIcon, ShowPassword, HidePassword } from '../../assets';
 import api from '../../services/api';
 import cache from '../../utils/cache';
-import validator from 'validator';	// biblioteca que verifica o formato do e-mail
+import cacheTemp from '../../utils/cacheTemp';
+import isEmail from 'validator/lib/isEmail';	// biblioteca que verifica o formato do e-mail
 import checkPwd from '../../utils/checkPwd'; // verificação de senha válida
 import { useModal } from './ModalContext'; //abrir modal do token
 
@@ -44,29 +45,32 @@ export default function Login() {
 	  };
 
 	// Configurações de login
-	const login = async (event) => {
-		event.preventDefault();
-
+	const login = async () => {
 		//uma variável de email sem espaçamentos acidentais p validações
-		const validEmail = email.trim();
+		let validEmail;
+		if(!email){
+			validEmail = email_cad
+			.trim()
+			.toLowerCase();
 
-		//função para validar se o campo de e-mail foi preenchido corretamente
-		const isEmailValid = (email) => {
-			return validator.isEmail(email);
-		};
+		}else{
+			validEmail = email
+			.trim()
+			.toLowerCase();
 
-		//validação de campos
-		if (!email || !pwd) {
-			showModal('Por favor, preencha todos os campos');
-			return;
-		} else if (!isEmailValid(validEmail)) {
-			// se o e-mail for inválido, exibe como um alerta de campo
-			showModal('Por favor, insira um e-mail válido');
-			return;
-		} else if (pwd.length < 8) {
-			// se a senha for inválida, exibe como um alerta de campo
-			showModal('Por favor, insira uma senha válida');
-			return;
+			//validação de campos
+			if ((!email || !pwd)) {
+				showModal('Por favor, preencha todos os campos');
+				return;
+			} else if (!isEmail(validEmail)) {
+				// se o e-mail for inválido, exibe como um alerta de campo
+				showModal('Por favor, insira um e-mail válido. (log)');
+				return;
+			} else if (pwd.length < 8) {
+				// se a senha for inválida, exibe como um alerta de campo
+				showModal('Por favor, insira uma senha válida');
+				return;
+			}
 		}
 
 		//seta os estados de loading e desativa o botão de login
@@ -74,16 +78,14 @@ export default function Login() {
 		setLoading(true);
 
 		try {
-			//define um limite para o tempo de espera de 5 segundos
-			const controller = new AbortController();
-			const timeout	 = setTimeout(() => controller.abort(), 5000);
-
-			const data = await api.post('/user/login', {email, pwd});
+			let data;
+			if(!email){
+				data = await api.post('/user/login', {email: email_cad, pwd: pwd_cad});
+			}else{
+				data = await api.post('/user/login', {email, pwd});
+			}
 			console.log(data.data.msg);
 			console.log(data.data.token);
-
-			//caso a requisição seja atendida, desativa o timeout
-			clearTimeout(timeout);
 
 			const response = data;
 
@@ -95,7 +97,7 @@ export default function Login() {
 					await cache.set("email", email);
 					
 					// Redireciona para a página Home
-					handlePress("Home");
+					navigation.navigate("DrawerNavigator");
 				break;
 			}
 		} catch(error) {
@@ -144,27 +146,22 @@ export default function Login() {
 		};
 	}
 
-	const cadastro = async (event) => {
-		event.preventDefault();
-
+	const cadastro = async () => {
 		//uma variável de email sem espaçamentos acidentais p validações
-		const validEmail = email_cad.trim();
-
-		//função para validar se o campo de e-mail foi preenchido corretamente
-		const isEmailValid = (email) => {
-			return validator.isEmail(email);
-		};
+		const validEmail = email_cad
+   		.trim()
+    	.toLowerCase();
 		
 		// chama função para verificar senha
 		const verificate = checkPwd(pwd_cad);
 
-		//validação de campos (Dá MUITO p/ melhorar essa validação com useEffect)
+		//validação de campos
 		if (!nome || !sobrenome || !email_cad || !pwd_cad || !pwd_cadcheck){
 			showModal('Por favor, preencha todos os campos');
 			return;
-		} else if (!isEmailValid(validEmail)) {
+		} else if (!isEmail(validEmail)) {
 			// se o e-mail for inválido, exibe como um alerta de campo
-			showModal('Por favor, insira um e-mail válido');
+			showModal('Por favor, insira um e-mail válido (cad)');
 			return;
 		} else if (verificate[0] == false) {
 			const msg = verificate[1];
@@ -182,23 +179,76 @@ export default function Login() {
 
 		try {
 			const avatar = 1;
-			const data = await api.post('/user/register', {name: nome, lastname: sobrenome, email: email_cad, pwd: pwd_cad, avatar});
+			const data   = await api.post('/user/register', {name: nome, lastname: sobrenome, email: validEmail, pwd: pwd_cad, avatar});
+			console.log(data.data.msg);
+			console.log(data.data.token);
+
 			const response = data;
 
 			//switch para verificar o que foi retornado
 			switch (response.status) {
 				case 200:
-					const msg = response.data.msg;
+					// Armazena o token (5 min)
+					await cacheTemp.set("tokenValidate", response.data.token);
 
-					// Armazena o token e o email no cache
-					cache.set("name",    nome);
-					cache.set("lastname",sobrenome);
-					cache.set("email",   email_cad);
-					cache.set("pwd",     pwd_cad);
-					cache.set("avatar",  avatar);
-					
-					showModal('Token de validação AAA');
-					setModalErro(msg)
+					// Aguarda a modal de validar token
+					const tokenValid = await openModal();
+					if (tokenValid) {
+						console.log('Token validado com sucesso!');
+
+						try{
+							const data     = await api.post('/user/create', {name: nome, lastname: sobrenome, email: validEmail, pwd: pwd_cad, avatar});
+							console.log(data.data.msg);
+							console.log(data.data.token);
+
+							const response = data;
+							//switch para verificar o que foi retornado
+							switch (response.status) {
+								case 200:
+									login();
+								break;
+							};
+						}catch(error){
+							// Se houver erro, verifica se é um erro de resposta
+							if (error.response) {
+								const status = error.response.status;
+								const msg = error.response.data.msg || 'Erro desconhecido'; // mensagem de erro
+
+								// Tratando erros com base no código de status
+								switch (status) {
+									case 400:
+										showModal('Algo deu errado :(',   msg);
+										setModalErro(msg);
+									break;
+
+									case 500:
+										showModal('Algo deu errado com a conexão :(', msg);
+										setModalErro(msg);
+									break;
+
+									default:
+									showModal('Algo deu errado :(',  'Ocorreu um erro desconhecido. Tente novamente');
+									console.error('Erro ilegal:', response);
+								}
+							} else if (error.request) {
+								// Se houver falha na requisição sem resposta do servidor
+								showModal('Erro de conexão', 'Sem resposta do servidor. Verifique sua conexão');
+							} else {
+								// Outros tipos de erro (como erros de configuração)
+								showModal('Erro', 'Erro desconhecido');
+							}
+						} finally {
+							//desativa os estados de loading e ativa o botão de login
+							setLoading(false);
+							setDisabled(false);
+						};
+					} else {
+						//desativa os estados de loading e ativa o botão de login
+						setLoading(false);
+						setDisabled(false);
+
+						showModal('Ops, algo deu errado :( \n O seu token não foi validado com sucesso, repita o processo.');
+					}
 				break;
 			}
 		} catch(error) {
@@ -298,11 +348,6 @@ export default function Login() {
 				<LogoEcoGuia width={300} style={styles.logo} />
 				<Text style={styles.title}>Login</Text>
 
-				{/* <View style={styles.googleContainer}>
-				<Google width={25} height={25} />
-				<Text style={styles.googleText}>Entrar com o Google</Text>
-				</View> */}
-
 				<View style={styles.inputContainer}>
 					<CustomInput placeholder="seuemail@email.com" onChangeText={setEmail} />
 					<View style={styles.inputView}>
@@ -315,9 +360,7 @@ export default function Login() {
 					<TouchableOpacity
 						style={styles.recover}
 						onPress={() => handlePress("RedefinirSenha")}
-						// Nesta versão, o esqueci a senha parará de funcionar temporariamente pela atribuição da nova modal
-					
-						>
+					>
 						<Text style={styles.recoverTexto}>Esqueci a senha</Text>
 					</TouchableOpacity>
 				</View>
@@ -349,15 +392,10 @@ export default function Login() {
 				<LogoEcoGuia width={300} style={styles.logo} />
 				<Text style={styles.title}>Cadastro</Text>
 
-				{/* <View style={styles.googleContainer}>
-					<Google width={25} height={25} />
-					<Text style={styles.googleText}>Criar conta com o Google</Text>
-				</View> */}
-
 				<View style={styles.inputContainer}>
 					<CustomInput placeholder="Nome" 		       onChangeText={setNome}/>
 					<CustomInput placeholder="Sobrenome" 		   onChangeText={setSobrenome}/>
-					<CustomInput placeholder="seuemail@email.com"  onChangeText={setEmailCad}/>
+					<CustomInput placeholder="Seuemail@email.com"  onChangeText={setEmailCad}/>
 					<View style={styles.inputView}>
 						<TextInput 
 							placeholder="Senha" 
@@ -387,7 +425,7 @@ export default function Login() {
 				<View style={styles.footer}>
 					<TouchableOpacity
 						style={styles.botao}
-						onPress={openModal}
+						onPress={cadastro}
 						disabled={disabled || loading}
 					>
 						{loading ? (
@@ -562,7 +600,6 @@ const styles = StyleSheet.create({
 		textDecorationLine: 'underline',
 		textAlign: 'center'
 	},
-
 	modalOverlay: {
 		flex: 1,
 		backgroundColor: 'rgba(0, 0, 0, 0.4)',

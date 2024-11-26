@@ -4,6 +4,7 @@ import { TitleTrilha, PointNone, PointDone } from '../assets';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { RefreshControl } from 'react-native-gesture-handler';
 import Footer from '../components/Footer';
+
 import api from '../services/api';
 import cache from '../utils/cache';
 
@@ -340,7 +341,6 @@ const Trilha = () => {
 		</View>
 	</Pressable>
 </Modal>
-
 			<Footer/>
 		</View>
 	);
