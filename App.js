@@ -7,7 +7,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { ModalProvider } from './app/pages/login/ModalContext';
 import CustomModal from './app/pages/login/CustomModal';
 import LogoEcoGuia  from './app/assets/logo.svg';
-import { TrilhaIcon, CatalogoIcon, HomeIcon, ColetaIcon, PerfilIcon } from "./app/assets";
+import { TrilhaIcon, CatalogoIcon, HomeIcon, ColetaIcon, PerfilIcon, ConfigIcon } from "./app/assets";
 import { Ionicons } from '@expo/vector-icons'; 
 
 
@@ -31,6 +31,17 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
+const HeaderLogo = () => (
+  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: '10' }}>
+    <LogoEcoGuia width={120} height={50} />
+  </View>
+);
+
+const HeaderMenuButton = ({ navigation }) => (
+  <TouchableOpacity onPress={() => navigation.openDrawer()}>
+    <Ionicons name="menu" size={30} color="black" />
+  </TouchableOpacity>
+);
 
 
 
@@ -57,16 +68,8 @@ function TrilhaStack() {
       screenOptions={({ navigation }) => ({
         headerShown: true,
         title: "",
-        headerRight: () => (
-          <TouchableOpacity onPress={() => navigation.openDrawer()}>
-            <Ionicons name="menu" size={30} color="black" />
-          </TouchableOpacity>
-        ),
-        headerTitle: () => (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: '10' }}>
-            <LogoEcoGuia width={120} height={50} />
-          </View>
-        ),
+        headerRight: () => <HeaderMenuButton navigation={navigation} />,
+        headerTitle: () => <HeaderLogo />,
       })}
     >
       <Stack.Screen name="Trilha" component={Trilha} />
@@ -82,24 +85,17 @@ function CatalogoStack() {
       screenOptions={({ route, navigation }) => ({
         headerShown: true,
         title: "", 
-        headerRight: () =>
-          route.name === "Catalogo" ? (
-            <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <Ionicons name="menu" size={30} color="black" />
-            </TouchableOpacity>
-          ) : null,
-        headerTitle: () => (
-          <LogoEcoGuia width={120} height={50} paddingVertical={35} />
-        ),
+        headerRight: () => route.name === "Catalogo" ? <HeaderMenuButton navigation={navigation} /> : null,
+        headerTitle: () => <LogoEcoGuia width={120} height={50} paddingVertical={35} />,
         headerStyle: {
-          alignItems: 'center', 
+          alignItems: 'center',
           justifyContent: 'center',
         },
         headerTitleAlign: 'center',
       })}
     >
       <Stack.Screen name="Catalogo" component={Catalogo} />
-      <Stack.Screen name="NoticiasPage" component={NoticiasPage} options={{ headerShown: false }} />
+      <Stack.Screen name="NoticiasPage" component={NoticiasPage} />
       <Stack.Screen name="DescartavelPage" component={DescartavelPage} />
       <Stack.Screen name="ReciclavelPage" component={ReciclavelPage} />
     </Stack.Navigator>
@@ -112,16 +108,8 @@ function HomeStack() {
       screenOptions={({ navigation }) => ({
         headerShown: true,
         title: "",
-        headerRight: () => (
-          <TouchableOpacity onPress={() => navigation.openDrawer()}>
-            <Ionicons name="menu" size={30} color="black" />
-          </TouchableOpacity>
-        ),
-        headerTitle: () => (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: '10' }}>
-            <LogoEcoGuia width={120} height={50} />
-          </View>
-        ),
+        headerRight: () => <HeaderMenuButton navigation={navigation} />,
+        headerTitle: () => <HeaderLogo />,
       })}
     >
       <Stack.Screen name="Home" component={Home} />
@@ -135,20 +123,13 @@ function ColetaStack() {
       screenOptions={({ route, navigation }) => ({
         headerShown: true,
         title: "", 
-        headerRight: () =>
-          route.name === "Coleta" ? (
-            <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <Ionicons name="menu" size={30} color="black" />
-            </TouchableOpacity>
-          ) : null,
-        headerTitle: () => (
-          <LogoEcoGuia width={120} height={50} paddingVertical={35} />
-        ),
+        headerRight: () => route.name === "Coleta" ? <HeaderMenuButton navigation={navigation} /> : null,
+        headerTitle: () => <LogoEcoGuia width={120} height={50} paddingVertical={35} />,
         headerStyle: {
-          alignItems: 'center', 
-          justifyContent: 'center', 
+          alignItems: 'center',
+          justifyContent: 'center',
         },
-        headerTitleAlign: 'center', 
+        headerTitleAlign: 'center',
       })}
     >
       <Stack.Screen name="Coleta" component={Coleta} />
@@ -165,16 +146,8 @@ function PerfilStack() {
       screenOptions={({ navigation }) => ({
         headerShown: true,
         title: "",
-        headerRight: () => (
-          <TouchableOpacity onPress={() => navigation.openDrawer()}>
-            <Ionicons name="menu" size={30} color="black" />
-          </TouchableOpacity>
-        ),
-        headerTitle: () => (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: '10',  }}>
-            <LogoEcoGuia width={120} height={50} />
-          </View>
-        ),
+        headerRight: () => <HeaderMenuButton navigation={navigation} />,
+        headerTitle: () => <HeaderLogo />,
       })}
     >
       <Stack.Screen name="Perfil" component={Perfil} />
@@ -244,6 +217,12 @@ function TabsNavigator() {
   );
 }
 
+const BackButton = ({ navigation }) => (
+  <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 16 }}>
+    <Ionicons name="arrow-back" size={24} color="black" />
+  </TouchableOpacity>
+);
+
 function DrawerNavigator() {
   return (
     <Drawer.Navigator
@@ -251,27 +230,36 @@ function DrawerNavigator() {
       screenOptions={{
         drawerPosition: "right", // Drawer abre pela direita
         headerShown: false,      // Header desativado por padrão
+        drawerLabelStyle: {
+          fontFamily: 'Poppins',
+          fontSize: 16,
+          color: "#3F463E",
+          fontWeight: '600',
+        },
       }}
     >
-      <Drawer.Screen name="Casa" component={TabsNavigator} />
+      {/* Tela Home */}
+      <Drawer.Screen
+        name="Casa"
+        component={TabsNavigator}
+        options={{
+          drawerIcon: ({ color, size }) => <HomeIcon color={color} size={size} />,
+        }}
+      />
+
+      {/* Tela de Configurações */}
       <Drawer.Screen
         name="Configurações"
         component={Config}
         options={({ navigation }) => ({
+          drawerIcon: ({ color, size }) => <ConfigIcon color={color} size={size} />,
           headerShown: true, // Ativa o header para esta tela
-          headerTitle: () => (
-            <LogoEcoGuia width={120} height={50} paddingVertical={45} />
-          ),
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Ionicons name="arrow-back" size={24} color="black" marginLeft={16}  />
-            </TouchableOpacity>
-          ),
-          headerStyle: {
-          
-          },
+          headerTitle: () => <LogoEcoGuia width={120} height={50} paddingVertical={45} />,
+          headerLeft: () => <BackButton navigation={navigation} />,
           headerTitleAlign: "center", // Centraliza o título
-         
+          headerStyle: {
+            // Adicione customizações do estilo do header, se necessário
+          },
         })}
       />
     </Drawer.Navigator>
