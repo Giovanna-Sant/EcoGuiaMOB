@@ -240,7 +240,7 @@ function DrawerNavigator() {
     >
       {/* Tela Home */}
       <Drawer.Screen
-        name="Casa"
+        name="Home"
         component={TabsNavigator}
         options={{
           drawerIcon: ({ color, size }) => <HomeIcon color={color} size={size} />,
