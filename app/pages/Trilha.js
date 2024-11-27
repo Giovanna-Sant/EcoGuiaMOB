@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TextInput, StyleSheet, Image, ActivityIndicator, TouchableOpacity, Modal, Dimensions, TouchableWithoutFeedback, Pressable,  Alert } from 'react-native';
-import { TitleTrilha, PointNone, PointConc } from '../assets';
+import { View, Text, FlatList, TextInput, StyleSheet, Image, ActivityIndicator, TouchableOpacity, Modal, Dimensions, Pressable, Alert } from 'react-native';
+import { TitleTrilha, PointNone, PointDone } from '../assets';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { RefreshControl } from 'react-native-gesture-handler';
 import api from '../services/api';
@@ -11,7 +11,7 @@ const Trilha = () => {
 	const [modalQuantidadeVisivel, setModalQuantidadeVisivel] = useState(false);
 	const [materialSelecionado, setMaterialSelecionado] = useState(null);
 	const [quantidade, setQuantidade] = useState(1);
-
+	
 	const materiaisDisponiveis = [
 		{ nome: 'Papel', xp: 10, cor: '#3787D4' }, 
 		{ nome: 'Plástico', xp: 20, cor: '#DB3030' }, 
@@ -85,7 +85,7 @@ const Trilha = () => {
 			switch (response.status) {
 				case 200:
 				// reload das quests
-				onRefresh()
+				setDummyState(Date.now());
 				break;
 				}
 
@@ -158,7 +158,7 @@ const Trilha = () => {
 								// Quests completas
 								<View style={{paddingLeft}}>
 									<Pressable onPress={() => setSelectedQuest(item)} style={styles.missaoButton}>
-										<PointConc width={70} height={70}/>
+										<PointDone width={70} height={70}/>
 									</Pressable>
 								</View>
 								// Quests incompletas
@@ -220,20 +220,21 @@ const Trilha = () => {
 										<Text style={styles.subtitle}>Missão {item.pk_IDquest}</Text>
 										<Text style={styles.text}>{item.description_quest}</Text>
 
-										{item.pk_IDquest < questUser ? 
-										// Modal missão a fazer
-										<Text style={styles.textCompleted}>Missão concluída, parábens!</Text>
-										:
-										// Modal missão já completada
-										<TouchableOpacity
-										style={styles.botaoCheck}
-											onPress={concluirObjetivo}
-										>
-											<Text style={styles.textBotao}>Concluir</Text>
-											<Text style={styles.textBotao}>+{item.XP_quest} XP</Text>
-										</TouchableOpacity>
-										}
-									</View>
+										{item.pk_IDquest < questUser ? (
+											// Missão já feita
+											<Text style={styles.textCompleted}>Missão concluída, parabéns!</Text>
+
+										) : item.pk_IDquest == questUser ? (
+											// Missão atual a ser feita
+											<TouchableOpacity style={styles.botaoCheck} onPress={concluirObjetivo}>
+												<Text style={styles.textBotao}>Concluir</Text>
+												<Text style={styles.textBotao}>+{item.XP_quest} XP</Text>
+											</TouchableOpacity>
+										) : (
+											// Próximas missões
+											<Text style={styles.textCompleted}>Complete a anterior</Text>
+										)}
+								</View>
 								</Pressable>
 							</Modal>
 						</View>

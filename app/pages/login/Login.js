@@ -64,7 +64,7 @@ export default function Login() {
 				return;
 			} else if (!isEmail(validEmail)) {
 				// se o e-mail for inválido, exibe como um alerta de campo
-				showModal('Por favor, insira um e-mail válido. (log)');
+				showModal('Por favor, insira um e-mail válido');
 				return;
 			} else if (pwd.length < 8) {
 				// se a senha for inválida, exibe como um alerta de campo
