@@ -45,7 +45,7 @@ const Trilha = () => {
 	const loadQuests = async () => {
 		try {
 			const response = await api.get('/quests');
-			setQuests(response.data)
+			setQuests(response.data.quests)
 			const quest = await cache.get('dados')
 			setQuestUser(quest.fk_quest_user)
 		} catch(error) {
@@ -157,7 +157,9 @@ const Trilha = () => {
 								// Quests completas
 								<View style={{paddingLeft}}>
 									<Pressable onPress={() => setSelectedQuest(item)} style={styles.missaoButton}>
-										<PointDone width={60} height={60}/>
+										{/* <PointDone width={60} height={60}/> */}
+									<PointNone width={60} height={60}/>
+
 									</Pressable>
 								</View>
 								// Quests incompletas
@@ -184,28 +186,26 @@ const Trilha = () => {
           {/* Aparecer badge a cada 3 quests */}
           {index % 3 === 2 && (
             <View style={styles.contentBadge}>
-							{item.pk_IDquest < questUser ?
-								<View>
-									<Text style={styles.badgeTitle}>{item.title_badge}</Text>
-									<Text style={styles.badgeState}>Badge concluída!</Text>
-									<Text style={styles.badgeDescription}>{item.description_badge}</Text>
-								</View>
-							:
-								<View>
-									<Text style={styles.badgeTitle}>{item.title_badge}</Text>
-									<Text style={styles.badgeState}>Badge bloqueada!</Text>
-									<Text style={styles.badgeDescription}>Complete mais missões para desbloquear essa badge</Text>
-								</View>
-							}
-							   <Image
-                style={styles.badgeImg}
-                source={{
-                  uri: `${item.blob_badge}`,
+				{item.pk_IDquest < questUser ?
+					<View >
+						<Text style={styles.badgeTitle}>{item.title_badge}</Text>
+						<Text style={styles.badgeState}>Badge concluída!</Text>
+						<Text style={styles.badgeDescription}>{item.description_badge}</Text>
+					</View>
+						:
+					<View>
+						<Text style={styles.badgeTitle}>{item.title_badge}</Text>
+						<Text style={styles.badgeState}>Badge bloqueada!</Text>
+						<Text style={styles.badgeDescription}>Complete mais missões para desbloquear essa badge</Text>
+					</View>
+				}
+				<Image
+                	style={styles.badgeImg}
+                	source={{
+                  	uri: `${item.blob_badge}`,
                 }}/>
             </View>
           )}
-
-
 							{/* Modal de visualização das missões */}
 							<Modal
 								animationType="fade"
@@ -607,16 +607,20 @@ const styles = StyleSheet.create({
 
 	contentBadge: {
 		backgroundColor: "#6BBF59",
-		position: 'absolute',
-		zIndex: 4,
-		borderRadius: 15,
+		zIndex: 40,
+		borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
 		padding: 15,
 		flexDirection: 'row',
+		width: '100%',
+		gap: 20,
+		alignItems: 'center',
+		justifyContent: 'space-evenly'
 	},
 
 	badgeImg: {
-		width: 60,
-		height: 80,
+		width: 76,
+		height: 100,
 	},
 
 	badgeTitle: {
@@ -631,7 +635,8 @@ const styles = StyleSheet.create({
 	badgeDescription: {
 		fontFamily: 'Poppins_400Regular',
 		fontSize: 14,
-		color: '#fff'
+		color: '#fff',
+		maxWidth: 260
 	},
 
 	badgeState: {
@@ -639,9 +644,10 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		backgroundColor: "#E2F2DF",
 		borderBottomLeftRadius: 5,
-    		borderBottomRightRadius: 5,
+    borderBottomRightRadius: 5,
 		paddingHorizontal: 10,
-		paddingVertical: 3
+		paddingVertical: 3,
+		width: 170
 	}
 
 });
