@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
 
   scrollContent: {
     marginHorizontal: 10,
-    paddingBottom: 85,
+    paddingBottom: 15,
   },
 
   subtitle: {
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     marginVertical: -90,
-    zIndex: -2
+    zIndex: -2,
   },
   
   imgNews: {

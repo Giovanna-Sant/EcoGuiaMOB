@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Ionicons } from '@expo/vector-icons'; 
 import { TouchableOpacity, View, Text,  Modal, StyleSheet } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -9,9 +8,6 @@ import { ModalProvider } from './app/pages/login/ModalContext';
 import CustomModal from './app/pages/login/CustomModal';
 import LogoEcoGuia  from './app/assets/logo.svg';
 import { TrilhaIcon, CatalogoIcon, HomeIcon, ColetaIcon, PerfilIcon } from "./app/assets";
-
-
-
 import { Ionicons } from '@expo/vector-icons'; 
 
 

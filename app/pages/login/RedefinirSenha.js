@@ -10,12 +10,12 @@ import { useModal } from './ModalContext'; //abrir modal do token
 import isEmail from 'validator/lib/isEmail';
 
 export default function RedefinirSenha() {
-	const { openModal }                   = useModal();      //abrir modal externa de token
-	const [loading,      setLoading]      = useState(false); //armazena o estado de carregamento
-	const [disabled,     setDisabled]     = useState(false); //armazena o estado de desativado
+	const { openModal } = useModal(); //abrir modal externa de token
+	const [loading, setLoading] = useState(false); //armazena o estado de carregamento
+	const [disabled, setDisabled] = useState(false); //armazena o estado de desativado
 	const [modalVisible, setModalVisible] = useState(false); //armazena o estado de modal de erro
-	const [modalMessage, setModalMessage] = useState('');    //define a mensagem de erro
-	const [modalErro,    setModalErro]    = useState('');    //abrir modal externa de erro
+	const [modalMessage, setModalMessage] = useState(''); //define a mensagem de erro
+	const [modalErro, setModalErro] = useState(''); //abrir modal externa de erro
 	const [resolveModal, setResolveModal] = useState(null);
 	const navigation = useNavigation();
 
