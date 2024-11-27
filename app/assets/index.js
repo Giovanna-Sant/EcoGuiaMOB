@@ -32,6 +32,7 @@ export { default as Recicla } from './icons/recicla.svg'
 export { default as RedTruck } from './icons/redTruck.svg'
 export { default as TrilhaIcon } from './icons/trilha.svg'
 export { default as Truck } from './icons/truck.svg'
+export { default as ConfigIcon } from './icons/ConfigIcon.svg'
 
 // Titles
 export { default as TitleCatalogo } from './titles/titleCatalogo.svg'
