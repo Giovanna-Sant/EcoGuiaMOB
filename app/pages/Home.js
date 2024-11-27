@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView, Image, Pressable, ActivityIndicator
 import { useNavigation } from '@react-navigation/native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Collapsible from 'react-native-collapsible'; 
-import Footer from '../components/Footer';
+
 import * as Progress from 'react-native-progress';
 import { ArrowDown, ArrowRight, CatalogoBG, TrilhaBG, Truck, Local } from '../assets'
 import api from '../services/api'
@@ -165,7 +165,7 @@ let levelProgress = 0
 
       </ScrollView>
 
-      <Footer />
+      
     </View>
   );
 };
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
 
   scrollContent: {
     marginHorizontal: 10,
-    paddingBottom: 85,
+    paddingBottom: 15,
   },
 
   subtitle: {
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     marginVertical: -90,
-    zIndex: -2
+    zIndex: -2,
   },
   
   imgNews: {

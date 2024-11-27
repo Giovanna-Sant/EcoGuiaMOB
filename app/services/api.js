@@ -1,7 +1,7 @@
 import  Axios  from "axios";
 
 const api = Axios.create({
-    baseURL:'http://172.16.2.23:3000',
+    baseURL:'https://contaneir-backend-ecoguia.blackbush-e76ee154.brazilsouth.azurecontainerapps.io/',
     timeout: 5000
 });
 

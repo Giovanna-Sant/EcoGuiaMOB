@@ -137,7 +137,6 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: 10,
     paddingVertical: 20,
-    paddingBottom: 30,
   },
 
   logoContainer: {
