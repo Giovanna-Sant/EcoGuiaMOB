@@ -4,7 +4,6 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } 
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Progress from 'react-native-progress';
- 
 import { ArrowRight, Edit, Ranking } from '../assets';
 import cache from '../utils/cache';
 import getPerfil from '../utils/gerProfile';
@@ -32,19 +31,56 @@ const Perfil = () => {
  
   const [rank,setRank] = useState([])
   const getRank = async () => {
+    try{
     const token = await cache.get('tokenID')
     const response  = await api.get('user/ranking',{
       headers: {
         authorization:`Bearer ${token}`
     }
-  },
- 
-  getAllAvatar()
-)
+  },)
+    await getAllAvatar()
     setRank(response.data)
- 
+  }catch(error){
+     // Se houver erro, verifica se é um erro de resposta
+     if (error.response) {
+      const status = error.response.status;
+      const msg = error.response.data.msg || 'Erro desconhecido'; // mensagem de erro
+
+      // Tratando erros com base no código de status
+      switch (status) {
+        case 422:
+          console.error('Algo deu errado com os campos :(', msg);
+          console.error(msg)
+        break;
+
+        case 404:
+          console.error('Algo deu errado com o usuário :(');
+          console.error(msg)
+          break;
+
+        case 400:
+          console.error('Algo deu errado com a senha :(',   msg);
+          console.error(msg)
+        break;
+
+        case 500:
+          console.error('Algo deu errado com a conexão :(', msg);
+          console.error(msg)
+        break;
+
+        default:
+        console.error('Algo deu errado :(',  'Ocorreu um erro desconhecido. Tente novamente');
+        console.error('Erro ilegal:', response);
+      }
+    } else if (error.request) {
+      // Se houver falha na requisição sem resposta do servidor
+      console.error('Erro de conexão', 'Sem resposta do servidor. Verifique sua conexão');
+    } else {
+      // Outros tipos de erro (como erros de configuração)
+      console.error('Erro', 'Erro desconhecido');
+    }
   }
- 
+}
   const[loading,setLoading] = useState(false)
   const [isModalVisible, setModalVisible] = useState(false);
   const [nome, setNome] = useState('');
@@ -76,8 +112,45 @@ const Perfil = () => {
       await getPerfil()
       await getRank()
       setUser(await cache.get("dados"));
-    } catch (erro) {
-      console.log(erro);
+    } catch (error) {
+       // Se houver erro, verifica se é um erro de resposta
+    if (error.response) {
+      const status = error.response.status;
+      const msg = error.response.data.msg || 'Erro desconhecido'; // mensagem de erro
+
+      // Tratando erros com base no código de status
+      switch (status) {
+        case 422:
+          console.error('Algo deu errado com os campos :(', msg);
+          console.error(msg)
+        break;
+
+        case 404:
+          console.error('Algo deu errado com o usuário :(');
+          console.error(msg)
+          break;
+
+        case 400:
+          console.error('Algo deu errado com a senha :(',   msg);
+          console.error(msg)
+        break;
+
+        case 500:
+          console.error('Algo deu errado com a conexão :(', msg);
+          console.error(msg)
+        break;
+
+        default:
+        console.error('Algo deu errado :(',  'Ocorreu um erro desconhecido. Tente novamente');
+        console.error('Erro ilegal:', response);
+      }
+    } else if (error.request) {
+      // Se houver falha na requisição sem resposta do servidor
+      console.error('Erro de conexão', 'Sem resposta do servidor. Verifique sua conexão');
+    } else {
+      // Outros tipos de erro (como erros de configuração)
+      console.error('Erro', 'Erro desconhecido');
+    }
     }
   };
  
@@ -443,7 +516,7 @@ const styles = StyleSheet.create({
   icon: {
     width: 60,
     height: 60,
-    borderRadius: 50,
+    borderRadius: 50
   },
  
   viewBadge: {

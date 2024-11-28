@@ -1,6 +1,6 @@
 import api from "../services/api";
 import cache from "./cache";
-
+import checkInfos from "./checkInfos";
 
 export const getPerfil = async () => {
     const token = await cache.get("tokenID")
@@ -11,6 +11,11 @@ export const getPerfil = async () => {
     },
   );
   await cache.set("dados",resposta.data.results[0][0]);
+
+  const info = await cache.get('hash')
+  if(!info){
+    checkInfos()
+  }
 }
 
 export default getPerfil;

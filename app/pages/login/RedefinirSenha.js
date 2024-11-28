@@ -61,6 +61,7 @@ export default function RedefinirSenha() {
 			switch (response.status) {
 				case 200:
 					// Armazena o token no cache temporário (5 min)
+					await cacheTemp.set("email", validEmail);
 					await cacheTemp.set("tokenValidate", response.data.token);
 					
 					// Aguarda a modal de validar token
