@@ -109,6 +109,7 @@ const Catalogo = ({ navigation }) => {
       <View style={styles.container}>
         <FlatList
           data={filteredArticles}
+					showsVerticalScrollIndicator={false} //scroll invisivel
           keyExtractor={(item) => item.pk_IDarticle.toString()}
           ListHeaderComponent={
             <>
@@ -176,7 +177,6 @@ const styles = StyleSheet.create({
 
   scrollContent: {
     paddingHorizontal: 10,
-    paddingBottom: 75,
   },
 
   logoContainer: {
@@ -207,26 +207,29 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginRight: 8,
   },
-  filterText: { 
+
+  filterText: {
     fontSize: width * 0.035,
-    fontFamily: "Poppins_400Regular" 
+    fontFamily: "Poppins_400Regular"
   },
 
-  selected: { 
-    backgroundColor: "#4CAF50" 
+  selected: {
+    backgroundColor: "#4CAF50"
   },
 
-  unselected: { 
-    backgroundColor: "#F1F1F1" 
+  unselected: {
+    backgroundColor: "#F1F1F1"
   },
 
-  selectedText: { 
+  selectedText: {
     color: "#FFF",
-    paddingHorizontal: 5 },
+    paddingHorizontal: 5
+  },
 
-  unselectedText: { 
+  unselectedText: {
     color: "#3F463E",
-    paddingHorizontal: 5 },
+    paddingHorizontal: 5
+  },
 
   buttonsContainer: {
     flexDirection: "row",
@@ -267,10 +270,10 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 
-  newsDate: { 
-    fontSize: 12, 
-    color: "#3F463E", 
-    fontFamily: "Poppins_500Medium" 
+  newsDate: {
+    fontSize: 12,
+    color: "#3F463E",
+    fontFamily: "Poppins_500Medium"
   },
 
   newsCategory: {
@@ -296,11 +299,11 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_500Medium",
   },
 
-  loader: { 
-    flex: 1, 
-    justifyContent: "center", 
-    alignItems: "center" 
+  loader: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
   },
 });
- 
+
 export default Catalogo;
