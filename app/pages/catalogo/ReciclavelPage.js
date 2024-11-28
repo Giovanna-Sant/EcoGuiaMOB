@@ -8,16 +8,6 @@ const { width } = Dimensions.get('window');
 
 const ReciclavelPage = () => {
   const [expanded, setExpanded] = useState({});
-  
-  const [fontsLoaded] = useFonts({
-    Poppins_400Regular,
-    Poppins_500Medium,
-    Poppins_600SemiBold,
-  });
-
-  if (!fontsLoaded) {
-    return <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />;
-  }
 
   const handleExpand = (category) => {
     setExpanded((prevExpanded) => ({
@@ -26,11 +16,24 @@ const ReciclavelPage = () => {
     }));
   };
 
+  // Carregamento das fontes
+  const [fontsLoaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
+  });
+
+  if (!fontsLoaded) {
+    return (
+      <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
+    );
+  }
+
   return (
     <View style={styles.container}>
-     
+
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <BannerReciclavel
+        <BannerReciclavel
           style={[styles.bannerContainer]}
           resizeMode="cover"
           maxWidth="100%"
@@ -161,7 +164,7 @@ const styles = StyleSheet.create({
   categoryContainer: {
     marginBottom: 15,
   },
-  
+
   categoryHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -175,44 +178,44 @@ const styles = StyleSheet.create({
     fontSize: 20,
     flex: 1,
   },
-  
+
   bullet: {
     width: 15,
     height: 15,
     borderRadius: 10,
     marginRight: 10,
   },
-  
+
   subList: {
     paddingLeft: 35,
   },
-  
+
   subItemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 5,
   },
-  
+
   subItemBullet: {
     width: 15,
     height: 15,
     borderRadius: 10,
     marginRight: 10,
   },
-  
+
   subItemText: {
     fontFamily: 'Poppins_400Regular',
     fontSize: 16,
     color: '#333',
   },
-  
+
   categorySeparator: {
     height: 1,
     backgroundColor: '#E0E0E0',
     marginVertical: 10,
     marginLeft: 15,
   },
-  
+
 });
 
 export default ReciclavelPage;

@@ -87,9 +87,9 @@ const Perfil = () => {
   const [sobrenome, setSobrenome] = useState('');
   const [selectedIcon, setSelectedIcon] = useState(null);
  
-  const [refresh,setRefresh]  = useState(false)
+  const [refresh, setRefresh] = useState(false)
  
-  const onRefresh = async  () =>{
+  const onRefresh = async () => {
     setRefresh(true)
     getPerfil()
     setUser(await cache.get("dados"))
