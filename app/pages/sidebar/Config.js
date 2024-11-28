@@ -415,32 +415,7 @@ const Config = () => {
           </>
         ))}
 
-        {renderModal(deletarModalVisible, setDeletarModalVisible, (
-          <>
-            <Text style={styles.title}>Deletar Conta</Text>
-            <Text style={styles.label}>Você realmente deseja deletar sua conta?</Text>
-            <View style={styles.inputView}>
-              <TextInput 
-                value={senhaParaDeletar}
-                placeholder="Confirme sua senha"
-                onChangeText={setSenhaParaDeletar}
-                secureTextEntry={!passwordVisible}
-                style={styles.textInput}
-              />
-                <TouchableOpacity onPress={togglePasswordVisibility}>
-                  {passwordVisible ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
-                </TouchableOpacity>
-            </View>
-            <View style={styles.buttonContainer}>
-              <Pressable style={styles.confirmButton} onPress={toggleDeletarModal}>
-                <Text style={styles.buttonTextConfir}>Cancelar</Text>
-              </Pressable>
-              <Pressable style={styles.cancelButton} onPress={handleDeleteAccount}>
-                <Text style={styles.buttonText}>Deletar Conta</Text>
-              </Pressable>
-            </View>
-          </>
-        ))}
+
 
 
         
