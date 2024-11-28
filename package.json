@@ -17,6 +17,7 @@
     "@react-navigation/native-stack": "^6.10.0",
     "@react-navigation/stack": "^6.4.1",
     "axios": "^1.7.7",
+    "bcryptjs": "^2.4.3",
     "crypto": "^1.0.1",
     "ecoguiamob": "file:",
     "email-validator": "^2.0.4",
