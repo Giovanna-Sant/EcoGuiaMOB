@@ -47,7 +47,7 @@ const Trilha = () => {
 			const response = await api.get('/quests');
 			setQuests(response.data.quests)
 			const quest = await cache.get('dados')
-			setQuestUser(quest.fk_quest_user)
+			setQuestUser(quest.pk_IDquest)
 		} catch(error) {
 			Alert.alert("Erro ao buscar as missões: ", error.response.msg)
 			console.error(error)
