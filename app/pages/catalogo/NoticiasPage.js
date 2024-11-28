@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Image, Linking } from 'react-native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 
 const NoticiasPage = ({ route }) => {
@@ -38,7 +38,7 @@ const NoticiasPage = ({ route }) => {
             <Text style={styles.newsTitle}>{article.title_article}</Text>
 
             {/*Fonte*/ }
-            <Text style={styles.newsSubtitle}>{article.reference_article || 'Autor Desconhecido'}</Text>
+            <Text style={styles.newsSubtitle} onPress={() => Linking.openURL(article.reference_article)}>{article.reference_article || 'Autor Desconhecido'}</Text>
 
             {/*Data*/ }
             <Text style={styles.newsDate}>{formatDate(article.date_article) || 'Data Desconhecida'}</Text>
@@ -89,7 +89,9 @@ const styles = StyleSheet.create({
     color: '#777',
     fontFamily: 'Poppins_400Regular',
     marginTop: 5,
+    textDecorationLine: 'underline'
   },
+
   newsDate: {
     fontSize: 12,
     color: '#777',
