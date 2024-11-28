@@ -5,7 +5,6 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } 
 import MapView, { Marker } from "react-native-maps";
 import * as Location from 'expo-location';
 import { PointLocal } from '../assets'
-import api from '../services/api';
 
 const Mapa = () => {
     const [regiao, setRegiao] = useState(null);
@@ -22,6 +21,10 @@ const Mapa = () => {
     // Navegação de páginas
     const navigation = useNavigation();
 
+    const handlePress = (screen) => {
+      navigation.navigate(screen);
+    };
+
     // Pedir localização
     useEffect(() => {
         (async () => {
@@ -30,6 +33,8 @@ const Mapa = () => {
                 alert("Permissão de acesso à localização negada. Não será possível trazer informações")
                 setLoading(false)
                 return
+            } else {
+              handleCallNotification();
             }
 
             let location = await Location.getCurrentPositionAsync({})
@@ -42,12 +47,12 @@ const Mapa = () => {
 
             // Buscar dados dos ecopontos 
             try {
-                let response = await api.get('/ecopontos');  
-                if (!response) {
+                let response = await fetch('https://api-ecopontos.onrender.com/ecopontos');  
+                if (!response.ok) {
                   console.log('Network response was not ok', response.statusText);
                   return;
               }
-                let data = response.data
+                let data = await response.json();
                 setEcopontos(data.features);
               } catch (error) {
                 console.log('Erro ao buscar dados dos ecopontos:', error);

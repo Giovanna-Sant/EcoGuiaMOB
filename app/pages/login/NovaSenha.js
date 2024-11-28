@@ -5,7 +5,7 @@ import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator,
 import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_300Light } from '@expo-google-fonts/poppins';
 import { LogoEcoGuia, ShowPassword, HidePassword } from '../../assets';
 import api from '../../services/api'
-import cacheTemp from '../../utils/cacheTemp';
+import cache from '../../utils/cache'
 
 export default function RedefinirSenha() {
   const [pwd, setPwd] = useState("");
@@ -19,7 +19,7 @@ export default function RedefinirSenha() {
       return;
     }
     try {
-      const email = await cacheTemp.get("email");
+      const email = await cache.get("email");
       console.log(email);
       const response = await api.post("/user/pwd/new", { pwd, email });
       console.log(response);

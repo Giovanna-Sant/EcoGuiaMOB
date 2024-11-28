@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TextInput, StyleSheet, Image, ActivityIndicator, TouchableOpacity, Modal, Dimensions, Pressable, Alert } from 'react-native';
+import { View, Text, FlatList, TextInput, StyleSheet, Image, ActivityIndicator, TouchableOpacity, Modal, Dimensions, TouchableWithoutFeedback, Pressable,  Alert } from 'react-native';
 import { TitleTrilha, PointNone, PointDone } from '../assets';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { RefreshControl } from 'react-native-gesture-handler';
@@ -11,7 +11,7 @@ const Trilha = () => {
 	const [modalQuantidadeVisivel, setModalQuantidadeVisivel] = useState(false);
 	const [materialSelecionado, setMaterialSelecionado] = useState(null);
 	const [quantidade, setQuantidade] = useState(1);
-	
+
 	const materiaisDisponiveis = [
 		{ nome: 'Papel', xp: 10, cor: '#3787D4' }, 
 		{ nome: 'Plástico', xp: 20, cor: '#DB3030' }, 
@@ -85,7 +85,7 @@ const Trilha = () => {
 			switch (response.status) {
 				case 200:
 				// reload das quests
-				setDummyState(Date.now());
+				onRefresh()
 				break;
 				}
 
@@ -143,14 +143,13 @@ const Trilha = () => {
 						<RefreshControl refreshing={refresh} onRefresh={onRefresh} />}
 					ListHeaderComponent={ //header
 						<View style={{justifyContent: "center", alignItems: "center"}}>
-							<TitleTrilha maxWidth={210} style={{marginBottom: -40, marginTop: -20}}/>
+							<TitleTrilha maxWidth={210} style={{marginBottom: -50}}/>
 							<Text style={styles.text}>Complete as missões abaixo para desbloquear badges e ganhar xp!</Text>
 						</View>
 					}
 					renderItem={({ item, index }) => {
-						const paddingLeft = index % 2 === 0 ? 50 : 270;
+						const paddingLeft = index % 2 === 0 ? 25 : 200;
 						const nextQuest = quests[index + 1];
-
 						return (
 						<View>
 							{/* Estrutura para setar quest como concluída ou não */}
@@ -158,14 +157,16 @@ const Trilha = () => {
 								// Quests completas
 								<View style={{paddingLeft}}>
 									<Pressable onPress={() => setSelectedQuest(item)} style={styles.missaoButton}>
-										<PointDone width={70} height={70}/>
+										{/* <PointDone width={60} height={60}/> */}
+									<PointNone width={60} height={60}/>
+
 									</Pressable>
 								</View>
 								// Quests incompletas
 								 : 
 								 <View style={{paddingLeft}}>
 								<Pressable onPress={() => setSelectedQuest(item)} style={styles.missaoButton}>
-									<PointNone width={70} height={70}/>
+									<PointNone width={60} height={60}/>
 								</Pressable>
 								</View>
 							}
@@ -174,9 +175,9 @@ const Trilha = () => {
               {nextQuest && (
                 <View
                   style={[styles.line,
-                    {left: index % 2 === 0 ? paddingLeft + 140 : paddingLeft - 70,
+                    {left: index % 2 === 0 ? paddingLeft + 120 : paddingLeft - 50,
                       top: 10, // Ajuste para começar da borda do ponto
-                      transform: [{ rotate: index % 2 === 0 ? '-65deg' : '65deg' }],
+                      transform: [{ rotate: index % 2 === 0 ? '-55deg' : '55deg' }],
                     },
                   ]}
                 />
@@ -220,21 +221,20 @@ const Trilha = () => {
 										<Text style={styles.subtitle}>Missão {item.pk_IDquest}</Text>
 										<Text style={styles.text}>{item.description_quest}</Text>
 
-										{item.pk_IDquest < questUser ? (
-											// Missão já feita
-											<Text style={styles.textCompleted}>Missão concluída, parabéns!</Text>
-
-										) : item.pk_IDquest == questUser ? (
-											// Missão atual a ser feita
-											<TouchableOpacity style={styles.botaoCheck} onPress={concluirObjetivo}>
-												<Text style={styles.textBotao}>Concluir</Text>
-												<Text style={styles.textBotao}>+{item.XP_quest} XP</Text>
-											</TouchableOpacity>
-										) : (
-											// Próximas missões
-											<Text style={styles.textCompleted}>Complete a anterior</Text>
-										)}
-								</View>
+										{item.pk_IDquest < questUser ? 
+										// Modal missão a fazer
+										<Text style={styles.textCompleted}>Missão concluída, parábens!</Text>
+										:
+										// Modal missão já completada
+										<TouchableOpacity
+										style={styles.botaoCheck}
+											onPress={concluirObjetivo}
+										>
+											<Text style={styles.textBotao}>Concluir</Text>
+											<Text style={styles.textBotao}>+{item.XP_quest} XP</Text>
+										</TouchableOpacity>
+										}
+									</View>
 								</Pressable>
 							</Modal>
 						</View>
@@ -353,6 +353,7 @@ const styles = StyleSheet.create({
 
 	content: {
 		justifyContent: "center",
+		paddingBottom: 100
 	},
 
 	botaoFlutuante: {
@@ -363,7 +364,7 @@ const styles = StyleSheet.create({
 		borderRadius: 30,
 		justifyContent: 'center',
 		alignItems: 'center',
-		bottom: 30,  
+		bottom: 100,  
 		right: 20,  
 		shadowColor: '#000',
 		shadowOffset: { width: 0, height: 2 },
@@ -554,7 +555,8 @@ const styles = StyleSheet.create({
 		width: 250,
 		borderRadius: 10,
 		padding: 15,
-		margin: 80
+		margin: 80,
+		elevation: 5
 	},
 
 	subtitle: {
@@ -598,7 +600,7 @@ const styles = StyleSheet.create({
 	  line: {
 		position: 'absolute',
 		width: 5,
-		height: 210,
+		height: 170,
 		backgroundColor: 'gray',
 		zIndex: -1, 
 	  },
@@ -608,8 +610,7 @@ const styles = StyleSheet.create({
 		zIndex: 40,
 		borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-		padding: 10,
-		marginTop: 30,
+		padding: 15,
 		flexDirection: 'row',
 		width: '100%',
 		gap: 20,
@@ -620,20 +621,15 @@ const styles = StyleSheet.create({
 	badgeImg: {
 		width: 76,
 		height: 100,
-		elevation: 20
 	},
 
 	badgeTitle: {
 		fontFamily: 'Poppins_500Medium',
 		fontSize: 16,
-		backgroundColor: '#fff',
-		paddingHorizontal: 10,
-		paddingVertical: 3,
-		borderTopLeftRadius: 10,
-		borderTopRightRadius: 10,
-		borderBottomRightRadius: 10,
-		bottom: 90,
-		position: 'absolute'
+		color: '#000', // cor do texto principal
+    		textShadowColor: '#FFF', // cor da borda (branco nesse caso)
+    		textShadowOffset: { width: 0, height: 0 }, // deslocamento do sombreamento
+    		textShadowRadius: 1, // intensidade do sombreamento
 	},
 
 	badgeDescription: {
@@ -647,13 +643,13 @@ const styles = StyleSheet.create({
 		fontFamily: 'Poppins_400Regular',
 		fontSize: 14,
 		backgroundColor: "#E2F2DF",
-		borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
+		borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
 		paddingHorizontal: 10,
 		paddingVertical: 3,
-		width: 170,
-		marginBottom: 10
-	},
+		width: 170
+	}
+
 });
 
 export default Trilha;

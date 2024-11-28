@@ -38,10 +38,7 @@ const HeaderLogo = () => (
 );
 
 const HeaderMenuButton = ({ navigation }) => (
-  <TouchableOpacity 
-    onPress={() => navigation.openDrawer()} 
-    hitSlop={{ top: 20, bottom: 20, left: 20, right: 0 }}
-  >
+  <TouchableOpacity onPress={() => navigation.openDrawer()}>
     <Ionicons name="menu" size={30} color="black" />
   </TouchableOpacity>
 );
@@ -231,10 +228,8 @@ function DrawerNavigator() {
     <Drawer.Navigator
       initialRouteName="Home"
       screenOptions={{
-        drawerPosition: "right",
-        headerShown: false,
-        gestureEnabled: true,
-        swipeEdgeWidth: 50,
+        drawerPosition: "right", // Drawer abre pela direita
+        headerShown: false,      // Header desativado por padrão
         drawerLabelStyle: {
           fontFamily: 'Poppins',
           fontSize: 16,
@@ -245,7 +240,7 @@ function DrawerNavigator() {
     >
       {/* Tela Home */}
       <Drawer.Screen
-        name="Home"
+        name="Casa"
         component={TabsNavigator}
         options={{
           drawerIcon: ({ color, size }) => <HomeIcon color={color} size={size} />,
