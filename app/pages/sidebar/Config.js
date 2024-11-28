@@ -5,6 +5,8 @@ import { Detail, ArrowRight, ShowPassword, HidePassword } from "../../assets";
 import cache from '../../utils/cache'
 import api from '../../services/api';
 import { useModal } from '../login/ModalContext'; //abrir modal do token
+import checkInfos from "../../utils/checkInfos";
+import bcrypt from 'bcryptjs'
 
 const Config = () => {
   const [user, setUser] = useState({});
@@ -38,20 +40,25 @@ const Config = () => {
     async function lerUser() {
       setUser(await cache.get("dados"));
       setEmail(await cache.get("email"));
+      setHash(await cache.get('hash'))
     };
     lerUser();
   }, [user, email]);
 
+  const [hash,setHash] = useState('')
   const modifyPwd = async () => {
+    const token = await cache.get("tokenID");
     try {
-      const token = await cache.get("tokenID");
-      console.log(token);
+      const checkPwd = bcrypt.compareSync(senhaAtual,hash)
+      if (!checkPwd) {
+        alert('Senha atual incorreta')
+        return;
+      }
       if (novaSenha !== confirmarSenha) {
         alert('As senhas não conferem');
         return;
       }
       const response = await api.put('/user/pwd', {
-        pwdUser: senhaAtual,
         newPwd: novaSenha
       }, {
         headers: {
@@ -62,6 +69,7 @@ const Config = () => {
     } catch (erro) {
       console.log(erro);
     }
+   await checkInfos()
   };
 
   const registerModifyEmail = async () => {
@@ -96,9 +104,9 @@ const Config = () => {
     }
   };
 
-  const [pwdHash, setPwdHash] = useState('');
+
   const deleteUser = async () => {
-    console.log(pwdHash);
+ 
     try {
       const token = await cache.get("tokenID");
       const response = await api.delete('/user', {
@@ -106,9 +114,10 @@ const Config = () => {
           authorization: `Bearer ${token}`
         },
         data: {
-          pwdHash: pwdHash
+          pwdHash: senhaParaDeletar
         },
       });
+      
     } catch (erro) {
       console.log(erro);
     }
@@ -162,6 +171,7 @@ const Config = () => {
   };
 
   const handleDeleteAccount = () => {
+    deleteUser()
     toggleDeletarModal();
     toggleConfirmarSenhaModal();
   };
@@ -316,10 +326,10 @@ const Config = () => {
             </View>
 
             <View style={styles.buttonContainer}>
-              <Pressable style={styles.confirmButton} onPress={handleSenhaSave}>
+              <Pressable style={styles.confirmButton} onPress={toggleSenhaModal}>
                 <Text style={styles.buttonTextConfir}>Cancelar</Text>
               </Pressable>
-              <Pressable style={styles.cancelButton} onPress={handleSenhaSave}>
+              <Pressable style={styles.cancelButton} onPress={() => handleSenhaSave()}>
                 <Text style={styles.buttonText}>Confirmar</Text>
               </Pressable>
             </View>
@@ -343,7 +353,7 @@ const Config = () => {
                 </TouchableOpacity>
             </View>
             <View style={styles.buttonContainer}>
-              <Pressable style={styles.confirmButton} onPress={handleDeleteAccount}>
+              <Pressable style={styles.confirmButton} onPress={toggleDeletarModal}>
                 <Text style={styles.buttonTextConfir}>Cancelar</Text>
               </Pressable>
               <Pressable style={styles.cancelButton} onPress={handleDeleteAccount}>
