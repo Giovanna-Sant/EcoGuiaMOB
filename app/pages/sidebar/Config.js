@@ -7,6 +7,7 @@ import api from '../../services/api';
 import { useModal } from '../login/ModalContext'; //abrir modal do token
 import checkInfos from "../../utils/checkInfos";
 import bcrypt from 'bcryptjs'
+import { useNavigation } from '@react-navigation/native';
 
 const Config = () => {
   const [user, setUser] = useState({});
@@ -15,6 +16,7 @@ const Config = () => {
   const [passwordVisibleA, setPasswordVisibleA] = useState(false);
   const [passwordVisibleB, setPasswordVisibleB] = useState(false);
 	const { openModal } = useModal(); //abrir modal externa
+    const navigation = useNavigation(); 
 
   // Visualização de senha
 	const togglePasswordVisibility = () => {
@@ -127,6 +129,7 @@ const Config = () => {
   const [tokenModalVisible, setTokenModalVisible] = useState(false);
   const [senhaModalVisible, setSenhaModalVisible] = useState(false);
   const [deletarModalVisible, setDeletarModalVisible] = useState(false);
+  const [sairModalVisible, setSairModalVisible] = useState(false);
   const [confirmarSenhaModalVisible, setConfirmarSenhaModalVisible] = useState(false);
 
   const [emailAtual, setEmailAtual] = useState('');
@@ -157,8 +160,16 @@ const Config = () => {
     setDeletarModalVisible(!deletarModalVisible);
   };
 
+  const toggleSairModal = () => {
+    setSairModalVisible(!sairModalVisible);
+  };
+
   const toggleConfirmarSenhaModal = () => {
     setConfirmarSenhaModalVisible(!confirmarSenhaModalVisible);
+  };
+
+  const indoLogin = () => {
+    navigation.navigate('Login');
   };
 
   const handleEmailSave = () => {
@@ -244,6 +255,10 @@ const Config = () => {
           </Pressable>
           <Pressable style={styles.operacao} onPress={toggleDeletarModal}>
             <Text style={styles.txtOperacao}>Deletar Conta</Text>
+            <ArrowRight />
+          </Pressable>
+          <Pressable style={styles.operacao} onPress={toggleSairModal}>
+            <Text style={styles.txtOperacao}>Sair da Conta</Text>
             <ArrowRight />
           </Pressable>
         </View>
@@ -363,6 +378,22 @@ const Config = () => {
           </>
         ))}
 
+        {renderModal(sairModalVisible, setSairModalVisible, (
+          <>
+            <Text style={styles.title}>Sair da Conta</Text>
+            <Text style={styles.label}>Você realmente deseja sair da sua conta?</Text>
+
+            <View style={styles.buttonContainer}>
+              <Pressable style={styles.confirmButton} onPress={toggleSairModal}>
+                <Text style={styles.buttonTextConfir}>Cancelar</Text>
+              </Pressable>
+              <Pressable style={styles.cancelButton} onPress={indoLogin}>
+                <Text style={styles.buttonText}>Sair da Conta</Text>
+              </Pressable>
+            </View>
+          </>
+        ))}
+
         {renderModal(confirmarSenhaModalVisible, setConfirmarSenhaModalVisible, (
           <>
             <Text style={styles.title}>Confirmar Senha</Text>
@@ -384,6 +415,35 @@ const Config = () => {
           </>
         ))}
 
+        {renderModal(deletarModalVisible, setDeletarModalVisible, (
+          <>
+            <Text style={styles.title}>Deletar Conta</Text>
+            <Text style={styles.label}>Você realmente deseja deletar sua conta?</Text>
+            <View style={styles.inputView}>
+              <TextInput 
+                value={senhaParaDeletar}
+                placeholder="Confirme sua senha"
+                onChangeText={setSenhaParaDeletar}
+                secureTextEntry={!passwordVisible}
+                style={styles.textInput}
+              />
+                <TouchableOpacity onPress={togglePasswordVisibility}>
+                  {passwordVisible ? <HidePassword width={24} height={24} /> : <ShowPassword width={24} height={24} />}
+                </TouchableOpacity>
+            </View>
+            <View style={styles.buttonContainer}>
+              <Pressable style={styles.confirmButton} onPress={toggleDeletarModal}>
+                <Text style={styles.buttonTextConfir}>Cancelar</Text>
+              </Pressable>
+              <Pressable style={styles.cancelButton} onPress={handleDeleteAccount}>
+                <Text style={styles.buttonText}>Deletar Conta</Text>
+              </Pressable>
+            </View>
+          </>
+        ))}
+
+
+        
       </View>
     </ScrollView>
   );
@@ -519,6 +579,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 10,
     borderRadius: 5,
+    justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
     borderColor: '#6BBF59',
@@ -529,6 +590,7 @@ const styles = StyleSheet.create({
   cancelButton: {
     backgroundColor: '#6BBF59',
     padding: 10,
+    textAlign: 'center',
     borderRadius: 5,
     alignItems: 'center',
     flex: 1,
