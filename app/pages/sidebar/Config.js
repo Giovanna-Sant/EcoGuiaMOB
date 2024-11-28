@@ -11,6 +11,7 @@ import bcrypt from 'bcryptjs'
 const Config = () => {
   const [user, setUser] = useState({});
   const [email, setEmail] = useState('');
+  const [userAvatar, setUserAvatar] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordVisibleA, setPasswordVisibleA] = useState(false);
   const [passwordVisibleB, setPasswordVisibleB] = useState(false);
@@ -103,6 +104,31 @@ const Config = () => {
       console.log(erro);
     }
   };
+
+  const userAvatarFetch = async () => {
+    try {
+      const token = await cache.get("tokenID");
+      const avatar = await cache.get("dados/avatar"); // Verifique se este é o caminho correto
+      const response = await api.get("user/profile", {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      });
+      const userData = response.data.results[0][0];
+      
+      // Use o avatar do cache, se disponível, senão use o blob_avatar do userData
+      setUserAvatar(avatar || userData.blob_avatar || 'https://cdn-icons-png.flaticon.com/256/903/903482.png');
+      setUser(userData);
+    } catch (error) {
+      console.error("Erro ao buscar avatar:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    userAvatarFetch();
+  }, []);
 
 
   const deleteUser = async () => {
@@ -220,7 +246,7 @@ const Config = () => {
       <View style={styles.content}>
         <Text style={styles.titulo}>Configurações da Conta</Text>
         <View style={styles.divPerfil}>
-          <View style={styles.iconDiv}><Image width={40} height={40} source={{ uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png' }} /></View>
+          <View style={styles.iconDiv}><Image width={40} height={40} source={{ uri: user.blob_avatar }} /></View>
           <View>
             <Text style={styles.subtitulo}>Perfil</Text>
             <Text style={styles.info}>{user.nickname_user}</Text>
