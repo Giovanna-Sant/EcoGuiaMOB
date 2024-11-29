@@ -266,7 +266,7 @@ const Perfil = () => {
         {/* Botão da Trilha */}
         <View style={styles.viewBadge}>
           <View style={styles.badge}>
-             {user.blob_avatar != null?(
+             {user && user.blob_badge?(
               <Image style={styles.badgeImg} source={{uri:`${user.blob_badge}`}} />
             ):(
               <Image style={styles.badgeImg} source={{uri: 'https://storage12ecoguia.blob.core.windows.net/blob-images-ecoguia/QUEST-01-DATA17324752145-NAMEBadge-00.png'}} />
