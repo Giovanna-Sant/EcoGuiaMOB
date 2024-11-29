@@ -5,20 +5,34 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } 
 import { RefreshControl } from 'react-native-gesture-handler';
 import api from '../services/api';
 import cache from '../utils/cache';
+import getPerfil from '../utils/gerProfile';
 
 const Trilha = () => {
 	const [modalMateriaisVisivel, setModalMateriaisVisivel] = useState(false);
 	const [modalQuantidadeVisivel, setModalQuantidadeVisivel] = useState(false);
 	const [materialSelecionado, setMaterialSelecionado] = useState(null);
 	const [quantidade, setQuantidade] = useState(1);
-	
-	const materiaisDisponiveis = [
-		{ nome: 'Papel', xp: 10, cor: '#3787D4' }, 
-		{ nome: 'Plástico', xp: 20, cor: '#DB3030' }, 
-		{ nome: 'Vidro', xp: 30, cor: '#6BBF59' }, 
-		{ nome: 'Metal', xp: 40, cor: '#DABC46' }, 
-		{ nome: 'Eletrônicos', xp: 50, cor: '#E09B6E' }, 
+	const [materiais,setMateriais] = useState([])
+
+  const getMateriais = async  () =>{
+	  try{
+		  const response = await api.get('/materiais')
+		  setMateriais(response.data.materiais)
+	  }catch(error){
+		console.error("Erro ao buscar os materiais "+error)
+	  }
+  }
+  let materiaisDisponiveis;
+   if(materiais[0]){
+	 materiaisDisponiveis = [
+		{ nome: materiais[0].title_material, xp: materiais[0].XP_material, cor: '#3787D4' }, 
+		{ nome: materiais[1].title_material, xp: materiais[1].XP_material, cor: '#DB3030' }, 
+		{ nome: materiais[2].title_material, xp: materiais[2].XP_material, cor: '#6BBF59' }, 
+		{ nome: materiais[3].title_material, xp: materiais[3].XP_material, cor: '#DABC46' }, 
+		{ nome: materiais[4].title_material, xp: materiais[4].XP_material, cor: '#E09B6E' }, 
 	];
+
+}
 
 	const abrirModalQuantidade = (material) => {
 		setMaterialSelecionado(material);
@@ -56,15 +70,19 @@ const Trilha = () => {
 
 	// Setar como useEffect
 	useEffect(() => {
-		loadQuests();
+		 loadQuests();
+		 getMateriais();
 	}, []);
 
 	// Reloading das páginas 
 	const [refresh, setRefresh]  = useState(false)
 	const onRefresh = async () => {
     setRefresh(true)
+	await getPerfil()
     await loadQuests()
-    setRefresh(false) 
+	setTimeout(() =>{
+		setRefresh(false)  
+	  },2000) 
 	};
 
 	// Função modal de concluir quest
@@ -118,6 +136,58 @@ const Trilha = () => {
 			setSelectedQuest(null);						
 		};
 	};
+
+	const [xpMaterial,setXpMaterial] = useState('')
+		// Função modal de concluir quest
+		const concluirColeta = async () => {
+			//capta o tokenID do cachê
+			const tokenID  = await cache.get('tokenID')
+			onRefresh()
+			//chama a função de atualizar level que atualiza o ID de missão
+			try {
+				const data = await api.put(
+					'/user/levelup', 
+					{ type: 1, xp_material: xpMaterial, peso: quantidade }, 
+					{ headers: { Authorization: `Bearer ${tokenID}` } }
+				);
+				const response = data.data.msg;
+	
+				//switch para verificar o que foi retornado
+				switch (response.status) {
+					case 200:
+					// reload das quests
+				alert("XP adicionado com sucesso!")
+					}
+	
+			} catch(error) {
+				// Se houver erro, verifica se é um erro de resposta
+				if (error.response) {
+					const status = error.response.status;
+					const msg = error.response.data.msg;
+					
+					// Tratando erros com base no status
+					switch (status) {
+						case 500:
+							showModal(msg);
+						break;
+							
+						default:
+							showModal('Algo deu errado :(',  'Ocorreu um erro desconhecido. Tente novamente');
+							console.error('Erro no back-end:', response);
+					}	
+				} else if (error.request) {
+					// Se houver falha na requisição sem resposta do servidor
+					showModal('Erro de conexão', 'Sem resposta do servidor. Verifique sua conexão');
+				} else {
+					// Outros tipos de erro (como erros de configuração)
+					showModal('Erro', 'Erro desconhecido');
+					console.error('Erro na requisição:', error);
+				}
+			} finally {
+				// Fechar modal ao apertar botão de concluído
+				setModalQuantidadeVisivel(false)						
+			};
+		};
 
 	// Carregamento das fontes
 	const [fontsLoaded] = useFonts({
@@ -274,7 +344,7 @@ const Trilha = () => {
 							renderItem={({ item }) => (
 								<TouchableOpacity
 									style={[styles.botaoMaterial, { backgroundColor: item.cor }]}
-									onPress={() => abrirModalQuantidade(item)}
+									onPress={() => [abrirModalQuantidade(item), setXpMaterial(item.xp)]} //AQUI
 								>
 									<Text style={styles.textoMaterial}>{item.nome}</Text>
 									<View style={styles.bolhaXp}>
@@ -305,7 +375,7 @@ const Trilha = () => {
 				<View style={styles.controleQuantidade}>
 					<TouchableOpacity
 						style={styles.botaoControle}
-						onPress={() => setQuantidade(quantidade - 0.5)}
+						onPress={() => setQuantidade(quantidade - 0.5,0)}
 					>
 						<Text style={styles.textoControle}>-</Text>
 					</TouchableOpacity>
@@ -323,7 +393,7 @@ const Trilha = () => {
 
 					<TouchableOpacity
 						style={styles.botaoControle}
-						onPress={() => setQuantidade(quantidade + 0.5)}
+						onPress={() => setQuantidade(quantidade + 0.5,0)}
 					>
 						<Text style={styles.textoControle}>+</Text>
 					</TouchableOpacity>
@@ -332,7 +402,7 @@ const Trilha = () => {
 
 			<TouchableOpacity
 				style={styles.botaoFinalizar}
-				onPress={() => setModalQuantidadeVisivel(false)}
+				onPress={() => concluirColeta()}
 			>
 				<Text style={styles.textoFinalizar}>Finalizar coleta</Text>
 			</TouchableOpacity>

@@ -16,10 +16,10 @@ const Perfil = () => {
   const [user, setUser] = useState({});
   useEffect(() => {
     setLoading(true)
-    getRank()
     try {
       async function lerUser() {
         setUser(await cache.get("dados"));
+        await getRank()
       }
       lerUser();
     } catch (erro) {
@@ -91,7 +91,8 @@ const Perfil = () => {
  
   const onRefresh = async () => {
     setRefresh(true)
-    getPerfil()
+    await getPerfil()
+    await getRank()
     setUser(await cache.get("dados"))
     setTimeout(() =>{
       setRefresh(false)  
