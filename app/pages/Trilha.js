@@ -258,7 +258,7 @@ const Trilha = () => {
 				{item.pk_IDquest < questUser ?
 					<View >
 						<Text style={styles.badgeTitle}>{item.title_badge}</Text>
-						<Text style={styles.badgeState}>Badge concluída!</Text>
+						<Text style={styles.badgeStateA}>Badge concluída!</Text>
 						<Text style={styles.badgeDescription}>{item.description_badge}</Text>
 					</View>
 						:
@@ -724,6 +724,19 @@ const styles = StyleSheet.create({
 		width: 170,
 		marginBottom: 10
 	},
+
+	badgeStateA: {
+		fontFamily: 'Poppins_400Regular',
+		fontSize: 14,
+		backgroundColor: "#E2F2DF",
+		borderBottomLeftRadius: 10,
+    		borderBottomRightRadius: 10,
+		paddingHorizontal: 10,
+		paddingVertical: 3,
+		width: 170,
+		top: 25,
+		marginBottom: 20
+	}
 });
 
 export default Trilha;
