@@ -23,11 +23,13 @@ const Config = () => {
 	const [modalVisible, setModalVisible] = useState(false); //armazena o estado de modal de erro
 	const [modalMessage, setModalMessage] = useState(''); //define a mensagem de erro
 	const [modalErro, setModalErro] = useState(''); //abrir modal externa de erro
+  const [userAvatar, setUserAvatar] = useState('');
 	const navigation = useNavigation();
   
   const [emailModalVisible, setEmailModalVisible] = useState(false);
   const [senhaModalVisible, setSenhaModalVisible] = useState(false);
   const [deletarModalVisible, setDeletarModalVisible] = useState(false);
+  const [sairModalVisible, setSairModalVisible] = useState(false);
   const [confirmarSenhaModalVisible, setConfirmarSenhaModalVisible] = useState(false);
 
   const [emailAtual, setEmailAtual] = useState('');
@@ -223,9 +225,33 @@ const Config = () => {
 		};
   };
 
+  // Buscar icon do perfil
+  const userAvatarFetch = async () => {
+    try {
+      const token = await cache.get("tokenID");
+      const avatar = await cache.get("dados/avatar"); // Verifique se este é o caminho correto
+      const response = await api.get("user/profile", {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      });
+      const userData = response.data.results[0][0];
+      
+      // Use o avatar do cache, se disponível, senão use o blob_avatar do userData
+      setUserAvatar(avatar || userData.blob_avatar || 'https://cdn-icons-png.flaticon.com/256/903/903482.png');
+      setUser(userData);
+    } catch (error) {
+      console.error("Erro ao buscar avatar:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    userAvatarFetch();
+  }, []);
 
   const deleteUser = async () => {
- 
     try {
       const token = await cache.get("tokenID");
       const response = await api.delete('/user', {
@@ -258,8 +284,16 @@ const Config = () => {
     setDeletarModalVisible(!deletarModalVisible);
   };
 
+  const toggleSairModal = () => {
+    setSairModalVisible(!sairModalVisible);
+  };
+
   const toggleConfirmarSenhaModal = () => {
     setConfirmarSenhaModalVisible(!confirmarSenhaModalVisible);
+  };
+
+  const indoLogin = () => {
+    navigation.navigate('Login');
   };
 
   const handleSenhaSave = () => {
@@ -305,7 +339,7 @@ const Config = () => {
       <View style={styles.content}>
         <Text style={styles.titulo}>Configurações da Conta</Text>
         <View style={styles.divPerfil}>
-          <View style={styles.iconDiv}><Image width={40} height={40} source={{ uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png' }} /></View>
+          <View style={styles.iconDiv}><Image width={40} height={40} source={{ uri: user.blob_avatar }} /></View>
           <View>
             <Text style={styles.subtitulo}>Perfil</Text>
             <Text style={styles.info}>{user.nickname_user}</Text>
@@ -331,8 +365,28 @@ const Config = () => {
             <Text style={styles.txtOperacao}>Deletar Conta</Text>
             <ArrowRight />
           </Pressable>
+          <Pressable style={styles.operacao} onPress={toggleSairModal}>
+            <Text style={styles.txtOperacao}>Sair da Conta</Text>
+            <ArrowRight />
+          </Pressable>
         </View>
         <Image source={Detail} style={styles.detalhe} />
+
+        {renderModal(sairModalVisible, setSairModalVisible, (
+          <>
+            <Text style={styles.title}>Sair da Conta</Text>
+            <Text style={styles.label}>Você realmente deseja sair da sua conta?</Text>
+
+            <View style={styles.buttonContainer}>
+              <Pressable style={styles.confirmButton} onPress={toggleSairModal}>
+                <Text style={styles.buttonTextConfir}>Cancelar</Text>
+              </Pressable>
+              <Pressable style={styles.cancelButton} onPress={indoLogin}>
+                <Text style={styles.buttonText}>Sair da Conta</Text>
+              </Pressable>
+            </View>
+          </>
+        ))}
 
         {renderModal(emailModalVisible, setEmailModalVisible, (
           <>
@@ -628,6 +682,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 2,
     borderColor: '#6BBF59',
     flex: 1,
@@ -641,6 +696,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     marginHorizontal: 5,
+    textAlign: 'center',
     justifyContent: 'center'
   },
   
