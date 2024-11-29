@@ -95,6 +95,7 @@ const Config = () => {
       }
       if (novaSenha !== confirmarSenha) {
         alert('As senhas não conferem');
+        setLoading(false)
         return;
       }
       const response = await api.put('/user/pwd', {

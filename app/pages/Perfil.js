@@ -16,6 +16,7 @@ const Perfil = () => {
   const [user, setUser] = useState({});
   useEffect(() => {
     setLoading(true)
+    onRefresh()
     try {
       async function lerUser() {
         setUser(await cache.get("dados"));
@@ -265,16 +266,16 @@ const Perfil = () => {
         {/* Botão da Trilha */}
         <View style={styles.viewBadge}>
           <View style={styles.badge}>
-             {user.blob_avatar ?(
+             {user.blob_avatar != null?(
               <Image style={styles.badgeImg} source={{uri:`${user.blob_badge}`}} />
             ):(
-              <Image style={styles.badgeImg} source={{uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png'}} />
+              <Image style={styles.badgeImg} source={{uri: 'https://storage12ecoguia.blob.core.windows.net/blob-images-ecoguia/QUEST-01-DATA17324752145-NAMEBadge-00.png'}} />
             )}
           </View>
           <View style={styles.badgeInfo}>
-            <Text style={styles.subtitle2}>{user.title_badge ? user.title_badge : "Árvore Iniciante"}</Text>
+            <Text style={styles.subtitle2}>{user.title_badge ? user.title_badge : "Sua badge inicial!"}</Text>
             <Text style={styles.text}>
-              {user.description_badge ? user.description_badge : " Você está indo bem, continue assim para evoluir!"}
+              {user.description_badge ? user.description_badge : "Viu como é bom ter um appzinho como nós?  Explore mais."}
             </Text>
             <Pressable
               style={styles.botao}
