@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Image, Pressable, Modal, TextInput, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { Detail, ArrowRight, ShowPassword, HidePassword } from "../../assets";
+import { useNavigation } from '@react-navigation/native';
 import cache from '../../utils/cache'
 import api from '../../services/api';
-import { useModal } from '../login/ModalContext'; //abrir modal do token
+import {useModal}   from '../login/ModalContext'; //abrir modal do token
 import checkInfos from "../../utils/checkInfos";
 import bcrypt from 'bcryptjs'
+import Login from "../login/Login";
+import isEmail from 'validator/lib/isEmail';
 
 const Config = () => {
   const [user, setUser] = useState({});
@@ -14,7 +17,43 @@ const Config = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordVisibleA, setPasswordVisibleA] = useState(false);
   const [passwordVisibleB, setPasswordVisibleB] = useState(false);
-	const { openModal } = useModal(); //abrir modal externa
+	const { openModal } = useModal(); //abrir modal externa de token
+	const [loading, setLoading] = useState(false); //armazena o estado de carregamento
+	const [disabled, setDisabled] = useState(false); //armazena o estado de desativado
+	const [modalVisible, setModalVisible] = useState(false); //armazena o estado de modal de erro
+	const [modalMessage, setModalMessage] = useState(''); //define a mensagem de erro
+	const [modalErro, setModalErro] = useState(''); //abrir modal externa de erro
+  const [userAvatar, setUserAvatar] = useState('');
+	const navigation = useNavigation();
+  
+  const [emailModalVisible, setEmailModalVisible] = useState(false);
+  const [senhaModalVisible, setSenhaModalVisible] = useState(false);
+  const [deletarModalVisible, setDeletarModalVisible] = useState(false);
+  const [sairModalVisible, setSairModalVisible] = useState(false);
+  const [confirmarSenhaModalVisible, setConfirmarSenhaModalVisible] = useState(false);
+
+  const [emailAtual, setEmailAtual] = useState('');
+  const [novoEmail, setNovoEmail] = useState('');
+  const [confirmarEmail, setConfirmarEmail] = useState('');
+
+  const [senhaAtual, setSenhaAtual] = useState('');
+  const [tokenAtual, setTokenAtual] = useState('');
+  const [novaSenha, setNovaSenha] = useState('');
+  const [confirmarSenha, setConfirmarSenha] = useState('');
+
+  const [senhaParaDeletar, setSenhaParaDeletar] = useState('');
+  const [tokenParaAlterar, setTokenParaAlterar] = useState('');
+
+	// Setar modal como visível
+	const showModal = (message, erro) => {
+		setModalMessage(message);
+		setModalVisible(true);
+		setModalErro(erro);
+	};
+
+  const handlePress = (screen) => {
+    navigation.navigate(screen);
+  };
 
   // Visualização de senha
 	const togglePasswordVisibility = () => {
@@ -47,15 +86,18 @@ const Config = () => {
 
   const [hash,setHash] = useState('')
   const modifyPwd = async () => {
+    setLoading(true)
     const token = await cache.get("tokenID");
     try {
       const checkPwd = bcrypt.compareSync(senhaAtual,hash)
       if (!checkPwd) {
         alert('Senha atual incorreta')
+        setLoading(false)
         return;
       }
       if (novaSenha !== confirmarSenha) {
         alert('As senhas não conferem');
+        setLoading(false)
         return;
       }
       const response = await api.put('/user/pwd', {
@@ -66,47 +108,151 @@ const Config = () => {
         }
       });
       alert("Senha alterada com sucesso!");
+      setLoading(false)
+      toggleSenhaModal();
     } catch (erro) {
       console.log(erro);
     }
    await checkInfos()
   };
 
-  const registerModifyEmail = async () => {
-    try {
-      if (novoEmail !== confirmarEmail) {
-        alert('Os e-mails não conferem');
-        return;
-      }
-      const response = await api.put('/user/registerEmail', {
-        email: novoEmail
-      });
-      setTokenAtual(response.data.token);
-      setTokenModalVisible(!tokenModalVisible);
-    } catch (erro) {
-      console.log(erro);
-    }
-  };
-
   const modifyEmail = async () => {
+    //uma variável de email sem espaçamentos acidentais p validações
+		const validEmail = novoEmail
+		.trim()
+		.toLowerCase();
+
+    //validação de campos
+		if (!novoEmail) {
+			showModal('Por favor, preencha o campo e-mail.');
+			return;
+		} 
+		if (!isEmail(validEmail)) {
+			// se o e-mail for inválido, exibe como um alerta de campo
+			showModal('Por favor, insira um e-mail válido.');
+			return;
+		}
+
+    //seta os estados de loading e desativa o botão de login
+		setDisabled(true);
+		setLoading(true);
+
     try {
-      const token = await cache.get("tokenID");
-      const response = await api.put("/user/email", {
-        email: novoEmail
-      }, {
+      const data = await api.put('/user/email/token', { email: validEmail }, {
         headers: {
           authorization: `Bearer ${token}`
         }
       });
-      await cache.set("email", novoEmail);
-    } catch (erro) {
-      console.log(erro);
+			console.log(data.data);
+			console.log(data.data.token);
+
+			const response = data;
+
+      // Armazena o token no cache temporário (5 min)
+      await cacheTemp.set("email", validEmail);
+      await cacheTemp.set("tokenValidate", response.data.token);
+      
+      console.log(response);
+      // Aguarda a modal de validar token
+      const tokenValid = await openModal();
+      if (tokenValid) {
+        console.log('Email trocado com sucesso!');
+        const token = await cache.get("tokenID");
+        const data = await api.put("/user/email/new", {
+          email: novoEmail
+        }, {
+          headers: {
+            authorization: `Bearer ${token}`
+          }
+        });
+        console.log(data.data.msg);
+        console.log(data.data.token);
+        navigation.navigate("Home");
+      } else {
+        Alert.alert('Ops, algo deu errado :(', 'O seu token não foi validado com sucesso, repita o processo.');
+      }
+      // //switch para verificar o que foi retornado
+			// switch (response.status) {
+			// 	case 200:
+			// 	break;
+			// }
+		} catch(error) {
+			// Se houver erro, verifica se é um erro de resposta
+			if (error.response) {
+				const status = error.response.status;
+				const msg    = error.response.data.msg || 'Erro desconhecido'; // mensagem de erro
+
+				// Tratando erros com base no código de status
+				switch (status) {
+					case 400:
+						showModal('Algo deu errado com o campo :(');
+						setModalErro(msg);
+					break;
+
+					case 401:
+						showModal('Algo deu errado com o e-mail inserido:(');
+						setModalErro(msg);
+						break;
+
+					case 404:
+						showModal('Algo deu errado com o registro de usuário :(');
+						setModalErro(msg);
+					break;
+
+					case 500:
+						showModal('Algo deu errado com a conexão :(');
+						setModalErro(msg);
+					break;
+
+					default:
+					showModal('Algo deu errado #01 :(');
+					setModalErro('Ocorreu um erro desconhecido. Tente novamente');
+					console.error('Erro ilegal 01:', response);
+				}
+			} else if (error.request) {
+				// Se houver falha na requisição sem resposta do servidor
+				showModal('Erro de conexão');
+				setModalErro('Sem resposta do servidor back-end. Verifique sua conexão.');
+				console.error('Erro ilegal 02:', response);
+			} else {
+				// Outros tipos de erro (como erros de configuração)
+				showModal('Algo deu errado #02 :(');
+				console.error('Erro ilegal #03:', response);
+			}
+		} finally {
+			//desativa os estados de loading e ativa o botão de login
+			setLoading(false);
+			setDisabled(false);
+		};
+  };
+
+  // Buscar icon do perfil
+  const userAvatarFetch = async () => {
+    try {
+      const token = await cache.get("tokenID");
+      const avatar = await cache.get("dados/avatar"); // Verifique se este é o caminho correto
+      const response = await api.get("user/profile", {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      });
+      const userData = response.data.results[0][0];
+      
+      // Use o avatar do cache, se disponível, senão use o blob_avatar do userData
+      setUserAvatar(avatar || userData.blob_avatar || 'https://cdn-icons-png.flaticon.com/256/903/903482.png');
+      setUser(userData);
+    } catch (error) {
+      console.error("Erro ao buscar avatar:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    userAvatarFetch();
+  }, []);
 
   const deleteUser = async () => {
- 
     try {
       const token = await cache.get("tokenID");
       const response = await api.delete('/user', {
@@ -117,36 +263,18 @@ const Config = () => {
           pwdHash: senhaParaDeletar
         },
       });
-      
+      handlePress(Login)
     } catch (erro) {
       console.log(erro);
     }
   }
-
-  const [emailModalVisible, setEmailModalVisible] = useState(false);
-  const [tokenModalVisible, setTokenModalVisible] = useState(false);
-  const [senhaModalVisible, setSenhaModalVisible] = useState(false);
-  const [deletarModalVisible, setDeletarModalVisible] = useState(false);
-  const [confirmarSenhaModalVisible, setConfirmarSenhaModalVisible] = useState(false);
-
-  const [emailAtual, setEmailAtual] = useState('');
-  const [novoEmail, setNovoEmail] = useState('');
-  const [confirmarEmail, setConfirmarEmail] = useState('');
-
-  const [senhaAtual, setSenhaAtual] = useState('');
-  const [tokenAtual, setTokenAtual] = useState('');
-  const [novaSenha, setNovaSenha] = useState('');
-  const [confirmarSenha, setConfirmarSenha] = useState('');
-
-  const [senhaParaDeletar, setSenhaParaDeletar] = useState('');
-  const [tokenParaAlterar, setTokenParaAlterar] = useState('');
 
   const toggleEmailModal = () => {
     setEmailModalVisible(!emailModalVisible);
   };
 
   const toggleTokenModal = () => {
-    registerModifyEmail();
+    modifyEmail();
   };
 
   const toggleSenhaModal = () => {
@@ -157,23 +285,24 @@ const Config = () => {
     setDeletarModalVisible(!deletarModalVisible);
   };
 
+  const toggleSairModal = () => {
+    setSairModalVisible(!sairModalVisible);
+  };
+
   const toggleConfirmarSenhaModal = () => {
     setConfirmarSenhaModalVisible(!confirmarSenhaModalVisible);
   };
 
-  const handleEmailSave = () => {
-    toggleEmailModal();
+  const indoLogin = () => {
+    navigation.navigate('Login');
   };
 
   const handleSenhaSave = () => {
     modifyPwd();
-    toggleSenhaModal();
   };
 
   const handleDeleteAccount = () => {
     deleteUser()
-    toggleDeletarModal();
-    toggleConfirmarSenhaModal();
   };
 
   const handleConfirmarSenha = () => {
@@ -184,15 +313,6 @@ const Config = () => {
       alert('Senha incorreta!');
     }
     toggleConfirmarSenhaModal();
-  };
-
-  const handleConfirmarToken = () => {
-    if (tokenParaAlterar === tokenAtual) {
-      modifyEmail();
-      alert('Email atualizado com sucesso!');
-    } else {
-      alert('Código de acesso incorreto!');
-    }
   };
 
   if (!fontsLoaded) {
@@ -220,7 +340,7 @@ const Config = () => {
       <View style={styles.content}>
         <Text style={styles.titulo}>Configurações da Conta</Text>
         <View style={styles.divPerfil}>
-          <View style={styles.iconDiv}><Image width={40} height={40} source={{ uri: 'https://cdn-icons-png.flaticon.com/256/903/903482.png' }} /></View>
+          <View style={styles.iconDiv}><Image width={40} height={40} source={{ uri: user.blob_avatar }} /></View>
           <View>
             <Text style={styles.subtitulo}>Perfil</Text>
             <Text style={styles.info}>{user.nickname_user}</Text>
@@ -246,8 +366,28 @@ const Config = () => {
             <Text style={styles.txtOperacao}>Deletar Conta</Text>
             <ArrowRight />
           </Pressable>
+          <Pressable style={styles.operacao} onPress={toggleSairModal}>
+            <Text style={styles.txtOperacao}>Sair da Conta</Text>
+            <ArrowRight />
+          </Pressable>
         </View>
         <Image source={Detail} style={styles.detalhe} />
+
+        {renderModal(sairModalVisible, setSairModalVisible, (
+          <>
+            <Text style={styles.title}>Sair da Conta</Text>
+            <Text style={styles.label}>Você realmente deseja sair da sua conta?</Text>
+
+            <View style={styles.buttonContainer}>
+              <Pressable style={styles.confirmButton} onPress={toggleSairModal}>
+                <Text style={styles.buttonTextConfir}>Cancelar</Text>
+              </Pressable>
+              <Pressable style={styles.cancelButton} onPress={indoLogin}>
+                <Text style={styles.buttonText}>Sair da Conta</Text>
+              </Pressable>
+            </View>
+          </>
+        ))}
 
         {renderModal(emailModalVisible, setEmailModalVisible, (
           <>
@@ -275,9 +415,19 @@ const Config = () => {
               <Pressable style={styles.confirmButton} onPress={toggleEmailModal}>
                 <Text style={styles.buttonTextConfir}>Cancelar</Text>
               </Pressable>
-              {/* <Pressable style={styles.cancelButton} onPress={toggleTokenModal}> */}
-              <Pressable style={styles.cancelButton} onPress={openModal}>
+              {/* <Pressable style={styles.cancelButton} onPress={toggleTokenModal}>
+              <Pressable style={styles.cancelButton}  onPress={() => handleSenhaSave()}>
                 <Text style={styles.buttonText}>Confirmar</Text>
+              </Pressable> */}
+              <Pressable style={styles.cancelButton} 
+              disabled={disabled || loading}
+              onPress={() => modifyEmail()}>
+
+              {loading ? (
+						<ActivityIndicator size="small" color="#fff" />
+						) : (
+						<Text style={styles.buttonText}>confirmar</Text>
+						)}
               </Pressable>
             </View>
           </>
@@ -326,11 +476,24 @@ const Config = () => {
             </View>
 
             <View style={styles.buttonContainer}>
-              <Pressable style={styles.confirmButton} onPress={toggleSenhaModal}>
-                <Text style={styles.buttonTextConfir}>Cancelar</Text>
-              </Pressable>
-              <Pressable style={styles.cancelButton} onPress={() => handleSenhaSave()}>
-                <Text style={styles.buttonText}>Confirmar</Text>
+             
+               {loading ? (
+                  <Text></Text>
+                ):(
+                  <Pressable style={styles.confirmButton} onPress={toggleSenhaModal}> 
+                  <Text style={styles.buttonTextConfir}>Cancelar</Text>
+                  </Pressable>
+                )}
+             
+              <Pressable style={styles.cancelButton} 
+              disabled={disabled || loading}
+              onPress={() => handleSenhaSave()}>
+
+              {loading ? (
+						<ActivityIndicator size="small" color="#fff" />
+						) : (
+						<Text style={styles.buttonText}>confirmar</Text>
+						)}
               </Pressable>
             </View>
           </>
@@ -520,6 +683,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 2,
     borderColor: '#6BBF59',
     flex: 1,
@@ -533,6 +697,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     marginHorizontal: 5,
+    textAlign: 'center',
     justifyContent: 'center'
   },
   

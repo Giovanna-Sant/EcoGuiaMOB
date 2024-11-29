@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView, Image, Pressable, ActivityIndicator
 import { useNavigation } from '@react-navigation/native';
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Collapsible from 'react-native-collapsible'; 
-
+import { RefreshControl } from 'react-native-gesture-handler';
 import * as Progress from 'react-native-progress';
 import { ArrowDown, ArrowRight, CatalogoBG, TrilhaBG, Truck, Local } from '../assets'
 import api from '../services/api'
@@ -12,7 +12,7 @@ import getPerfil from '../utils/gerProfile';
 
 const Home = () => {
   const [isCollapsed, setIsCollapsed] = useState(false); 
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const rotateAnim = useRef(new Animated.Value(0)).current; 
   const navigation = useNavigation();
 
@@ -24,23 +24,33 @@ const Home = () => {
   const [tip, setTip] = useState([])
   const [user, setUser] = useState({});
 
-  useEffect(() => {
-    setLoading(true)
+  // Função para carregar as dicas
+  const loadTips = async () => {
+    setLoading(true);
     try {
-      getPerfil();
-      async function getDados() {
-        const resposta = await api.get("/tip");
-        setTip(resposta.data);
-        setUser(await cache.get("dados"));
-      }
-      getDados();
-    } catch (erro) {
-      console.log(erro);
-    }finally{
-        setLoading(false)
+      await getPerfil();
+      const resposta = await api.get("/tip");
+      setTip(resposta.data);
+      setUser(await cache.get("dados"));
+    } catch(error) {
+      Alert.alert("Erro ao buscar os dados: ", error.response.msg)
+    } finally {
+      setLoading(false);
+      setRefresh(false); // Finaliza o estado de refresh
     }
-    },
-  [user]);
+  };
+
+	// Reloading das páginas 
+  const [refresh, setRefresh]  = useState(false)
+	const onRefresh = async () => {
+    setRefresh(true);
+    loadTips();
+	};
+
+	// Setar como useEffect
+	useEffect(() => {
+		loadTips();
+	}, []);
 
   // Carregamento das fontes
   const [fontsLoaded] = useFonts({
@@ -82,6 +92,9 @@ let levelProgress = 0
       <ScrollView 
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+        }
         style={styles.scrollView}
         >
           {loading ?(
@@ -116,10 +129,10 @@ let levelProgress = 0
           </View>
 
           <View style={styles.badge}>
-            {user ?  
+            {user && user.blob_badge ?  
             <Image style={styles.badgeImg} source={{uri:`${user.blob_badge}`}} />
              :
-            <Text></Text>
+             <Image style={styles.badgeImg} source={{uri:`https://storage12ecoguia.blob.core.windows.net/blob-images-ecoguia/QUEST-01-DATA17324752145-NAMEBadge-00.png`}} />
               }
           </View>
           
