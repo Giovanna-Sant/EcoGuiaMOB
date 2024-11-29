@@ -129,10 +129,10 @@ let levelProgress = 0
           </View>
 
           <View style={styles.badge}>
-            {user ?  
+            {user && user.blob_badge ?  
             <Image style={styles.badgeImg} source={{uri:`${user.blob_badge}`}} />
              :
-            <Text></Text>
+             <Image style={styles.badgeImg} source={{uri:`https://storage12ecoguia.blob.core.windows.net/blob-images-ecoguia/QUEST-01-DATA17324752145-NAMEBadge-00.png`}} />
               }
           </View>
           
