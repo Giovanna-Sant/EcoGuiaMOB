@@ -286,7 +286,11 @@ const Trilha = () => {
 									style={styles.modalBackdrop} 
 									onPress={() => setSelectedQuest(null)} // Fecha o modal quando clicado fora do conteúdo
 								>
-									<View style={styles.modalContent}>
+                                  {refresh?(
+										 <ActivityIndicator style={styles.loading} size="large" color="#fff"/>  
+									):(
+										<View style={styles.modalContent}>
+		  								
 										<Text style={styles.subtitle}>Missão {item.pk_IDquest}</Text>
 										<Text style={styles.text}>{item.description_quest}</Text>
 
@@ -297,6 +301,7 @@ const Trilha = () => {
 										) : item.pk_IDquest == questUser ? (
 											// Missão atual a ser feita
 											<TouchableOpacity style={styles.botaoCheck} onPress={concluirObjetivo}>
+												
 												<Text style={styles.textBotao}>Concluir</Text>
 												<Text style={styles.textBotao}>+{item.XP_quest} XP</Text>
 											</TouchableOpacity>
@@ -304,7 +309,9 @@ const Trilha = () => {
 											// Próximas missões
 											<Text style={styles.textCompleted}>Complete a anterior</Text>
 										)}
+
 								</View>
+									)}
 								</Pressable>
 							</Modal>
 						</View>
@@ -375,7 +382,7 @@ const Trilha = () => {
 				<View style={styles.controleQuantidade}>
 					<TouchableOpacity
 						style={styles.botaoControle}
-						onPress={() => setQuantidade(quantidade - 0.5,0)}
+						onPress={() => setQuantidade(Math.max(quantidade - 0.5))}
 					>
 						<Text style={styles.textoControle}>-</Text>
 					</TouchableOpacity>
