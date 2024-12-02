@@ -16,7 +16,6 @@ export default function RedefinirSenha() {
 	const [modalVisible, setModalVisible] = useState(false); //armazena o estado de modal de erro
 	const [modalMessage, setModalMessage] = useState(''); //define a mensagem de erro
 	const [modalErro, setModalErro] = useState(''); //abrir modal externa de erro
-	const [resolveModal, setResolveModal] = useState(null);
 	const navigation = useNavigation();
 
 	// Setar modal como visível

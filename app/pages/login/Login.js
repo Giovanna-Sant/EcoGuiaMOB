@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView, Modal } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import { LogoEcoGuia, Google, MissIcon, ShowPassword, HidePassword } from '../../assets';
+import { LogoEcoGuia, MissIcon, ShowPassword, HidePassword } from '../../assets';
 import api from '../../services/api';
 import cache from '../../utils/cache';
 import cacheTemp from '../../utils/cacheTemp';
@@ -85,7 +85,6 @@ export default function Login() {
 				data = await api.post('/user/login', {email, pwd});
 			}
 			console.log(data.data.msg);
-			console.log(data.data.token);
 
 			const response = data;
 
@@ -484,24 +483,6 @@ const styles = StyleSheet.create({
 		marginTop: 20,
 	},
 
-	googleContainer: {
-		borderWidth: 2,
-		borderRadius: 25,
-		flexDirection: "row",
-		paddingHorizontal: 8,
-		paddingVertical: 2,
-		justifyContent: "center",
-		alignItems: "center",
-		marginVertical: 10,
-	},
-
-	googleText: {
-		fontFamily: "Poppins_400Regular",
-		fontSize: 16,
-		color: "#000",
-		marginLeft: 8,
-	},
-
 	inputContainer: {
 		width: '100%',
 		paddingHorizontal: 30,
@@ -522,7 +503,7 @@ const styles = StyleSheet.create({
 		fontFamily: "Poppins_400Regular",
 	},
 
-  inputView: {
+	inputView: {
 		backgroundColor: "#F1F1F1",
 		height: 40,
 		paddingHorizontal: 10,
@@ -621,5 +602,5 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		fontFamily: "Poppins_400Regular",
 		fontSize: 14,
-	  }
+	}
 });
