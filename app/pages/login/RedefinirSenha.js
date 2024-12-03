@@ -310,6 +310,13 @@ const styles = StyleSheet.create({
 		color: "#6BBF59",
 		fontSize: 14,
 	},
+	recoverTexto: {
+		fontFamily: "Poppins_400Regular",
+		color: "#6BBF59",
+		fontSize: 14,
+		textDecorationLine: 'underline',
+		textAlign: 'center'
+	},
 	modalOverlay: {
 		flex: 1,
 		backgroundColor: 'rgba(0, 0, 0, 0.4)',

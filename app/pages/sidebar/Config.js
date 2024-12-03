@@ -3,7 +3,8 @@ import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Image, Pressable
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { Detail, ArrowRight, ShowPassword, HidePassword, MissIcon } from "../../assets";
 import { useNavigation } from '@react-navigation/native';
-import cache from '../../utils/cache'
+import cache from '../../utils/cache';
+import cacheTemp from "../../utils/cache";
 import api from '../../services/api';
 import {useModal}   from '../login/ModalContext'; //abrir modal do token
 import checkInfos from "../../utils/checkInfos";
@@ -84,15 +85,17 @@ const Config = () => {
 				let cache_hash  = await cache.get('hash');
 
 				if (!cache_user || !cache_email || !cache_hash){
-					showModal('Algo deu errado ao carregar os dados de usuário :(', 'Não foi possível encontrar dados no cachê.');
+					showModal('Algo deu errado :(');
+					setModalErro('Não foi possível encontrar os dados de identificação do usuário.');
 				}else{
-					setUser  = cache_user;
-					setEmail = cache_email;
-					setHash  = cache_hash;
+					setUser(cache_user);
+					setEmail(cache_email);
+					setHash(cache_hash);					
 				}
 			}catch(error){
-				showModal('Algo deu errado ao carregar os dados de usuário :(', msg);
-				setModalErro(error)
+				console.error('Erro, função lerUser: ' + error);
+				showModal('Algo deu errado :(');
+				setModalErro('Não foi possível carregar os dados de identificação do usuário.');
 			}finally{
 				setLoading(false);
 			}
@@ -100,121 +103,76 @@ const Config = () => {
 		lerUser();
 	}, [user, email]);
 
-	const modifyPwd = async () => {
-		setLoading(true);
-
-		const token    = await cache.get("tokenID");
-		const checkPwd = bcrypt.compareSync(senhaAtual, hash);
-
-		if(!token){
-			showModal('Algo deu errado ao carregar o token de usuário :(');
-			setModalErro('Não foi econtrado token de identificação no cachê.');
-		}else if (!checkPwd) {
-			showModal('Algo deu errado com a senha :(');
-			setModalErro('Senha incorreta.');
-
-			setLoading(false);
-			return;
-		}else if(novaSenha !== confirmarSenha){
-			showModal('Algo deu errado com a senha :(');
-			setModalErro('As senhas não batem.');
-			
-			setLoading(false);
-			return;
-		}
-		try {
-			const data = await api.put('/user/pwd', {newPwd: novaSenha}, {
-				headers: {
-					authorization: `Bearer ${token}`
-				}
-			});
-
-			const response = data;
-			//switch para verificar o que foi retornado
-			switch (response.status) {
-				case 200:
-					showModal('Senha alterada com sucesso.');
-				break;
-			};
-		}catch (error) {
-			// Se houver erro, verifica se é um erro de resposta
-			if (error.response) {
-				const status = error.response.status;
-				const msg = error.response.data.msg || 'Erro desconhecido'; // mensagem de erro
-
-				// Tratando erros com base no código de status
-				switch (status) {
-					case 500:
-						showModal('Algo deu errado com a conexão :(', msg);
-						setModalErro(msg);
-					break;
-
-					default:
-					showModal('Algo deu errado :(',  'Ocorreu um erro desconhecido. Tente novamente');
-					console.error('Erro ilegal:', response);
-				}
-			} else if (error.request) {
-				// Se houver falha na requisição sem resposta do servidor
-				showModal('Erro de conexão', 'Sem resposta do servidor. Verifique sua conexão');
-			} else {
-				// Outros tipos de erro (como erros de configuração)
-				showModal('Erro', 'Erro desconhecido');
-			}
-		}finally{
-			setLoading(false);
-			toggleSenhaModal();
-			
-			await checkInfos();
-		}
-	};
-
 	const modifyEmail = async () => {
-		//uma variável de email sem espaçamentos acidentais p validações
+		showModal('Função não disponível.');
+		setModalErro('Lamentamos, em breve será disponibilizada...');
+		stop;
+
+		//variável de email sem espaçamentos acidentais p validações
 		const validEmail = novoEmail
 		.trim()
 		.toLowerCase();
 
+		const validEmail1 = confirmarEmail
+		.trim()
+		.toLowerCase();
+
 		//validação de campos
-		if (!novoEmail) {
-			showModal('Por favor, preencha o campo e-mail.');
-			return;
-		} 
-		if (!isEmail(validEmail)) {
-			// se o e-mail for inválido, exibe como um alerta de campo
-			showModal('Por favor, insira um e-mail válido.');
+		if (!novoEmail || !confirmarEmail) {
+			showModal('Ops! Espera aí!');
+			setModalErro('Por favor, preencha todos os campos.');
 			return;
 		}
+		else if (!isEmail(validEmail)) {
+			// se o e-mail for inválido, exibe como um alerta de campo
+			showModal('Ops! Espera aí!');
+			setModalErro('Por favor, insira um e-mail válido.');
+			return;
+		}
+		else if(validEmail1 != validEmail){
+			// se o e-mails não forem iguais, exibe como um alerta de campo
+			showModal('Ops! Espera aí!');
+			setModalErro('Os campos não batem.');
+			return;
+		} 
 
 		//seta os estados de loading e desativa o botão de login
 		setDisabled(true);
 		setLoading(true);
 
 		try {
-			const data = await api.put('/user/email/token', { email: validEmail }, {
-				headers: {
-					authorization: `Bearer ${token}`
-				}
-			});
-			console.log(data.data);
-			console.log(data.data.token);
+			const token = await cache.get("tokenID");
+			let response;
 
-			const response = data;
+			if(token){
+				const data = await api.put('/user/email/token', { email: validEmail }, {
+					headers: {
+						authorization: `Bearer ${token}`
+					}
+				});
+
+				response = data;
+			}else{
+				//caso não tenha achado o token de identificação
+				showModal('Algo deu errado :(');
+				setModalErro('Não foi possível capturar o ID no cachê, recarregue o app.');
+
+				return;
+			}
 
 			// Armazena o token no cache temporário (5 min)
 			await cacheTemp.set("email", validEmail);
 			await cacheTemp.set("tokenValidate", response.data.token);
-			
-			console.log(response);
-			
+					
 			//switch para verificar o que foi retornado
 			switch (response.status) {
 				case 200:
 					// Aguarda a modal de validar token
 					const tokenValid = await openModal();
+
 					if (tokenValid) {
 						console.log('Email trocado com sucesso!');
-						const token = await cache.get("tokenID");
-						const data = await api.put("/user/email/new", {
+						const data  = await api.put("/user/email/new", {
 							email: novoEmail
 						}, {
 							headers: {
@@ -222,10 +180,11 @@ const Config = () => {
 							}
 						});
 						console.log(data.data.msg);
-						console.log(data.data.token);
+
 						navigation.navigate("Home");
 					} else {
-						Alert.alert('Ops, algo deu errado :(', 'O seu token não foi validado com sucesso, repita o processo.');
+						showModal('Algo deu errado :(');
+						setModalErro('O seu token não foi validado com sucesso, repita o processo.');
 					}
 				break;
 			}
@@ -263,21 +222,99 @@ const Config = () => {
 					console.error('Erro ilegal 01:', response);
 				}
 			} else if (error.request) {
-				// Se houver falha na requisição sem resposta do servidor
+				// Se for de falha na requisição sem resposta do servidor
 				showModal('Erro de conexão');
 				setModalErro('Sem resposta do servidor back-end. Verifique sua conexão.');
 				console.error('Erro ilegal 02:', response);
-			} else {
-				// Outros tipos de erro (como erros de configuração)
-				showModal('Algo deu errado #02 :(');
-				console.error('Erro ilegal #03:', response);
 			}
+			// De toda maneira, exibe no console
+			console.log('Erro captado no catch, função modifyEmail: ' + error);
 		} finally {
 			//desativa os estados de loading e ativa o botão de login
 			setLoading(false);
 			setDisabled(false);
 		};
 	};
+
+	const modifyPwd = async () => {
+		setLoading(true);
+
+		if(!senhaAtual || !novaSenha || !confirmarSenha){
+			showModal('Ops! Espera aí!');
+			setModalErro('Por favor, preencha todos os campos.');
+		}
+
+		try {
+			const token    = await cache.get("tokenID");
+			const checkPwd = bcrypt.compareSync(senhaAtual, hash);
+	
+			if(!token){
+				showModal('Algo deu errado ao carregar o token de usuário :(');
+				setModalErro('Não foi econtrado token de identificação armazenado no cachê.');
+			}else if (!checkPwd) {
+				showModal('Ops! Espera aí!');
+				setModalErro('Senha atual incorreta');
+	
+				setLoading(false);
+				return;
+			}else if(novaSenha !== confirmarSenha){
+				showModal('Ops! Espera aí!');
+				setModalErro('Os campos de nova senha não batem.');
+				
+				setLoading(false);
+				return;
+			}
+
+			const data = await api.put('/user/pwd', {newPwd: novaSenha}, {
+				headers: {
+					authorization: `Bearer ${token}`
+				}
+			});
+
+			const response = data;
+
+			//switch para verificar o que foi retornado
+			switch (response.status) {
+				case 200:
+					showModal('Senha alterada com sucesso.');
+
+					// Redireciona para a página Home
+					navigation.navigate("DrawerNavigator");
+				break;
+			};
+		}catch (error) {
+			// Se houver erro, verifica se é um erro de resposta
+			if (error.response) {
+				const status = error.response.status;
+				const msg = error.response.data.msg || 'Erro desconhecido'; // mensagem de erro
+
+				// Tratando erros com base no código de status
+				switch (status) {
+					case 500:
+						showModal('Algo deu errado com a conexão :(', msg);
+						setModalErro(msg);
+					break;
+
+					default:
+					showModal('Algo deu errado :(',  'Ocorreu um erro desconhecido. Tente novamente');
+					console.error('Erro ilegal:', response);
+				}
+			} else if (error.request) {
+				// Se houver falha na requisição sem resposta do servidor
+				showModal('Erro de conexão');
+				setModalErro(`Sem resposta do servidor. <br> Verifique sua conexão`);
+			} else {
+				// Outros tipos de erro (como erros de configuração)
+				showModal('Erro', 'Erro desconhecido');
+			}
+		}finally{
+			setLoading(false);
+			toggleSenhaModal();
+			
+			await checkInfos();
+		}
+	};
+
 
 	// Buscar icon do perfil
 	const userAvatarFetch = async () => {
@@ -324,10 +361,6 @@ const Config = () => {
 
 	const toggleEmailModal = () => {
 		setEmailModalVisible(!emailModalVisible);
-	};
-
-	const toggleTokenModal = () => {
-		modifyEmail();
 	};
 
 	const toggleSenhaModal = () => {
@@ -401,7 +434,7 @@ const Config = () => {
 					<View style={styles.modalContainer}>
 						<MissIcon width={45} height={45}/>
 						<Text style={styles.textModal}>{modalMessage}</Text>
-						<Text style={styles.textModal}>{modalErro}</Text>
+						<Text style={styles.textModal}>{String(modalErro)}</Text>
 						<TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
 							<Text style={styles.recoverTexto}>Fechar</Text>
 						</TouchableOpacity>
@@ -486,10 +519,6 @@ const Config = () => {
 							<Pressable style={styles.confirmButton} onPress={toggleEmailModal}>
 								<Text style={styles.buttonTextConfir}>Cancelar</Text>
 							</Pressable>
-							{/* <Pressable style={styles.cancelButton} onPress={toggleTokenModal}>
-							<Pressable style={styles.cancelButton}  onPress={() => handleSenhaSave()}>
-								<Text style={styles.buttonText}>Confirmar</Text>
-							</Pressable> */}
 							<Pressable style={styles.cancelButton} 
 							disabled={disabled || loading}
 							onPress={() => modifyEmail()}>
@@ -801,4 +830,57 @@ const styles = StyleSheet.create({
 		fontFamily: "Poppins_400Regular",
 		alignItems: 'center'
 	},
+	recoverTexto: {
+		fontFamily: "Poppins_400Regular",
+		color: "#6BBF59",
+		fontSize: 14,
+		textDecorationLine: 'underline',
+		textAlign: 'center'
+	},
+	modalOverlay: {
+		flex: 1,
+		backgroundColor: 'rgba(0, 0, 0, 0.4)',
+		justifyContent: 'center',
+		alignItems: 'center',
+		padding: 10
+	},
+	
+	modalContainer: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		padding: 20,
+		backgroundColor: '#fff',
+		borderRadius: 10,
+		elevation: 10,
+	},
+	
+	textModal: {
+		textAlign: 'center',
+		fontFamily: "Poppins_400Regular",
+		fontSize: 14,
+	},
+	
+	recoverTexto: {
+		fontFamily: "Poppins_400Regular",
+		color: "#6BBF59",
+		fontSize: 14,
+		textDecorationLine: 'underline',
+		textAlign: 'center'
+	},
+	modalOverlay: {
+		flex: 1,
+		backgroundColor: 'rgba(0, 0, 0, 0.4)',
+		justifyContent: 'center',
+		alignItems: 'center',
+		padding: 10
+	},
+	
+	modalContainer: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		padding: 20,
+		backgroundColor: '#fff',
+		borderRadius: 10,
+		elevation: 10,
+	}
 });

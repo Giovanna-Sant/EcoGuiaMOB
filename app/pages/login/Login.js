@@ -48,7 +48,7 @@ export default function Login() {
 	const login = async () => {
 		//uma variável de email sem espaçamentos acidentais p validações
 		let validEmail;
-		if(!email){
+		if(!email && email_cad){
 			validEmail = email_cad
 			.trim()
 			.toLowerCase();
@@ -60,15 +60,18 @@ export default function Login() {
 
 			//validação de campos
 			if ((!email || !pwd)) {
-				showModal('Por favor, preencha todos os campos');
+				showModal();
+				setModalMessage('Por favor, preencha todos os campos.');
 				return;
 			} else if (!isEmail(validEmail)) {
 				// se o e-mail for inválido, exibe como um alerta de campo
-				showModal('Por favor, insira um e-mail válido');
+				showModal();
+				setModalMessage('Por favor, insira um e-mail válido.');
 				return;
 			} else if (pwd.length < 8) {
 				// se a senha for inválida, exibe como um alerta de campo
-				showModal('Por favor, insira uma senha válida');
+				showModal();
+				setModalMessage('Por favor, insira uma senha válida.');
 				return;
 			}
 		}
@@ -103,37 +106,39 @@ export default function Login() {
 			// Se houver erro, verifica se é um erro de resposta
 			if (error.response) {
 				const status = error.response.status;
-				const msg = error.response.data.msg || 'Erro desconhecido'; // mensagem de erro
+				const msg    = error.response.data.msg; // mensagem de erro
 
 				// Tratando erros com base no código de status
 				switch (status) {
 					case 422:
-						showModal('Algo deu errado com os campos :(', msg);
-						setModalErro(msg)
+						showModal('Algo deu errado :(');
+						setModalErro(msg);
 					break;
 
 					case 404:
-						showModal('Algo deu errado com o usuário :(');
-						setModalErro(msg)
+						showModal('Algo deu errado :(');
+						setModalErro(msg);
 						break;
 
 					case 400:
-						showModal('Algo deu errado com a senha :(',   msg);
-						setModalErro(msg)
+						showModal('Algo deu errado :(');
+						setModalErro(msg);
 					break;
 
 					case 500:
-						showModal('Algo deu errado com a conexão :(', msg);
-						setModalErro(msg)
+						showModal('Algo deu errado com a conexão :(');
+						setModalErro(msg);
 					break;
 
 					default:
-					showModal('Algo deu errado :(',  'Ocorreu um erro desconhecido. Tente novamente');
+					showModal('Algo deu errado AAAA:(',  'Ocorreu um erro desconhecido. Tente novamente');
 					console.error('Erro ilegal:', response);
 				}
 			} else if (error.request) {
 				// Se houver falha na requisição sem resposta do servidor
-				showModal('Erro de conexão', 'Sem resposta do servidor. Verifique sua conexão');
+				showModal('Erro de conexão');
+				setModalErro('Sem resposta do servidor. Verifique sua conexão');
+				console.error(error);
 			} else {
 				// Outros tipos de erro (como erros de configuração)
 				showModal('Erro', 'Erro desconhecido');
