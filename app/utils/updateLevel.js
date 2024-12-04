@@ -1,6 +1,6 @@
 import api from "../services/api";
 import cache from "./cache";
-import getPerfil from "./gerProfile";
+import getPerfil from "./getProfile";
 
 export const updateLevel = async () => {
 	//capta o tokenID do cachê

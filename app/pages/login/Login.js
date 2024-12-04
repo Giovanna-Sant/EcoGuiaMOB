@@ -7,7 +7,7 @@ import { LogoEcoGuia, MissIcon, ShowPassword, HidePassword } from '../../assets'
 import api from '../../services/api';
 import cache from '../../utils/cache';
 import cacheTemp from '../../utils/cacheTemp';
-import isEmail from 'validator/lib/isEmail';	// biblioteca que verifica o formato do e-mail
+import isEmail from 'validator/lib/isEmail'; // biblioteca que verifica o formato do e-mail
 import checkPwd from '../../utils/checkPwd'; // verificação de senha válida
 import { useModal } from './ModalContext'; //abrir modal do token
 
@@ -48,15 +48,23 @@ export default function Login() {
 	const login = async () => {
 		//uma variável de email sem espaçamentos acidentais p validações
 		let validEmail;
+		let validPwd;
+		
 		if(!email && email_cad){
 			validEmail = email_cad
 			.trim()
 			.toLowerCase();
 
+			validPwd   = pwd_cad
+			.trim()
+
 		}else{
 			validEmail = email
 			.trim()
 			.toLowerCase();
+
+			validPwd   = pwd
+			.trim()
 
 			//validação de campos
 			if ((!email || !pwd)) {
@@ -83,9 +91,9 @@ export default function Login() {
 		try {
 			let data;
 			if(!email){
-				data = await api.post('/user/login', {email: email_cad, pwd: pwd_cad});
+				data = await api.post('/user/login', {email: validEmail, pwd: validPwd});
 			}else{
-				data = await api.post('/user/login', {email, pwd});
+				data = await api.post('/user/login', {email: validEmail, pwd: validPwd});
 			}
 			console.log(data.data.msg);
 

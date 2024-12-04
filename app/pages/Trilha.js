@@ -5,7 +5,7 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } 
 import { RefreshControl } from 'react-native-gesture-handler';
 import api from '../services/api';
 import cache from '../utils/cache';
-import getPerfil from '../utils/gerProfile';
+import getPerfil from '../utils/getProfile';
 
 const Trilha = () => {
 	const [modalMateriaisVisivel, setModalMateriaisVisivel] = useState(false);

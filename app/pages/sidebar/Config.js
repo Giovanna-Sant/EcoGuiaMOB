@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Image, Pressable, Modal, TextInput, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Image, Pressable, Modal, TextInput, TouchableWithoutFeedback, TouchableOpacity, Alert } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { Detail, ArrowRight, ShowPassword, HidePassword, MissIcon } from "../../assets";
 import { useNavigation } from '@react-navigation/native';
 import cache from '../../utils/cache';
 import cacheTemp from "../../utils/cache";
 import api from '../../services/api';
+import checkPwd from "../../utils/checkPwd";
 import {useModal}   from '../login/ModalContext'; //abrir modal do token
 import checkInfos from "../../utils/checkInfos";
-import bcrypt from 'bcryptjs'
 import Login from "../login/Login";
 import isEmail from 'validator/lib/isEmail';
 
 const Config = () => {
 	const [user, setUser] = useState({});
 	const [email, setEmail] = useState('');
-	const [hash, setHash] = useState('');
 	const [passwordVisible, setPasswordVisible] = useState(false);
 	const [passwordVisibleA, setPasswordVisibleA] = useState(false);
 	const [passwordVisibleB, setPasswordVisibleB] = useState(false);
@@ -82,15 +81,13 @@ const Config = () => {
 			try{
 				let cache_user  = await cache.get("dados");
 				let cache_email = await cache.get("email");
-				let cache_hash  = await cache.get('hash');
 
-				if (!cache_user || !cache_email || !cache_hash){
+				if (!cache_user || !cache_email){
 					showModal('Algo deu errado :(');
 					setModalErro('Não foi possível encontrar os dados de identificação do usuário.');
 				}else{
 					setUser(cache_user);
-					setEmail(cache_email);
-					setHash(cache_hash);					
+					setEmail(cache_email);			
 				}
 			}catch(error){
 				console.error('Erro, função lerUser: ' + error);
@@ -237,35 +234,49 @@ const Config = () => {
 	};
 
 	const modifyPwd = async () => {
-		setLoading(true);
-
 		if(!senhaAtual || !novaSenha || !confirmarSenha){
 			showModal('Ops! Espera aí!');
 			setModalErro('Por favor, preencha todos os campos.');
+
+			return;
 		}
 
+		setLoading(true);
+		
 		try {
-			const token    = await cache.get("tokenID");
-			const checkPwd = bcrypt.compareSync(senhaAtual, hash);
-	
+			const token = await cache.get("tokenID");
+
 			if(!token){
 				showModal('Algo deu errado ao carregar o token de usuário :(');
-				setModalErro('Não foi econtrado token de identificação armazenado no cachê.');
-			}else if (!checkPwd) {
-				showModal('Ops! Espera aí!');
-				setModalErro('Senha atual incorreta');
-	
-				setLoading(false);
+				setModalErro('Não foi econtrado token de identificação armazenado no cachê. \n Faça login novamente.');
+
 				return;
-			}else if(novaSenha !== confirmarSenha){
+			} 
+			
+			//variável de email sem espaçamentos acidentais p validações
+			const validPwd = novaSenha.trim();
+
+			const validPwd1 = confirmarSenha.trim();
+
+			// chama função para verificar senha
+			const verificate = checkPwd(validPwd);
+
+			//validação de campos
+			if(!verificate[0]){
+				// se a senha for inválida, exibe como um alerta de campo
+				const msg = verificate[1];
+				showModal('Ops! Espera aí!');
+				setModalErro(msg);
+
+				return;
+			}else if(validPwd !== validPwd1){
 				showModal('Ops! Espera aí!');
 				setModalErro('Os campos de nova senha não batem.');
 				
-				setLoading(false);
 				return;
 			}
 
-			const data = await api.put('/user/pwd', {newPwd: novaSenha}, {
+			const data = await api.put('/user/pwd', {newPwd: validPwd1}, {
 				headers: {
 					authorization: `Bearer ${token}`
 				}
@@ -276,10 +287,11 @@ const Config = () => {
 			//switch para verificar o que foi retornado
 			switch (response.status) {
 				case 200:
-					showModal('Senha alterada com sucesso.');
+					await checkInfos();
+					showModal('Eba!');
+					setModalErro('Senha alterada com sucesso!');
 
-					// Redireciona para a página Home
-					navigation.navigate("DrawerNavigator");
+					toggleSenhaModal();
 				break;
 			};
 		}catch (error) {
@@ -297,65 +309,108 @@ const Config = () => {
 
 					default:
 					showModal('Algo deu errado :(',  'Ocorreu um erro desconhecido. Tente novamente');
-					console.error('Erro ilegal:', response);
 				}
 			} else if (error.request) {
 				// Se houver falha na requisição sem resposta do servidor
 				showModal('Erro de conexão');
-				setModalErro(`Sem resposta do servidor. <br> Verifique sua conexão`);
+				setModalErro(`Sem resposta do servidor. \n Verifique sua conexão`);
 			} else {
 				// Outros tipos de erro (como erros de configuração)
 				showModal('Erro', 'Erro desconhecido');
 			}
+			console.error('Erro ilegal:', error);
 		}finally{
 			setLoading(false);
-			toggleSenhaModal();
-			
-			await checkInfos();
 		}
 	};
-
-
-	// Buscar icon do perfil
-	const userAvatarFetch = async () => {
-		try {
-			const token = await cache.get("tokenID");
-			const avatar = await cache.get("dados/avatar"); // Verifique se este é o caminho correto
-			const response = await api.get("user/profile", {
-				headers: {
-					authorization: `Bearer ${token}`
-				}
-			});
-			const userData = response.data.results[0][0];
-			
-			// Use o avatar do cache, se disponível, senão use o blob_avatar do userData
-			setUserAvatar(avatar || userData.blob_avatar || 'https://cdn-icons-png.flaticon.com/256/903/903482.png');
-			setUser(userData);
-		} catch (error) {
-			console.error("Erro ao buscar avatar:", error);
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	useEffect(() => {
-		userAvatarFetch();
-	}, []);
 
 	const deleteUser = async () => {
+		if(!senhaParaDeletar){
+			showModal('Ops! Espera aí!');
+			setModalErro('Por favor, preencha o campo.');
+
+			return;
+		}
+
+		setLoading(true);
+
 		try {
 			const token = await cache.get("tokenID");
-			const response = await api.delete('/user', {
+
+			if(!token){
+				showModal('Algo deu errado ao carregar o token de usuário :(');
+				setModalErro('Não foi econtrado token de identificação armazenado no cachê. \n Faça login novamente.');
+
+				return;
+			};
+
+			//variável de email sem espaçamentos acidentais p validações
+			const validPwd = senhaParaDeletar.trim();
+
+			const data = await api.delete('/user', {
 				headers: {
-					authorization: `Bearer ${token}`
+				  authorization: `Bearer ${token}`
 				},
 				data: {
-					pwdHash: senhaParaDeletar
+				  pwdHash: validPwd
 				},
 			});
-			handlePress(Login)
-		} catch (erro) {
-			console.log(erro);
+
+			const response = data;
+
+			//switch para verificar o que foi retornado
+			switch (response.status) {
+				case 200:
+					navigation.navigate('Login');
+					
+					showModal('Que pena que nos deixou!');
+					setModalErro('Sempre há uma nova possibilidade...');
+				break;
+			};
+		}catch (error) {
+			// Se houver erro, verifica se é um erro de resposta
+			if (error.response) {
+				const status = error.response.status;
+				const msg = error.response.data.msg || 'Erro desconhecido'; // mensagem de erro
+
+				// Tratando erros com base no código de status
+				switch (status) {
+					case 404:
+						showModal('Algo deu errado :(');
+						setModalErro(msg);
+					break;
+
+					case 422:
+						showModal('Algo deu errado :(');
+						setModalErro(msg);
+					break;
+
+					case 500:
+						showModal('Algo deu errado com a conexão:(');
+						setModalErro(msg);
+					break;
+
+					case 503:
+						showModal('Algo deu errado :(');
+						setModalErro(msg);
+					break;
+
+					default:
+					showModal('Algo deu errado :(',  'Ocorreu um erro desconhecido. Tente novamente');
+					console.error('Erro ilegal:', error);
+				}
+			} else if (error.request) {
+				// Se houver falha na requisição sem resposta do servidor
+				showModal('Erro de conexão');
+				setModalErro(`Sem resposta do servidor. \n Verifique sua conexão`);
+				console.error('Erro ilegal:', error);
+			} else {
+				// Outros tipos de erro (como erros de configuração)
+				showModal('Erro', 'Erro desconhecido');
+				console.error('Erro ilegal:', error);
+			}
+		}finally{
+			setLoading(false);
 		}
 	}
 
@@ -430,11 +485,11 @@ const Config = () => {
 				visible={modalVisible}
 				onRequestClose={() => setModalVisible(false)}
 			>
-				<View style={styles.modalOverlay}>
-					<View style={styles.modalContainer}>
+				<View style={styles.modalOverlay1}>
+					<View style={styles.modalContainer1}>
 						<MissIcon width={45} height={45}/>
-						<Text style={styles.textModal}>{modalMessage}</Text>
-						<Text style={styles.textModal}>{String(modalErro)}</Text>
+						<Text style={styles.textModal1}>{modalMessage}</Text>
+						<Text style={styles.textModal1}>{String(modalErro)}</Text>
 						<TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
 							<Text style={styles.recoverTexto}>Fechar</Text>
 						</TouchableOpacity>
@@ -444,7 +499,16 @@ const Config = () => {
 			<View style={styles.content}>
 				<Text style={styles.titulo}>Configurações da Conta</Text>
 				<View style={styles.divPerfil}>
-					<View style={styles.iconDiv}><Image width={40} height={40} source={{ uri: user.blob_avatar }} /></View>
+				<View style={styles.iconDiv}>
+					<Image
+						style={styles.icon}
+						width={40}
+						height={40}
+						source={{
+						uri: `${user.blob_avatar}`,
+						}}
+					/>
+            	</View>
 					<View>
 						<Text style={styles.subtitulo}>Perfil</Text>
 						<Text style={styles.info}>{user.nickname_user}</Text>
@@ -576,25 +640,26 @@ const Config = () => {
 						</View>
 
 						<View style={styles.buttonContainer}>
-						 
-							 {loading ? (
-									<Text></Text>
-								):(
-									<Pressable style={styles.confirmButton} onPress={toggleSenhaModal}> 
-									<Text style={styles.buttonTextConfir}>Cancelar</Text>
-									</Pressable>
-								)}
-						 
-							<Pressable style={styles.cancelButton} 
-							disabled={disabled || loading}
-							onPress={() => handleSenhaSave()}>
-
-							{loading ? (
-						<ActivityIndicator size="small" color="#fff" />
-						) : (
-						<Text style={styles.buttonText}>confirmar</Text>
-						)}
-							</Pressable>
+							
+								{loading ? (
+										<Text></Text>
+									):(
+										<Pressable style={styles.confirmButton} onPress={toggleSenhaModal}> 
+										<Text style={styles.buttonTextConfir}>Cancelar</Text>
+										</Pressable>
+									)}
+							
+								<Pressable style={styles.cancelButton} 
+									disabled={disabled || loading}
+									onPress={() => handleSenhaSave()}
+								>
+									{loading ? (
+										<ActivityIndicator size="small" color="#fff" />
+										) : (
+										<Text style={styles.buttonText}>confirmar</Text>
+										)
+									}
+								</Pressable>
 						</View>
 					</>
 				))}
@@ -705,8 +770,17 @@ const styles = StyleSheet.create({
 	},
 
 	iconDiv: {
-		backgroundColor: '#f1f1f1',
+		borderColor: "#A6D89B",
+		backgroundColor: "#F1F1F1",
+		borderWidth: 3,
+		borderRadius: 50,
 		padding: 8,
+		marginRight: 10,
+	},
+
+	icon: {
+		width: 40,
+		height: 40,
 		borderRadius: 50
 	},
 	
@@ -830,6 +904,7 @@ const styles = StyleSheet.create({
 		fontFamily: "Poppins_400Regular",
 		alignItems: 'center'
 	},
+
 	recoverTexto: {
 		fontFamily: "Poppins_400Regular",
 		color: "#6BBF59",
@@ -837,7 +912,8 @@ const styles = StyleSheet.create({
 		textDecorationLine: 'underline',
 		textAlign: 'center'
 	},
-	modalOverlay: {
+
+	modalOverlay1: {
 		flex: 1,
 		backgroundColor: 'rgba(0, 0, 0, 0.4)',
 		justifyContent: 'center',
@@ -845,7 +921,7 @@ const styles = StyleSheet.create({
 		padding: 10
 	},
 	
-	modalContainer: {
+	modalContainer1: {
 		justifyContent: 'center',
 		alignItems: 'center',
 		padding: 20,
@@ -854,33 +930,9 @@ const styles = StyleSheet.create({
 		elevation: 10,
 	},
 	
-	textModal: {
+	textModal1: {
 		textAlign: 'center',
 		fontFamily: "Poppins_400Regular",
 		fontSize: 14,
-	},
-	
-	recoverTexto: {
-		fontFamily: "Poppins_400Regular",
-		color: "#6BBF59",
-		fontSize: 14,
-		textDecorationLine: 'underline',
-		textAlign: 'center'
-	},
-	modalOverlay: {
-		flex: 1,
-		backgroundColor: 'rgba(0, 0, 0, 0.4)',
-		justifyContent: 'center',
-		alignItems: 'center',
-		padding: 10
-	},
-	
-	modalContainer: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		padding: 20,
-		backgroundColor: '#fff',
-		borderRadius: 10,
-		elevation: 10,
 	}
 });
