@@ -11,14 +11,20 @@ export const getPerfil = async () => {
       }
     },
   );
-  await cache.set("dados", resposta.data.results[0][0]);
-
+  await cache.set("dados",resposta.data.results[0][0]);
+  const last =  await cache.get('lastLevel')
   const user = resposta.data.results[0][0]
-  if(user.XP_user > user.XP_level){
+
+  if(!last){
+     await cache.set("lastLevel",user.XP_level)
+   }
+ 
+
+  if(user.XP_user > user.XP_level && last != user.XP_level ){
+    await cache.set("lastLevel",user.XP_level)
     await updateLevel();
-    await getPerfil();
+
   }
-  
   const info = await cache.get('hash')
   if(!info){
     checkInfos()
