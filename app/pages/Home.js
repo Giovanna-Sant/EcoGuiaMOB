@@ -8,7 +8,7 @@ import * as Progress from 'react-native-progress';
 import { ArrowDown, ArrowRight, CatalogoBG, TrilhaBG, Truck, Local } from '../assets'
 import api from '../services/api'
 import cache from '../utils/cache'
-import getPerfil from '../utils/gerProfile';
+import getPerfil from '../utils/getProfile';
 
 const Home = () => {
   const [isCollapsed, setIsCollapsed] = useState(false); 

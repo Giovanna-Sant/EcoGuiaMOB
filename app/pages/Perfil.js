@@ -6,7 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Progress from 'react-native-progress';
 import { ArrowRight, Edit, Ranking } from '../assets';
 import cache from '../utils/cache';
-import getPerfil from '../utils/gerProfile';
+import getPerfil from '../utils/getProfile';
 import { RefreshControl } from 'react-native-gesture-handler';
 import api from '../services/api';
  

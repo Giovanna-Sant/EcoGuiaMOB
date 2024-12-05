@@ -1,11 +1,16 @@
 {
   "expo": {
     "name": "EcoGuiaMOB",
-    "slug": "EcoGuiaMOB",
+    "slug": "mobile-ecoguia-s8amr4d9fwvoi6-uovjxt",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
     "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./app/assets/icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "ios": {
       "supportsTablet": true
     },
@@ -13,13 +18,20 @@
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.zarquells.mobileecoguias8amr4d9fwvoi6uovjxt"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "1b13ec54-ee34-44a0-b50a-06dbfa997194"
+      }
+    },
+    "owner": "zarquells"
   }
 }

@@ -3,11 +3,11 @@ import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView, Modal } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import { LogoEcoGuia, Google, MissIcon, ShowPassword, HidePassword } from '../../assets';
+import { LogoEcoGuia, MissIcon, ShowPassword, HidePassword } from '../../assets';
 import api from '../../services/api';
 import cache from '../../utils/cache';
 import cacheTemp from '../../utils/cacheTemp';
-import isEmail from 'validator/lib/isEmail';	// biblioteca que verifica o formato do e-mail
+import isEmail from 'validator/lib/isEmail'; // biblioteca que verifica o formato do e-mail
 import checkPwd from '../../utils/checkPwd'; // verificação de senha válida
 import { useModal } from './ModalContext'; //abrir modal do token
 
@@ -48,27 +48,38 @@ export default function Login() {
 	const login = async () => {
 		//uma variável de email sem espaçamentos acidentais p validações
 		let validEmail;
-		if(!email){
+		let validPwd;
+		
+		if(!email && email_cad){
 			validEmail = email_cad
 			.trim()
 			.toLowerCase();
+
+			validPwd   = pwd_cad
+			.trim()
 
 		}else{
 			validEmail = email
 			.trim()
 			.toLowerCase();
 
+			validPwd   = pwd
+			.trim()
+
 			//validação de campos
 			if ((!email || !pwd)) {
-				showModal('Por favor, preencha todos os campos');
+				showModal();
+				setModalMessage('Por favor, preencha todos os campos.');
 				return;
 			} else if (!isEmail(validEmail)) {
 				// se o e-mail for inválido, exibe como um alerta de campo
-				showModal('Por favor, insira um e-mail válido');
+				showModal();
+				setModalMessage('Por favor, insira um e-mail válido.');
 				return;
 			} else if (pwd.length < 8) {
 				// se a senha for inválida, exibe como um alerta de campo
-				showModal('Por favor, insira uma senha válida');
+				showModal();
+				setModalMessage('Por favor, insira uma senha válida.');
 				return;
 			}
 		}
@@ -80,12 +91,11 @@ export default function Login() {
 		try {
 			let data;
 			if(!email){
-				data = await api.post('/user/login', {email: email_cad, pwd: pwd_cad});
+				data = await api.post('/user/login', {email: validEmail, pwd: validPwd});
 			}else{
-				data = await api.post('/user/login', {email, pwd});
+				data = await api.post('/user/login', {email: validEmail, pwd: validPwd});
 			}
 			console.log(data.data.msg);
-			console.log(data.data.token);
 
 			const response = data;
 
@@ -104,37 +114,39 @@ export default function Login() {
 			// Se houver erro, verifica se é um erro de resposta
 			if (error.response) {
 				const status = error.response.status;
-				const msg = error.response.data.msg || 'Erro desconhecido'; // mensagem de erro
+				const msg    = error.response.data.msg; // mensagem de erro
 
 				// Tratando erros com base no código de status
 				switch (status) {
 					case 422:
-						showModal('Algo deu errado com os campos :(', msg);
-						setModalErro(msg)
+						showModal('Algo deu errado :(');
+						setModalErro(msg);
 					break;
 
 					case 404:
-						showModal('Algo deu errado com o usuário :(');
-						setModalErro(msg)
+						showModal('Algo deu errado :(');
+						setModalErro(msg);
 						break;
 
 					case 400:
-						showModal('Algo deu errado com a senha :(',   msg);
-						setModalErro(msg)
+						showModal('Algo deu errado :(');
+						setModalErro(msg);
 					break;
 
 					case 500:
-						showModal('Algo deu errado com a conexão :(', msg);
-						setModalErro(msg)
+						showModal('Algo deu errado com a conexão :(');
+						setModalErro(msg);
 					break;
 
 					default:
-					showModal('Algo deu errado :(',  'Ocorreu um erro desconhecido. Tente novamente');
+					showModal('Algo deu errado AAAA:(',  'Ocorreu um erro desconhecido. Tente novamente');
 					console.error('Erro ilegal:', response);
 				}
 			} else if (error.request) {
 				// Se houver falha na requisição sem resposta do servidor
-				showModal('Erro de conexão', 'Sem resposta do servidor. Verifique sua conexão');
+				showModal('Erro de conexão');
+				setModalErro('Sem resposta do servidor. Verifique sua conexão');
+				console.error(error);
 			} else {
 				// Outros tipos de erro (como erros de configuração)
 				showModal('Erro', 'Erro desconhecido');
@@ -484,24 +496,6 @@ const styles = StyleSheet.create({
 		marginTop: 20,
 	},
 
-	googleContainer: {
-		borderWidth: 2,
-		borderRadius: 25,
-		flexDirection: "row",
-		paddingHorizontal: 8,
-		paddingVertical: 2,
-		justifyContent: "center",
-		alignItems: "center",
-		marginVertical: 10,
-	},
-
-	googleText: {
-		fontFamily: "Poppins_400Regular",
-		fontSize: 16,
-		color: "#000",
-		marginLeft: 8,
-	},
-
 	inputContainer: {
 		width: '100%',
 		paddingHorizontal: 30,
@@ -522,7 +516,7 @@ const styles = StyleSheet.create({
 		fontFamily: "Poppins_400Regular",
 	},
 
-  inputView: {
+	inputView: {
 		backgroundColor: "#F1F1F1",
 		height: 40,
 		paddingHorizontal: 10,
@@ -621,5 +615,5 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		fontFamily: "Poppins_400Regular",
 		fontSize: 14,
-	  }
+	}
 });

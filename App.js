@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity, View, Text,  Modal, StyleSheet } from 'react-native';
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, CommonActions } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -10,6 +10,7 @@ import LogoEcoGuia  from './app/assets/logo.svg';
 import { TrilhaIcon, CatalogoIcon, HomeIcon, ColetaIcon, PerfilIcon, ConfigIcon } from "./app/assets";
 import { Ionicons } from '@expo/vector-icons'; 
 
+import cache from "./app/utils/cache.js";
 
 import Trilha from './app/pages/Trilha';
 import Home from './app/pages/Home';
@@ -75,7 +76,7 @@ function TrilhaStack() {
         headerTitle: () => <HeaderLogo />,
       })}
     >
-      <Stack.Screen name="Trilha" component={Trilha} />
+      <Stack.Screen name="Stack_Trilha" component={Trilha} />
     </Stack.Navigator>
   );
 }
@@ -88,7 +89,7 @@ function CatalogoStack() {
       screenOptions={({ route, navigation }) => ({
         headerShown: true,
         title: "", 
-        headerRight: () => route.name === "Catalogo" ? <HeaderMenuButton navigation={navigation} /> : null,
+        headerRight: () => route.name === "Stack_Catalogo" ? <HeaderMenuButton navigation={navigation} /> : null,
         headerTitle: () => <LogoEcoGuia width={120} height={50} paddingVertical={35} />,
         headerStyle: {
           alignItems: 'center',
@@ -97,7 +98,7 @@ function CatalogoStack() {
         headerTitleAlign: 'center',
       })}
     >
-      <Stack.Screen name="Catalogo" component={Catalogo} />
+      <Stack.Screen name="Stack_Catalogo" component={Catalogo} />
       <Stack.Screen name="NoticiasPage" component={NoticiasPage} />
       <Stack.Screen name="DescartavelPage" component={DescartavelPage} />
       <Stack.Screen name="ReciclavelPage" component={ReciclavelPage} />
@@ -115,7 +116,7 @@ function HomeStack() {
         headerTitle: () => <HeaderLogo />,
       })}
     >
-      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Stack_Home" component={Home} />
     </Stack.Navigator>
   );
 }
@@ -126,7 +127,7 @@ function ColetaStack() {
       screenOptions={({ route, navigation }) => ({
         headerShown: true,
         title: "", 
-        headerRight: () => route.name === "Coleta" ? <HeaderMenuButton navigation={navigation} /> : null,
+        headerRight: () => route.name === "Stack_Coleta" ? <HeaderMenuButton navigation={navigation} /> : null,
         headerTitle: () => <LogoEcoGuia width={120} height={50} paddingVertical={35} />,
         headerStyle: {
           alignItems: 'center',
@@ -135,7 +136,7 @@ function ColetaStack() {
         headerTitleAlign: 'center',
       })}
     >
-      <Stack.Screen name="Coleta" component={Coleta} />
+      <Stack.Screen name="Stack_Coleta" component={Coleta} />
       <Stack.Screen name="Horarios" component={Horarios} />
       <Stack.Screen name="Mapa" component={Mapa} />
       <Stack.Screen name="Config" component={Config} />
@@ -153,7 +154,7 @@ function PerfilStack() {
         headerTitle: () => <HeaderLogo />,
       })}
     >
-      <Stack.Screen name="Perfil" component={Perfil} />
+      <Stack.Screen name="Stack_Perfil" component={Perfil} />
     </Stack.Navigator>
   );
 }
@@ -161,7 +162,7 @@ function PerfilStack() {
 function TabsNavigator() {
   return (
     <Tab.Navigator
-      initialRouteName="Home"  
+      initialRouteName="Tab_Home"  
       screenOptions={{
         tabBarStyle: {
           height: 80,  
@@ -172,7 +173,7 @@ function TabsNavigator() {
       }}
     >
       <Tab.Screen
-        name="Trilha"
+        name="Tab_Trilha"
         component={TrilhaStack}
         options={{
           title: "",  
@@ -181,7 +182,7 @@ function TabsNavigator() {
         }}
       />
       <Tab.Screen
-        name="Catalogo"
+        name="Tab_Catalogo"
         component={CatalogoStack}
         options={{
           title: "",  
@@ -190,7 +191,7 @@ function TabsNavigator() {
         }}
       />
       <Tab.Screen
-        name="Home"
+        name="Tab_Home"
         component={HomeStack}
         options={{
           title: "",  
@@ -199,7 +200,7 @@ function TabsNavigator() {
         }}
       />
       <Tab.Screen
-        name="Coleta"
+        name="Tab_Coleta"
         component={ColetaStack}
         options={{
           title: "",  
@@ -208,7 +209,7 @@ function TabsNavigator() {
         }}  
       />
       <Tab.Screen
-        name="Perfil"
+        name="Tab_Perfil"
         component={PerfilStack}
         options={{
           title: "",  
@@ -275,13 +276,23 @@ export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Verifica se o tokenID está armazenado no cache
+
     const checkAuth = async () => {
+
       const tokenID = await cache.get("tokenID");
+
       if (tokenID) {
-        setIsAuthenticated(true); // Se o token existir, o usuário está autenticado
+
+        setIsAuthenticated(true);
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: "DrawerNavigator" }],
+          })
+        );
       } else {
-        setIsAuthenticated(false); // Caso contrário, o usuário não está autenticado
+
+        setIsAuthenticated(false);
       }
     };
 
