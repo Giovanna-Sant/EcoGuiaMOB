@@ -279,7 +279,7 @@ const Perfil = () => {
             </Text>
             <Pressable
               style={styles.botao}
-              onPress={() => handlePress("Trilha")}
+              onPress={() => handlePress("Tab_Trilha")}
             >
               <Text style={styles.textBotao}>Ver Trilha de Objetivos</Text>
               <ArrowRight maxWidth={12} maxHeight={12} />

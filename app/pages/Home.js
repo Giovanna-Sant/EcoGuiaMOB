@@ -100,7 +100,7 @@ let levelProgress = 0
           {loading ?(
             <ActivityIndicator style={styles.loading} size="large" color="#fff"/>  
           ):( 
-          <Pressable style={styles.viewPerfil} onPress={() => handlePress('Perfil')}> 
+          <Pressable style={styles.viewPerfil} onPress={() => handlePress('Tab_Perfil')}> 
           <View style={styles.iconDiv}>
           {user ?(
                <Image style={styles.icon} width={60} height={60} source={{uri:`${user.blob_avatar}`}} />
@@ -141,7 +141,7 @@ let levelProgress = 0
 
         
 
-        <Pressable onPress={() => handlePress('Trilha')} maxHeight={210} style={styles.viewTrilha}>
+        <Pressable onPress={() => handlePress('Tab_Trilha')} maxHeight={210} style={styles.viewTrilha}>
           <Image source={TrilhaBG} maxHeight={210} maxWidth='100%' borderRadius={10} />
         </Pressable>
 
@@ -158,7 +158,7 @@ let levelProgress = 0
           </View>
         </Collapsible>
 
-        <Pressable onPress={() => handlePress('Coleta')} style={styles.iconButton}>
+        <Pressable onPress={() => handlePress('Tab_Coleta')} style={styles.iconButton}>
           <View style={styles.viewAPI}>
             <View style={styles.contAPI}>
               <Truck/>
@@ -172,7 +172,7 @@ let levelProgress = 0
           </View>
         </Pressable>
 
-        <Pressable onPress={() => handlePress('Catalogo')} style={styles.viewNews}>
+        <Pressable onPress={() => handlePress('Tab_Catalogo')} style={styles.viewNews}>
           <Image style={styles.imgNews} source={CatalogoBG} maxWidth='100%' maxHeight={205} />
         </Pressable>
 

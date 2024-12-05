@@ -178,7 +178,7 @@ const Config = () => {
 						});
 						console.log(data.data.msg);
 
-						navigation.navigate("Home");
+						navigation.navigate("Tab_Home");
 					} else {
 						showModal('Algo deu errado :(');
 						setModalErro('O seu token não foi validado com sucesso, repita o processo.');
