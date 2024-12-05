@@ -85,6 +85,7 @@ const Trilha = () => {
 	  },2000) 
 	};
 
+	const [last,setLast] = useState(false)
 	// Função modal de concluir quest
 	const concluirObjetivo = async () => {
 		//capta o tokenID do cachê
@@ -133,7 +134,10 @@ const Trilha = () => {
 			}
 		} finally {
 			// Fechar modal ao apertar botão de concluído
-			setSelectedQuest(null);						
+			setSelectedQuest(null);		
+			if(quests[quests.length-1].pk_IDquest == questUser){
+				setLast(true)
+			}								
 		};
 	};
 
@@ -224,7 +228,7 @@ const Trilha = () => {
 						return (
 						<View>
 							{/* Estrutura para setar quest como concluída ou não */}
-								{item.pk_IDquest < questUser ? 
+								{item.pk_IDquest < questUser || last == true? 
 								// Quests completas
 								<View style={{paddingLeft}}>
 									<Pressable onPress={() => setSelectedQuest(item)} style={styles.missaoButton}>
@@ -255,7 +259,7 @@ const Trilha = () => {
           {/* Aparecer badge a cada 3 quests */}
           {index % 3 === 2 && (
             <View style={styles.contentBadge}>
-				{item.pk_IDquest < questUser ?
+				{item.pk_IDquest < questUser  || last == true?
 					<View >
 						<Text style={styles.badgeTitle}>{item.title_badge}</Text>
 						<Text style={styles.badgeStateA}>Badge concluída!</Text>
