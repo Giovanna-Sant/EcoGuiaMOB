@@ -31,6 +31,9 @@ const Home = () => {
       await getPerfil();
       const resposta = await api.get("/tip");
       setTip(resposta.data);
+
+      
+
       setUser(await cache.get("dados"));
     } catch(error) {
       Alert.alert("Erro ao buscar os dados: ", error.response.msg)

@@ -95,7 +95,6 @@ export default function Login() {
 			}else{
 				data = await api.post('/user/login', {email: validEmail, pwd: validPwd});
 			}
-			console.log(data.data.msg);
 
 			const response = data;
 
@@ -111,6 +110,7 @@ export default function Login() {
 				break;
 			}
 		} catch(error) {
+
 			// Se houver erro, verifica se é um erro de resposta
 			if (error.response) {
 				const status = error.response.status;

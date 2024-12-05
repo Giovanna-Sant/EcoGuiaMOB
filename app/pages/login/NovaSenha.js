@@ -25,7 +25,7 @@ export default function RedefinirSenha() {
       console.log(response);
       if (response.status == 200) {
         alert("Senha alterada com sucesso");
-        navigation.navigate("Login");
+        navigation.navigate('Login');
       }
     } catch (erro) {
       console.log(erro);
@@ -101,7 +101,7 @@ export default function RedefinirSenha() {
 
         <View style={styles.textContainer}>
 
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <Text style={styles.text}>Voltar ao Login</Text>
           </TouchableOpacity>
         </View>

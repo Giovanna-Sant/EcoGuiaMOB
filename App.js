@@ -293,11 +293,17 @@ export default function App() {
       } else {
 
         setIsAuthenticated(false);
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: "Login" }],
+          })
+        );
       }
     };
 
     checkAuth();
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <ModalProvider>

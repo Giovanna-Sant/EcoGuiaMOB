@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Image, Pressable, Modal, TextInput, TouchableWithoutFeedback, TouchableOpacity, Alert } from "react-native";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import { Detail, ArrowRight, ShowPassword, HidePassword, MissIcon } from "../../assets";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 import cache from '../../utils/cache';
 import cacheTemp from "../../utils/cache";
 import api from '../../services/api';
@@ -435,7 +435,15 @@ const Config = () => {
 	};
 
 	const indoLogin = () => {
-		navigation.navigate('Login');
+
+		cache.remove("tokenID");
+		
+		navigation.dispatch(
+			CommonActions.reset({
+			  index: 0,
+			  routes: [{ name: "Login" }],
+			})
+		);
 	};
 
 	const handleSenhaSave = () => {

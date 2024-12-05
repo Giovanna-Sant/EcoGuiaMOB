@@ -183,7 +183,7 @@ export default function RedefinirSenha() {
 
 				<View style={styles.textContainer}>
 
-					<TouchableOpacity onPress={() => navigation.navigate("Login")}>
+					<TouchableOpacity onPress={() => navigation.navigate('Login')}>
 						<Text style={styles.text}>Voltar ao Login</Text>
 					</TouchableOpacity>
 				</View>
