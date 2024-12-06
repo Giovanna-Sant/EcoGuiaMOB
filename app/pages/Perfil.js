@@ -6,7 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Progress from 'react-native-progress';
 import { ArrowRight, Edit, Ranking } from '../assets';
 import cache from '../utils/cache';
-import getPerfil from '../utils/gerProfile';
+import getPerfil from '../utils/getProfile';
 import { RefreshControl } from 'react-native-gesture-handler';
 import api from '../services/api';
  
@@ -279,7 +279,7 @@ const Perfil = () => {
             </Text>
             <Pressable
               style={styles.botao}
-              onPress={() => handlePress("Trilha")}
+              onPress={() => handlePress("Tab_Trilha")}
             >
               <Text style={styles.textBotao}>Ver Trilha de Objetivos</Text>
               <ArrowRight maxWidth={12} maxHeight={12} />

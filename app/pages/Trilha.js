@@ -5,7 +5,7 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } 
 import { RefreshControl } from 'react-native-gesture-handler';
 import api from '../services/api';
 import cache from '../utils/cache';
-import getPerfil from '../utils/gerProfile';
+import getPerfil from '../utils/getProfile';
 
 const Trilha = () => {
 	const [modalMateriaisVisivel, setModalMateriaisVisivel] = useState(false);
@@ -85,6 +85,7 @@ const Trilha = () => {
 	  },2000) 
 	};
 
+	const [last,setLast] = useState(false)
 	// Função modal de concluir quest
 	const concluirObjetivo = async () => {
 		//capta o tokenID do cachê
@@ -133,7 +134,10 @@ const Trilha = () => {
 			}
 		} finally {
 			// Fechar modal ao apertar botão de concluído
-			setSelectedQuest(null);						
+			setSelectedQuest(null);		
+			if(quests[quests.length-1].pk_IDquest == questUser){
+				setLast(true)
+			}								
 		};
 	};
 
@@ -224,7 +228,7 @@ const Trilha = () => {
 						return (
 						<View>
 							{/* Estrutura para setar quest como concluída ou não */}
-								{item.pk_IDquest < questUser ? 
+								{item.pk_IDquest < questUser || last == true? 
 								// Quests completas
 								<View style={{paddingLeft}}>
 									<Pressable onPress={() => setSelectedQuest(item)} style={styles.missaoButton}>
@@ -255,7 +259,7 @@ const Trilha = () => {
           {/* Aparecer badge a cada 3 quests */}
           {index % 3 === 2 && (
             <View style={styles.contentBadge}>
-				{item.pk_IDquest < questUser ?
+				{item.pk_IDquest < questUser  || last == true?
 					<View >
 						<Text style={styles.badgeTitle}>{item.title_badge}</Text>
 						<Text style={styles.badgeStateA}>Badge concluída!</Text>
@@ -286,7 +290,11 @@ const Trilha = () => {
 									style={styles.modalBackdrop} 
 									onPress={() => setSelectedQuest(null)} // Fecha o modal quando clicado fora do conteúdo
 								>
-									<View style={styles.modalContent}>
+                                  {refresh?(
+										 <ActivityIndicator style={styles.loading} size="large" color="#fff"/>  
+									):(
+										<View style={styles.modalContent}>
+		  								
 										<Text style={styles.subtitle}>Missão {item.pk_IDquest}</Text>
 										<Text style={styles.text}>{item.description_quest}</Text>
 
@@ -297,6 +305,7 @@ const Trilha = () => {
 										) : item.pk_IDquest == questUser ? (
 											// Missão atual a ser feita
 											<TouchableOpacity style={styles.botaoCheck} onPress={concluirObjetivo}>
+												
 												<Text style={styles.textBotao}>Concluir</Text>
 												<Text style={styles.textBotao}>+{item.XP_quest} XP</Text>
 											</TouchableOpacity>
@@ -304,7 +313,9 @@ const Trilha = () => {
 											// Próximas missões
 											<Text style={styles.textCompleted}>Complete a anterior</Text>
 										)}
+
 								</View>
+									)}
 								</Pressable>
 							</Modal>
 						</View>
@@ -375,7 +386,7 @@ const Trilha = () => {
 				<View style={styles.controleQuantidade}>
 					<TouchableOpacity
 						style={styles.botaoControle}
-						onPress={() => setQuantidade(quantidade - 0.5,0)}
+						onPress={() => setQuantidade(Math.max(quantidade - 0.5))}
 					>
 						<Text style={styles.textoControle}>-</Text>
 					</TouchableOpacity>
