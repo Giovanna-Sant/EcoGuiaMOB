@@ -298,7 +298,7 @@ const Trilha = () => {
 										<Text style={styles.subtitle}>Missão {item.pk_IDquest}</Text>
 										<Text style={styles.text}>{item.description_quest}</Text>
 
-										{item.pk_IDquest < questUser ? (
+										{item.pk_IDquest < questUser || last == true ? (
 											// Missão já feita
 											<Text style={styles.textCompleted}>Missão concluída, parabéns!</Text>
 

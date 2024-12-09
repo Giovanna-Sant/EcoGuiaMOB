@@ -2,6 +2,10 @@
 # EcoGuia 🌱 _Mobile_
 Aplicativo desenvolvido baseado na 12° ODS _(Objetivo de Desenvolvimento Sustentável)_ com o intuito de incentivar um consumo mais sustentável através de uma forma dinâmica e informativa.
 
+## 💬 Como acessar o aplicativo?
+Disponibilizamos o arquivo de instalação do nosso aplicativo, sendo a forma mais dinâmica de acessá-lo. O link abaixo te redirecionapara a página de download, que resultará em algumas verificações de segurança.
+
+## 👾 [Instale o EcoGuia aqui!](https://drive.google.com/uc?export=download&id=1YE_tOuFjM1eQdI3mYkRajFw2z01nEjMq)
 
 ## ⚙ Funcionalidades
 
@@ -13,6 +17,7 @@ Aplicativo desenvolvido baseado na 12° ODS _(Objetivo de Desenvolvimento Susten
 - +...
 ## 🚀 Sobre o Projeto
 Trabalho de Conclusão de Curso desenvolvido pelo grupo EcoBio12 da turma 3DM do curso de Desenvolvimento de Sistemas do SENAI Suíço-Brasileiro.
+
 ## 👾 Links Úteis
 
 | Link  | Função |
